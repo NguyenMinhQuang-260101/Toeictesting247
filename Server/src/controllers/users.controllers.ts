@@ -1,4 +1,5 @@
 import { Request, Response } from 'express'
+import { ParamsDictionary } from 'express-serve-static-core'
 import usersServices from '~/services/users.services'
 
 export const loginController = (req: Request, res: Response) => {
@@ -11,7 +12,7 @@ export const loginController = (req: Request, res: Response) => {
   return res.status(401).json({ message: 'Invalid email or password' })
 }
 
-export const registerController = async (req: Request, res: Response) => {
+export const registerController = async (req: Request<ParamsDictionary, any, any>, res: Response) => {
   const { email, password } = req.body
   try {
     const result = await usersServices.register({ email, password })
