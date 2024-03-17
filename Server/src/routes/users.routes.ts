@@ -11,7 +11,7 @@ const usersRouter = Router()
  * Path: /users/login
  * Body: { email: string, password: string }
  */
-usersRouter.post('/login', loginValidator, loginController)
+usersRouter.post('/login', loginValidator, wrapRequestHandler(loginController))
 
 /**
  * Description: Register

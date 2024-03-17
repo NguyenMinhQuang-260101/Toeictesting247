@@ -9,6 +9,7 @@ export const envConfig = {
   dbUsername: process.env.DB_USERNAME as string,
   dbPassword: process.env.DB_PASSWORD as string,
   dbUsersCollection: process.env.DB_USERS_COLLECTION as string,
+  dbRefreshTokensCollection: process.env.DB_REFRESH_TOKENS_COLLECTION as string,
   passwordSecret: process.env.PASSWORD_SECRET as string,
   jwtSecret: process.env.JWT_SECRET as string,
   jwtSecretAccessToken: process.env.JWT_SECRET_ACCESS_TOKEN as string,
