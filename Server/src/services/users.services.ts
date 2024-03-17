@@ -3,17 +3,18 @@ import databaseServices from './database.services'
 import { RegisterRequestBody } from '~/models/requests/User.requests'
 import { hashPassword } from '~/utils/crypto'
 import { signToken } from '~/utils/jwt'
-import { TokenTypes } from '~/constants/enums'
+import { TokenType } from '~/constants/enums'
 import { envConfig } from '~/constants/config'
 import RefreshToken from '~/models/schemas/RefreshToken.schema'
 import { ObjectId } from 'mongodb'
+import { USERS_MESSAGES } from '~/constants/message'
 
 class UsersServices {
   private signAccessToken(user_id: string) {
     return signToken({
       payload: {
         user_id,
-        token_type: TokenTypes.AccessToken
+        token_type: TokenType.AccessToken
       },
       options: {
         expiresIn: envConfig.accessTokenExpiresIn
@@ -25,7 +26,7 @@ class UsersServices {
     return signToken({
       payload: {
         user_id,
-        token_type: TokenTypes.RefreshToken
+        token_type: TokenType.RefreshToken
       },
       options: {
         expiresIn: envConfig.refreshTokenExpiresIn
@@ -46,13 +47,13 @@ class UsersServices {
       })
     )
     const user_id = result.insertedId.toString()
-    const [accessToken, refreshToken] = await this.signAccessAndRefreshToken(user_id)
+    const [access_token, refresh_token] = await this.signAccessAndRefreshToken(user_id)
     await databaseServices.refreshTokens.insertOne(
-      new RefreshToken({ user_id: new ObjectId(user_id), token: refreshToken })
+      new RefreshToken({ user_id: new ObjectId(user_id), token: refresh_token })
     )
     return {
-      accessToken,
-      refreshToken
+      access_token,
+      refresh_token
     }
   }
 
@@ -62,14 +63,19 @@ class UsersServices {
   }
 
   async login(user_id: string) {
-    const [accessToken, refreshToken] = await this.signAccessAndRefreshToken(user_id)
+    const [access_token, refresh_token] = await this.signAccessAndRefreshToken(user_id)
     await databaseServices.refreshTokens.insertOne(
-      new RefreshToken({ user_id: new ObjectId(user_id), token: refreshToken })
+      new RefreshToken({ user_id: new ObjectId(user_id), token: refresh_token })
     )
     return {
-      accessToken,
-      refreshToken
+      access_token,
+      refresh_token
     }
+  }
+
+  async logout(refresh_token: string) {
+    await databaseServices.refreshTokens.deleteOne({ token: refresh_token })
+    return { message: USERS_MESSAGES.LOGOUT_SUCCESS }
   }
 }
 
