@@ -49,6 +49,19 @@ class UsersServices {
     })
   }
 
+  private signForgotPasswordToken(user_id: string) {
+    return signToken({
+      payload: {
+        user_id,
+        token_type: TokenType.ForgotPasswordToken
+      },
+      privateKey: envConfig.jwtSecretForgotPasswordToken,
+      options: {
+        expiresIn: envConfig.forgotPasswordTokenExpiresIn
+      }
+    })
+  }
+
   private signAccessAndRefreshToken(user_id: string) {
     return Promise.all([this.signAccessToken(user_id), this.signRefreshToken(user_id)])
   }
@@ -134,6 +147,36 @@ class UsersServices {
       }
     ])
     return { message: USERS_MESSAGES.RESEND_VERIFY_EMAIL_SUCCESS }
+  }
+
+  async forgotPassword(user_id: string) {
+    const forgot_password_token = await this.signForgotPasswordToken(user_id)
+    await databaseServices.users.updateOne({ _id: new ObjectId(user_id) }, [
+      {
+        $set: {
+          forgot_password_token,
+          updated_at: '$$NOW'
+        }
+      }
+    ])
+
+    // Gửi email kèm link reset password đến email của user: http://toeictesting247.com/forgot-password?token=token
+    console.log('forgot_password_token: ', forgot_password_token)
+
+    return { message: USERS_MESSAGES.CHECK_EMAIL_TO_RESET_PASSWORD }
+  }
+
+  async resetPassword(user_id: string, password: string) {
+    await databaseServices.users.updateOne({ _id: new ObjectId(user_id) }, [
+      {
+        $set: {
+          password: hashPassword(password),
+          forgot_password_token: '',
+          updated_at: '$$NOW'
+        }
+      }
+    ])
+    return { message: USERS_MESSAGES.RESET_PASSWORD_SUCCESS }
   }
 }
 
