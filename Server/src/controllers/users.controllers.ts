@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
 import { ParamsDictionary } from 'express-serve-static-core'
+import { pick } from 'lodash'
 import { ObjectId } from 'mongodb'
 import { UserRuleType, UserVerifyStatus } from '~/constants/enums'
 import HTTP_STATUS from '~/constants/httpStatus'
@@ -148,13 +149,22 @@ export const getMeController = async (req: Request, res: Response) => {
 
 export const updateMeController = async (req: Request<ParamsDictionary, any, UpdateMeReqBody>, res: Response) => {
   const { user_id } = req.decoded_authorization as TokenPayload
-  const body = req.body
+  const body = pick(req.body, [
+    'user_id',
+    'name',
+    'date_of_birth',
+    'username',
+    'location',
+    'avatar',
+    'cover_photo',
+    'rule'
+  ]) as UpdateMeReqBody
 
   const user =
     body.user_id !== undefined
       ? // Update User profile by Admin
         await usersServices.updateMe(body.user_id, body)
-      : // Update Admin profile
+      : // Update my profile
         await usersServices.updateMe(user_id, body)
 
   return res.json({

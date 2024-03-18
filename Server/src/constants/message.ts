@@ -38,7 +38,7 @@ export const USERS_MESSAGES = {
   RESET_PASSWORD_SUCCESS: 'Reset password success',
   GET_ME_SUCCESS: 'Get my profile success',
   USER_NOT_VERIFIED: 'User not verified',
-  USER_NOT_ADMIN: 'User not admin',
+  USER_NOT_ADMIN: 'User are not admin',
   RULE_MUST_BE_ADMIN_OR_USER: 'Rule must be 0(Amin) or 1(User)',
   USER_ID_MUST_BE_STRING: 'User id must be a string',
   USER_ID_IS_INFECTED: 'user id overlaps with your id',
