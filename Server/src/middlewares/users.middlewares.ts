@@ -4,7 +4,7 @@ import { JsonWebTokenError } from 'jsonwebtoken'
 import { capitalize } from 'lodash'
 import { ObjectId } from 'mongodb'
 import { envConfig } from '~/constants/config'
-import { UserVerifyStatus } from '~/constants/enums'
+import { UserRuleType, UserVerifyStatus } from '~/constants/enums'
 import HTTP_STATUS from '~/constants/httpStatus'
 import { USERS_MESSAGES } from '~/constants/message'
 import { ErrorWithStatus } from '~/models/Errors'
@@ -114,6 +114,48 @@ const forgotPasswordTokenSchema: ParamSchema = {
   }
 }
 
+const dayOfBirthSchema: ParamSchema = {
+  isISO8601: {
+    options: {
+      strict: true,
+      strictSeparator: true
+    },
+    errorMessage: USERS_MESSAGES.DATE_OF_BIRTH_MUST_BE_ISO8601
+  }
+}
+
+const imageSchema: ParamSchema = {
+  optional: true,
+  isLength: {
+    options: {
+      min: 1,
+      max: 400
+    },
+    errorMessage: USERS_MESSAGES.IMAGE_URL_LENGTH
+  },
+  isString: {
+    errorMessage: USERS_MESSAGES.IMAGE_URL_MUST_BE_STRING
+  },
+  trim: true
+}
+
+const nameSchema: ParamSchema = {
+  notEmpty: {
+    errorMessage: USERS_MESSAGES.NAME_IS_REQUIRED
+  },
+  isString: {
+    errorMessage: USERS_MESSAGES.NAME_MUST_BE_A_STRING
+  },
+  isLength: {
+    options: {
+      min: 1,
+      max: 100
+    },
+    errorMessage: USERS_MESSAGES.NAME_LENGTH_MUST_BE_FROM_1_TO_100
+  },
+  trim: true
+}
+
 export const loginValidator = validate(
   checkSchema(
     {
@@ -170,19 +212,7 @@ export const loginValidator = validate(
 export const registerValidator = validate(
   checkSchema(
     {
-      name: {
-        notEmpty: {
-          errorMessage: USERS_MESSAGES.NAME_IS_REQUIRED
-        },
-        isString: {
-          errorMessage: USERS_MESSAGES.NAME_MUST_BE_A_STRING
-        },
-        isLength: {
-          options: { min: 6, max: 255 },
-          errorMessage: USERS_MESSAGES.NAME_LENGTH_MUST_BE_FROM_1_TO_100
-        },
-        trim: true
-      },
+      name: nameSchema,
       email: {
         notEmpty: {
           errorMessage: USERS_MESSAGES.EMAIL_IS_REQUIRED
@@ -203,15 +233,7 @@ export const registerValidator = validate(
       },
       password: passwordSchema,
       confirm_password: confirmPasswordSchema,
-      date_of_birth: {
-        isISO8601: {
-          options: {
-            strict: true,
-            strictSeparator: true
-          },
-          errorMessage: USERS_MESSAGES.DATE_OF_BIRTH_MUST_BE_ISO8601
-        }
-      }
+      date_of_birth: dayOfBirthSchema
     },
     ['body']
   )
@@ -391,3 +413,117 @@ export const verifiedUserValidator = (req: Request, res: Response, next: NextFun
   // Nhớ next() để chạy tiếp middleware tiếp theo không thì sẽ bị treo
   next()
 }
+
+export const userRuleValidator = (req: Request, res: Response, next: NextFunction) => {
+  const { rule } = req.decoded_authorization as TokenPayload
+  if (rule !== UserRuleType.Admin) {
+    return next(
+      new ErrorWithStatus({
+        message: USERS_MESSAGES.USER_NOT_ADMIN,
+        status: HTTP_STATUS.FORBIDDEN
+      })
+    )
+  }
+  // Nhớ next() để chạy tiếp middleware tiếp theo không thì sẽ bị treo
+  next()
+}
+
+export const updateMeValidator = validate(
+  checkSchema({
+    // Chỉ truyền lên user_id khi muốn update user khác và là admin
+    // Nếu không truyền lên thì sẽ update thông tin của chính user đó
+    // Nếu truyền lên user_id mà không phải admin thì sẽ báo lỗi
+    user_id: {
+      custom: {
+        options: async (value, { req }) => {
+          if (value) {
+            const { user_id, rule } = req.decoded_authorization as TokenPayload
+            if (rule === UserRuleType.Admin) {
+              if (value === user_id) {
+                throw new ErrorWithStatus({
+                  message: USERS_MESSAGES.USER_ID_IS_INFECTED,
+                  status: HTTP_STATUS.FORBIDDEN
+                })
+              }
+              return value
+            }
+            throw new ErrorWithStatus({
+              message: USERS_MESSAGES.USER_NOT_ADMIN,
+              status: HTTP_STATUS.FORBIDDEN
+            })
+          }
+        }
+      }
+    },
+    name: {
+      ...nameSchema,
+      optional: true,
+      notEmpty: undefined
+    },
+    date_of_birth: {
+      ...dayOfBirthSchema,
+      optional: true
+    },
+    username: {
+      optional: true,
+      isString: {
+        errorMessage: USERS_MESSAGES.USERNAME_MUST_BE_STRING
+      },
+      trim: true,
+      isLength: {
+        options: {
+          min: 1,
+          max: 50
+        },
+        errorMessage: 'Username length must be from 1 to 50'
+      }
+      // custom: {
+      //   options: async (value, { req }) => {
+      //     if (!REGEX_USERNAME.test(value)) {
+      //       throw Error(USERS_MESSAGES.USERNAME_INVALID)
+      //     }
+      //     const user = await databaseService.users.findOne({ username: value })
+      //     // Nếu đã tồn tại username này trong db
+      //     // thì ta không cho phép update
+      //     if (user) {
+      //       throw Error(USERS_MESSAGES.USERNAME_EXISTED)
+      //     }
+      //   }
+      // }
+    },
+    location: {
+      optional: true,
+      isLength: {
+        options: {
+          min: 1,
+          max: 200
+        },
+        errorMessage: USERS_MESSAGES.LOCATION_MUST_BE_STRING
+      },
+      isString: {
+        errorMessage: USERS_MESSAGES.LOCATION_LENGTH
+      },
+      trim: true
+    },
+    avatar: imageSchema,
+    cover_photo: imageSchema,
+    rule: {
+      optional: true,
+      isIn: {
+        options: [Object.values(UserRuleType)],
+        errorMessage: USERS_MESSAGES.RULE_MUST_BE_ADMIN_OR_USER
+      },
+      custom: {
+        options: async (value, { req }) => {
+          const { rule } = req.decoded_authorization as TokenPayload
+          if (rule !== UserRuleType.Admin) {
+            throw new ErrorWithStatus({
+              message: USERS_MESSAGES.USER_NOT_ADMIN,
+              status: HTTP_STATUS.FORBIDDEN
+            })
+          }
+        }
+      }
+    }
+  })
+)

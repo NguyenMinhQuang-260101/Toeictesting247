@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import { ParamsDictionary } from 'express-serve-static-core'
 import { ObjectId } from 'mongodb'
-import { UserVerifyStatus } from '~/constants/enums'
+import { UserRuleType, UserVerifyStatus } from '~/constants/enums'
 import HTTP_STATUS from '~/constants/httpStatus'
 import { USERS_MESSAGES } from '~/constants/message'
 import {
@@ -11,6 +11,7 @@ import {
   RegisterRequestBody,
   ResetPasswordReqBody,
   TokenPayload,
+  UpdateMeReqBody,
   VerifyEmailReqBody,
   VerifyForgotPasswordReqBody
 } from '~/models/requests/User.requests'
@@ -23,7 +24,8 @@ export const loginController = async (req: Request<ParamsDictionary, any, LoginR
   const user_id = user._id as ObjectId
   const result = await usersServices.login({
     user_id: user_id.toString(),
-    verify: user.verify
+    verify: user.verify,
+    rule: user.rule
   })
   return res.json({
     message: USERS_MESSAGES.LOGIN_SUCCESS,
@@ -105,10 +107,11 @@ export const forgotPasswordController = async (
   req: Request<ParamsDictionary, any, ForgotPasswordReqBody>,
   res: Response
 ) => {
-  const { _id, verify } = req.user as User
+  const { _id, verify, rule } = req.user as User
   const result = await usersServices.forgotPassword({
     user_id: (_id as ObjectId).toString(),
-    verify: verify
+    verify: verify,
+    rule: rule
   })
   return res.json({
     result
@@ -143,8 +146,19 @@ export const getMeController = async (req: Request, res: Response) => {
   })
 }
 
-export const updateMeController = async (req: Request, res: Response) => {
+export const updateMeController = async (req: Request<ParamsDictionary, any, UpdateMeReqBody>, res: Response) => {
+  const { user_id } = req.decoded_authorization as TokenPayload
+  const body = req.body
+
+  const user =
+    body.user_id !== undefined
+      ? // Update User profile by Admin
+        await usersServices.updateMe(body.user_id, body)
+      : // Update Admin profile
+        await usersServices.updateMe(user_id, body)
+
   return res.json({
-    message: USERS_MESSAGES.UPDATE_ME_SUCCESS
+    message: USERS_MESSAGES.UPDATE_ME_SUCCESS,
+    result: user
   })
 }
