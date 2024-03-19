@@ -237,7 +237,8 @@ class UsersServices {
         access_token,
         refresh_token,
         newUser: 0,
-        verify: user.verify
+        verify: user.verify,
+        rule: user.rule
       }
     } else {
       // Random string để làm password
@@ -253,7 +254,8 @@ class UsersServices {
       return {
         ...data,
         newUser: 1,
-        verify: UserVerifyStatus.Unverified
+        verify: UserVerifyStatus.Unverified,
+        rule: UserRuleType.User
       }
     }
   }
@@ -403,6 +405,16 @@ class UsersServices {
 
   async updateMe(user_id: string, payload: UpdateMeReqBody) {
     const _payload = payload.date_of_birth ? { ...payload, date_of_birth: new Date(payload.date_of_birth) } : payload
+    if (_payload.rule !== undefined && _payload.rule !== UserRuleType.User) {
+      const user_be_updated = await databaseServices.users.findOne({ _id: new ObjectId(user_id) })
+      if (user_be_updated?.verify === UserVerifyStatus.Unverified) {
+        throw new ErrorWithStatus({
+          message: USERS_MESSAGES.USER_NOT_VERIFIED,
+          status: HTTP_STATUS.FORBIDDEN
+        })
+      }
+    }
+
     const user = await databaseServices.users.findOneAndUpdate(
       {
         _id: new ObjectId(user_id)

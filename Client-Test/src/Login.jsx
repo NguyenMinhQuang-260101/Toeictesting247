@@ -10,8 +10,9 @@ export default function Login() {
     const refresh_token = params.get("refresh_token");
     const new_user = params.get("new_user");
     const verify = params.get("verify");
+    const rule = params.get("rule");
 
-    console.log(new_user, verify);
+    console.log(new_user, verify, rule);
     // if (newUser === 1) {
     // Hiểm thị popup theo từng trường hợp
     // }

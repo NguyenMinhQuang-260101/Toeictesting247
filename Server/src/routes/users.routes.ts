@@ -25,7 +25,6 @@ import {
   registerValidator,
   resetPasswordValidator,
   updateMeValidator,
-  userRuleValidator,
   verifiedUserValidator,
   verifyForgotPasswordTokenValidator
 } from '~/middlewares/users.middlewares'
