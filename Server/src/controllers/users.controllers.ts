@@ -36,6 +36,15 @@ export const loginController = async (req: Request<ParamsDictionary, any, LoginR
   })
 }
 
+export const oauthController = async (req: Request, res: Response) => {
+  const { code } = req.query
+  const result = await usersServices.oauthGoogle(code as string)
+  return res.json({
+    message: USERS_MESSAGES.LOGIN_SUCCESS,
+    result
+  })
+}
+
 export const registerController = async (req: Request<ParamsDictionary, any, RegisterRequestBody>, res: Response) => {
   const result = await usersServices.register(req.body)
   return res.json({

@@ -11,6 +11,7 @@ import RefreshToken from '~/models/schemas/RefreshToken.schema'
 import { ObjectId } from 'mongodb'
 import { USERS_MESSAGES } from '~/constants/message'
 import HTTP_STATUS from '~/constants/httpStatus'
+import axios from 'axios'
 
 class UsersServices {
   private signAccessToken({
@@ -173,6 +174,26 @@ class UsersServices {
     }
   }
 
+  private async getOauthGoogleToken(code: string) {
+    const body = {
+      code,
+      client_id: envConfig.googleClientId,
+      client_secret: envConfig.googleClientSecret,
+      redirect_uri: envConfig.googleRedirectUrl,
+      grant_type: 'authorization_code'
+    }
+    const { data } = await axios.post('https://oauth2.googleapis.com/token', body, {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
+    })
+    return data
+  }
+  async oauthGoogle(code: string) {
+    const data = await this.getOauthGoogleToken(code)
+    console.log(data)
+  }
+
   async logout(refresh_token: string) {
     await databaseServices.refreshTokens.deleteOne({ token: refresh_token })
     return { message: USERS_MESSAGES.LOGOUT_SUCCESS }
@@ -197,6 +218,10 @@ class UsersServices {
     ])
 
     const [access_token, refresh_token] = token
+    await databaseServices.refreshTokens.insertOne(
+      new RefreshToken({ user_id: new ObjectId(user_id), token: refresh_token })
+    )
+
     return {
       access_token,
       refresh_token
