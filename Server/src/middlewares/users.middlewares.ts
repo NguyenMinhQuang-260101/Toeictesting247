@@ -7,6 +7,7 @@ import { envConfig } from '~/constants/config'
 import { UserRuleType, UserVerifyStatus } from '~/constants/enums'
 import HTTP_STATUS from '~/constants/httpStatus'
 import { USERS_MESSAGES } from '~/constants/message'
+import { REGEX_USERNAME } from '~/constants/regex'
 import { ErrorWithStatus } from '~/models/Errors'
 import { TokenPayload } from '~/models/requests/User.requests'
 import databaseServices from '~/services/database.services'
@@ -435,8 +436,23 @@ export const updateMeValidator = validate(
     // Nếu truyền lên user_id mà không phải admin thì sẽ báo lỗi
     user_id: {
       custom: {
-        options: async (value, { req }) => {
+        options: async (value: string, { req }) => {
           if (value) {
+            if (!ObjectId.isValid(value)) {
+              throw new ErrorWithStatus({
+                message: USERS_MESSAGES.USER_ID_INVALID,
+                status: HTTP_STATUS.BAD_REQUEST
+              })
+            }
+
+            const user = await databaseServices.users.findOne({ _id: new ObjectId(value) })
+            if (user === null) {
+              throw new ErrorWithStatus({
+                message: USERS_MESSAGES.USER_NOT_FOUND,
+                status: HTTP_STATUS.NOT_FOUND
+              })
+            }
+
             const { user_id, rule } = req.decoded_authorization as TokenPayload
             if (rule === UserRuleType.Admin) {
               if (value === user_id) {
@@ -470,26 +486,19 @@ export const updateMeValidator = validate(
         errorMessage: USERS_MESSAGES.USERNAME_MUST_BE_STRING
       },
       trim: true,
-      isLength: {
-        options: {
-          min: 1,
-          max: 50
-        },
-        errorMessage: 'Username length must be from 1 to 50'
+      custom: {
+        options: async (value, { req }) => {
+          if (!REGEX_USERNAME.test(value)) {
+            throw Error(USERS_MESSAGES.USERNAME_INVALID)
+          }
+          const user = await databaseServices.users.findOne({ username: value })
+          // Nếu đã tồn tại username này trong db
+          // thì ta không cho phép update
+          if (user) {
+            throw Error(USERS_MESSAGES.USERNAME_EXISTED)
+          }
+        }
       }
-      // custom: {
-      //   options: async (value, { req }) => {
-      //     if (!REGEX_USERNAME.test(value)) {
-      //       throw Error(USERS_MESSAGES.USERNAME_INVALID)
-      //     }
-      //     const user = await databaseService.users.findOne({ username: value })
-      //     // Nếu đã tồn tại username này trong db
-      //     // thì ta không cho phép update
-      //     if (user) {
-      //       throw Error(USERS_MESSAGES.USERNAME_EXISTED)
-      //     }
-      //   }
-      // }
     },
     location: {
       optional: true,
