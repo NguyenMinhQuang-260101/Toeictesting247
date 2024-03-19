@@ -187,11 +187,75 @@ class UsersServices {
         'Content-Type': 'application/x-www-form-urlencoded'
       }
     })
-    return data
+    return data as { access_token: string; id_token: string }
   }
+
+  private async getOauthGoogleInfo(access_token: string, id_token: string) {
+    const { data } = await axios.get('https://www.googleapis.com/oauth2/v1/userinfo', {
+      params: {
+        access_token,
+        alt: 'json'
+      },
+      headers: {
+        Authorization: `Bearer ${id_token}`
+      }
+    })
+    return data as {
+      id: string
+      email: string
+      verified_email: boolean
+      name: string
+      given_name: string
+      family_name: string
+      picture: string
+      locale: string
+    }
+  }
+
   async oauthGoogle(code: string) {
-    const data = await this.getOauthGoogleToken(code)
-    console.log(data)
+    const { access_token, id_token } = await this.getOauthGoogleToken(code)
+    const userInfo = await this.getOauthGoogleInfo(access_token, id_token)
+    if (!userInfo.verified_email) {
+      throw new ErrorWithStatus({
+        message: USERS_MESSAGES.GMAIL_NOT_VERIFIED,
+        status: HTTP_STATUS.BAD_REQUEST
+      })
+    }
+    // Kiểm tra xem email đã được đăng ký chưa
+    const user = await databaseServices.users.findOne({ email: userInfo.email })
+    // Nếu tồn tai email thì login
+    if (user) {
+      const [access_token, refresh_token] = await this.signAccessAndRefreshToken({
+        user_id: user._id.toString(),
+        verify: user.verify,
+        rule: user.rule
+      })
+      await databaseServices.refreshTokens.insertOne(
+        new RefreshToken({ user_id: new ObjectId(user._id), token: refresh_token })
+      )
+      return {
+        access_token,
+        refresh_token,
+        newUser: 0,
+        verify: user.verify
+      }
+    } else {
+      // Random string để làm password
+      const password = Math.random().toString(36).substring(2, 15)
+      // Nếu chưa tồn tại email thì register
+      const data = await this.register({
+        email: userInfo.email,
+        name: userInfo.name,
+        date_of_birth: new Date().toISOString(),
+        password,
+        confirm_password: password
+      })
+      return {
+        ...data,
+        newUser: 1,
+        verify: UserVerifyStatus.Unverified
+      }
+    }
   }
 
   async logout(refresh_token: string) {

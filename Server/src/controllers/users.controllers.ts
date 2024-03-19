@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import { ParamsDictionary } from 'express-serve-static-core'
 import { pick } from 'lodash'
 import { ObjectId } from 'mongodb'
+import { envConfig } from '~/constants/config'
 import { UserRuleType, UserVerifyStatus } from '~/constants/enums'
 import HTTP_STATUS from '~/constants/httpStatus'
 import { USERS_MESSAGES } from '~/constants/message'
@@ -32,17 +33,17 @@ export const loginController = async (req: Request<ParamsDictionary, any, LoginR
   })
   return res.json({
     message: USERS_MESSAGES.LOGIN_SUCCESS,
-    result
+    result,
+    rule: user.rule
   })
 }
 
 export const oauthController = async (req: Request, res: Response) => {
   const { code } = req.query
   const result = await usersServices.oauthGoogle(code as string)
-  return res.json({
-    message: USERS_MESSAGES.LOGIN_SUCCESS,
-    result
-  })
+  const urlRedirect = `${envConfig.clientRedirectCallback}?access_token=${result.access_token}&refresh_token=${result.refresh_token}&new_user=${result.newUser}&verify=${result.verify}`
+  console.log(urlRedirect)
+  return res.redirect(urlRedirect)
 }
 
 export const registerController = async (req: Request<ParamsDictionary, any, RegisterRequestBody>, res: Response) => {
