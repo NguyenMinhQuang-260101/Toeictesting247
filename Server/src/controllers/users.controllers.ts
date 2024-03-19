@@ -7,6 +7,7 @@ import HTTP_STATUS from '~/constants/httpStatus'
 import { USERS_MESSAGES } from '~/constants/message'
 import {
   ForgotPasswordReqBody,
+  GetProfileReqParams,
   LoginRequestBody,
   LogoutRequestBody,
   RegisterRequestBody,
@@ -147,18 +148,18 @@ export const getMeController = async (req: Request, res: Response) => {
   })
 }
 
+export const getProfileController = async (req: Request<GetProfileReqParams>, res: Response) => {
+  const { username } = req.params
+  const user = await usersServices.getProfile(username)
+  return res.json({
+    message: USERS_MESSAGES.GET_PROFILE_SUCCESS,
+    result: user
+  })
+}
+
 export const updateMeController = async (req: Request<ParamsDictionary, any, UpdateMeReqBody>, res: Response) => {
   const { user_id } = req.decoded_authorization as TokenPayload
-  const body = pick(req.body, [
-    'user_id',
-    'name',
-    'date_of_birth',
-    'username',
-    'location',
-    'avatar',
-    'cover_photo',
-    'rule'
-  ]) as UpdateMeReqBody
+  const { body } = req
 
   const user =
     body.user_id !== undefined

@@ -53,3 +53,7 @@ export interface UpdateMeReqBody {
   cover_photo?: string
   rule?: UserRuleType
 }
+
+export interface GetProfileReqParams {
+  username: string
+}
