@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import {
+  changePasswordController,
   forgotPasswordController,
   getMeController,
   getProfileController,
@@ -15,6 +16,7 @@ import {
 import { filterMiddleware } from '~/middlewares/common.middlewares'
 import {
   accessTokenValidator,
+  changePasswordValidator,
   emailVerifyTokenValidator,
   forgotPasswordValidator,
   loginValidator,
@@ -139,5 +141,20 @@ usersRouter.patch(
  * Path: /:username
  */
 usersRouter.get('/:username', wrapRequestHandler(getProfileController))
+
+/**
+ * Description: Change password
+ * Path: /change-password
+ * Method: PUT
+ * Header: { Authorization: Bearer <access_token> }
+ * Body: { old_password: string, password: string, confirm_password: string }
+ */
+usersRouter.put(
+  '/change-password',
+  accessTokenValidator,
+  verifiedUserValidator,
+  changePasswordValidator,
+  wrapRequestHandler(changePasswordController)
+)
 
 export default usersRouter

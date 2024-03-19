@@ -6,6 +6,7 @@ import { UserRuleType, UserVerifyStatus } from '~/constants/enums'
 import HTTP_STATUS from '~/constants/httpStatus'
 import { USERS_MESSAGES } from '~/constants/message'
 import {
+  ChangePasswordReqBody,
   ForgotPasswordReqBody,
   GetProfileReqParams,
   LoginRequestBody,
@@ -137,6 +138,16 @@ export const resetPasswordController = async (
   const { password } = req.body
   const result = await usersServices.resetPassword(user_id, password)
   return res.json({ result })
+}
+
+export const changePasswordController = async (
+  req: Request<ParamsDictionary, any, ChangePasswordReqBody>,
+  res: Response
+) => {
+  const { user_id } = req.decoded_authorization as TokenPayload
+  const { password } = req.body
+  const result = await usersServices.changePassword(user_id, password)
+  return res.json(result)
 }
 
 export const getMeController = async (req: Request, res: Response) => {
