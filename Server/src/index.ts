@@ -6,6 +6,7 @@ import staticRouter from './routes/static.routes'
 import usersRouter from './routes/users.routes'
 import databaseServices from './services/database.services'
 import { initFolder } from './utils/file'
+import coursesRouter from './routes/courses.routes'
 
 const app = express()
 const port = envConfig.port
@@ -22,6 +23,7 @@ app.use(express.json())
 app.use('/users', usersRouter)
 app.use('/medias', mediasRouter)
 app.use('/static', staticRouter)
+app.use('/courses', coursesRouter)
 
 // Dùng sau khi đã sử dụng tất cả các routes
 app.use(defaultErrorHandler)

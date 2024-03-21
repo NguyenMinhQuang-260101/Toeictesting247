@@ -61,3 +61,14 @@ export const USERS_MESSAGES = {
   REFRESH_TOKEN_SUCCESS: 'Refresh token success',
   GET_VIDEO_STATUS_SUCCESS: 'Get video status success'
 } as const
+
+export const COURSES_MESSAGES = {
+  COURSE_TYPE_INVALID: 'Course type invalid',
+  TITLE_MUST_BE_STRING: 'Title must be a string',
+  DESCRIPTION_MUST_BE_STRING: 'Description must be a string',
+  CONTENT_MUST_BE_STRING: 'Content must be a string',
+  TEST_MUST_BE_AN_ARRAY_OF_TEST_ID: 'Test must be an array of test id',
+  NOTIFICATION_MUST_BE_AN_OBJECT_ID: 'Notification must be an object id',
+  THUMBNAILS_MUST_BE_AN_ARRAY_OF_MEDIA_OBJECT: 'Thumbnails must be an array of media object',
+  STATUS_INVALID: 'Status invalid'
+} as const

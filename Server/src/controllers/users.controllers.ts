@@ -1,9 +1,8 @@
 import { Request, Response } from 'express'
 import { ParamsDictionary } from 'express-serve-static-core'
-import { pick } from 'lodash'
 import { ObjectId } from 'mongodb'
 import { envConfig } from '~/constants/config'
-import { UserRuleType, UserVerifyStatus } from '~/constants/enums'
+import { UserVerifyStatus } from '~/constants/enums'
 import HTTP_STATUS from '~/constants/httpStatus'
 import { USERS_MESSAGES } from '~/constants/message'
 import {
