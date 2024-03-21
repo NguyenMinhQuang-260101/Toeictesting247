@@ -72,3 +72,15 @@ export const COURSES_MESSAGES = {
   THUMBNAILS_MUST_BE_AN_ARRAY_OF_MEDIA_OBJECT: 'Thumbnails must be an array of media object',
   STATUS_INVALID: 'Status invalid'
 } as const
+
+export const TESTS_MESSAGES = {
+  COURSE_ID_MUST_NOT_BE_EMPTY: 'Course id must not be empty',
+  COURSE_ID_MUST_BE_AN_OBJECT_ID: 'Course id must be an ObjectId',
+  TITLE_MUST_NOT_BE_EMPTY: 'Title must not be empty',
+  TITLE_MUST_BE_STRING: 'Title must be a string',
+  DESCRIPTION_MUST_NOT_BE_EMPTY: 'Description must not be empty',
+  DESCRIPTION_MUST_BE_STRING: 'Description must be a string',
+  TIMELINE_MUST_NOT_BE_EMPTY: 'Timeline must not be empty',
+  TIMELINE_MUST_BE_A_NUMBER: 'Timeline must be a number',
+  QUESTIONS_MUST_BE_AN_ARRAY_OF_QUESTION_ID: 'Questions must be an array of question id'
+} as const

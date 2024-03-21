@@ -9,10 +9,10 @@ interface CourseConstructor {
   title: string
   description: string
   content: string
-  tests: ObjectId[]
+  tests: string[]
   thumbnails: Media[]
-  notification: ObjectId
-  user_view?: number
+  notification: null | string
+  user_views?: number
   created_at?: Date
   updated_at?: Date
   status: OperatingStatus
@@ -21,14 +21,14 @@ interface CourseConstructor {
 export default class Course {
   _id?: ObjectId
   user_id: ObjectId
+  type: CourseType
   title: string
   description: string
   content: string
   tests: ObjectId[]
   thumbnail: Media[]
-  notification: ObjectId
-  user_view: number
-  type: CourseType
+  notification: null | ObjectId
+  user_views: number
   created_at: Date
   updated_at: Date
   status: OperatingStatus
@@ -41,7 +41,7 @@ export default class Course {
     tests,
     thumbnails,
     notification,
-    user_view,
+    user_views,
     type,
     created_at,
     updated_at,
@@ -53,10 +53,10 @@ export default class Course {
     this.title = title
     this.description = description
     this.content = content
-    this.tests = tests
+    this.tests = tests.map((item) => new ObjectId(item))
     this.thumbnail = thumbnails
-    this.notification = notification
-    this.user_view = user_view || 0
+    this.notification = notification ? new ObjectId(notification) : null
+    this.user_views = user_views || 0
     this.type = type
     this.created_at = created_at || date
     this.updated_at = updated_at || date
