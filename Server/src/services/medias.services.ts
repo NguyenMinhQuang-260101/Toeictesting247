@@ -1,5 +1,11 @@
 import { Request } from 'express'
-import { deleteAllFiles, getNameFromFullname, handleUploadImage, handleUploadVideo } from '~/utils/file'
+import {
+  deleteAllFiles,
+  getNameFromFullname,
+  handleUploadAudio,
+  handleUploadImage,
+  handleUploadVideo
+} from '~/utils/file'
 import sharp from 'sharp'
 import { UPLOAD_IMAGE_DIR, UPLOAD_IMAGE_TEMP_DIR, UPLOAD_VIDEO_TEMP_DIR } from '~/constants/dir'
 import path from 'path'
@@ -24,8 +30,20 @@ class MediasService {
         }
       })
     )
-
     if (deleteAllFiles(directoryPathImageTemp)) return result
+  }
+
+  async uploadAudio(req: Request) {
+    const files = await handleUploadAudio(req)
+    const result: Media[] = files.map((file) => {
+      return {
+        url: isProduction
+          ? `${envConfig.host}/static/audio-stream/${file.newFilename}`
+          : `http://localhost:${envConfig.port}/static/audio-stream/${file.newFilename}`,
+        type: MediaType.Audio
+      }
+    })
+    return result
   }
 
   async uploadVideo(req: Request) {
@@ -34,7 +52,7 @@ class MediasService {
     const result: Media[] = files.map((file) => {
       return {
         url: isProduction
-          ? `${envConfig.host}/static/video/${file.newFilename}`
+          ? `${envConfig.host}/static/video-stream/${file.newFilename}`
           : `http://localhost:${envConfig.port}/static/video-stream/${file.newFilename}`,
         type: MediaType.Video
       }

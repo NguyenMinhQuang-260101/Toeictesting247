@@ -2,7 +2,13 @@ import { Request } from 'express'
 import formidable, { File } from 'formidable'
 import { exec } from 'child_process'
 import fs from 'fs'
-import { UPLOAD_IMAGE_TEMP_DIR, UPLOAD_VIDEO_DIR, UPLOAD_VIDEO_TEMP_DIR } from '~/constants/dir'
+import {
+  UPLOAD_AUDIO_DIR,
+  UPLOAD_AUDIO_TEMP_DIR,
+  UPLOAD_IMAGE_TEMP_DIR,
+  UPLOAD_VIDEO_DIR,
+  UPLOAD_VIDEO_TEMP_DIR
+} from '~/constants/dir'
 
 export const handleUploadImage = async (req: Request) => {
   const form = formidable({
@@ -33,11 +39,44 @@ export const handleUploadImage = async (req: Request) => {
   })
 }
 
+export const handleUploadAudio = async (req: Request) => {
+  const form = formidable({
+    uploadDir: UPLOAD_AUDIO_DIR,
+    maxFiles: 1,
+    maxFileSize: 50 * 1024 * 1024, // 50MB
+    filter: function ({ name, originalFilename, mimetype }) {
+      const valid = name === 'audio' && Boolean(mimetype?.includes('audio/'))
+      if (!valid) {
+        form.emit('error' as any, new Error('File type is not valid') as any)
+      }
+      return valid
+    }
+  })
+  return new Promise<File[]>((resolve, reject) => {
+    form.parse(req, (err, fields, files) => {
+      if (err) {
+        return reject(err)
+      }
+      // eslint-disable-next-line no-extra-boolean-cast
+      if (!Boolean(files.audio)) {
+        return reject(new Error('No file uploaded'))
+      }
+      const audios = files.audio as File[]
+      audios.forEach((audio) => {
+        const ext = getExtension(audio.originalFilename as string)
+        fs.renameSync(audio.filepath, audio.filepath + '.' + ext)
+        audio.newFilename = audio.newFilename + '.' + ext
+      })
+      resolve(files.audio as File[])
+    })
+  })
+}
+
 export const handleUploadVideo = async (req: Request) => {
   const form = formidable({
     uploadDir: UPLOAD_VIDEO_DIR,
     maxFiles: 1,
-    maxFileSize: 50 * 1024 * 1024, // 50MB
+    maxFileSize: 100 * 1024 * 1024, // 100MB
     filter: function ({ name, originalFilename, mimetype }) {
       const valid = name === 'video' && Boolean(mimetype?.includes('video/') || mimetype?.includes('quicktime'))
       if (!valid) {
@@ -67,7 +106,7 @@ export const handleUploadVideo = async (req: Request) => {
 }
 
 export const initFolder = () => {
-  ;[UPLOAD_IMAGE_TEMP_DIR, UPLOAD_VIDEO_TEMP_DIR].forEach((dir) => {
+  ;[UPLOAD_IMAGE_TEMP_DIR, UPLOAD_AUDIO_TEMP_DIR, UPLOAD_VIDEO_TEMP_DIR].forEach((dir) => {
     if (!fs.existsSync(dir)) {
       fs.mkdirSync(dir, {
         recursive: true

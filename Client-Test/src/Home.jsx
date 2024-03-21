@@ -51,10 +51,18 @@ export default function Home() {
         </span>
       </div>
 
+      <h2>Audio</h2>
+      <audio controls>
+        <source
+          src="http://localhost:4000/static/audio-stream/6d78dd6be5fea88f7ae98c900.mp3"
+          type="audio/mpeg"
+        />
+      </audio>
+
       <h2>Video Streaming</h2>
       <video controls width={500}>
         <source
-          src="http://localhost:4000/static/video-stream/4856c41812efbbaf6336f4500.mp4"
+          src="http://localhost:4000/static/video-stream/c2d935d61f13619df86291e00.mp4"
           type="video/mp4"
         />
       </video>

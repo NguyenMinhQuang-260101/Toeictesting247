@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { uploadImageController, uploadVideoController } from '~/controllers/medias.controllers'
+import { uploadAudioController, uploadImageController, uploadVideoController } from '~/controllers/medias.controllers'
 import { accessTokenValidator, userRuleValidator, verifiedUserValidator } from '~/middlewares/users.middlewares'
 import { wrapRequestHandler } from '~/utils/handlers'
 
@@ -19,9 +19,22 @@ mediasRouter.post(
 )
 
 /**
+ * Description: Upload audio
+ * Route: POST /upload-audio
+ * body: { audio: File }
+ */
+mediasRouter.post(
+  '/upload-audio',
+  accessTokenValidator,
+  verifiedUserValidator,
+  userRuleValidator,
+  wrapRequestHandler(uploadAudioController)
+)
+
+/**
  * Description: Upload a simple video
  * Route: POST /upload-image
- * body: { image: File }
+ * body: { video: File }
  */
 mediasRouter.post(
   '/upload-video',

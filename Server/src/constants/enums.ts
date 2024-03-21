@@ -18,6 +18,7 @@ export enum UserRuleType {
 
 export enum MediaType {
   Image,
+  Audio,
   Video
 }
 
