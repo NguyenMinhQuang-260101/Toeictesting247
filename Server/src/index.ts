@@ -6,6 +6,7 @@ import staticRouter from './routes/static.routes'
 import usersRouter from './routes/users.routes'
 import databaseServices from './services/database.services'
 import { initFolder } from './utils/file'
+import { UPLOAD_VIDEO_DIR } from './constants/dir'
 
 const app = express()
 const port = envConfig.port

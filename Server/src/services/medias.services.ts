@@ -35,7 +35,7 @@ class MediasService {
       return {
         url: isProduction
           ? `${envConfig.host}/static/video/${file.newFilename}`
-          : `http://localhost:${envConfig.port}/static/video/${file.newFilename}`,
+          : `http://localhost:${envConfig.port}/static/video-stream/${file.newFilename}`,
         type: MediaType.Video
       }
     })

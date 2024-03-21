@@ -265,6 +265,31 @@ class UsersServices {
     return { message: USERS_MESSAGES.LOGOUT_SUCCESS }
   }
 
+  async refreshToken({
+    refresh_token,
+    user_id,
+    verify,
+    rule
+  }: {
+    refresh_token: string
+    user_id: string
+    verify: UserVerifyStatus
+    rule: UserRuleType
+  }) {
+    const [new_access_token, new_refresh_token] = await Promise.all([
+      this.signAccessToken({ user_id, verify, rule }),
+      this.signRefreshToken({ user_id, verify, rule }),
+      databaseServices.refreshTokens.deleteOne({ token: refresh_token })
+    ])
+    await databaseServices.refreshTokens.insertOne(
+      new RefreshToken({ user_id: new ObjectId(user_id), token: new_refresh_token })
+    )
+    return {
+      access_token: new_access_token,
+      refresh_token: new_refresh_token
+    }
+  }
+
   async verifyEmail(user_id: string) {
     const [token] = await Promise.all([
       this.signAccessAndRefreshToken({

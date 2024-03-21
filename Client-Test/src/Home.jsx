@@ -1,41 +1,44 @@
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-import { Link } from 'react-router-dom'
+import reactLogo from "./assets/react.svg";
+import viteLogo from "/vite.svg";
+import "./App.css";
+import { Link } from "react-router-dom";
 
-import '@vidstack/react/player/styles/base.css'
-import '@vidstack/react/player/styles/plyr/theme.css'
-import { MediaPlayer, MediaProvider } from '@vidstack/react'
-import { PlyrLayout, plyrLayoutIcons } from '@vidstack/react/player/layouts/plyr'
+import "@vidstack/react/player/styles/base.css";
+import "@vidstack/react/player/styles/plyr/theme.css";
+import { MediaPlayer, MediaProvider } from "@vidstack/react";
+import {
+  PlyrLayout,
+  plyrLayoutIcons,
+} from "@vidstack/react/player/layouts/plyr";
 
 const getGoogleAuthUrl = () => {
-  const { VITE_GOOGLE_CLIENT_ID, VITE_GOOGLE_REDIRECT_URI } = import.meta.env
-  const url = `https://accounts.google.com/o/oauth2/v2/auth`
+  const { VITE_GOOGLE_CLIENT_ID, VITE_GOOGLE_REDIRECT_URI } = import.meta.env;
+  const url = `https://accounts.google.com/o/oauth2/v2/auth`;
   const query = {
     client_id: VITE_GOOGLE_CLIENT_ID,
     redirect_uri: VITE_GOOGLE_REDIRECT_URI,
-    response_type: 'code',
+    response_type: "code",
     scope: [
-      'https://www.googleapis.com/auth/userinfo.profile',
-      'https://www.googleapis.com/auth/userinfo.email',
-    ].join(' '),
-    prompt: 'consent',
-    access_type: 'offline',
-  }
-  const queryString = new URLSearchParams(query).toString()
-  return `${url}?${queryString}`
-}
+      "https://www.googleapis.com/auth/userinfo.profile",
+      "https://www.googleapis.com/auth/userinfo.email",
+    ].join(" "),
+    prompt: "consent",
+    access_type: "offline",
+  };
+  const queryString = new URLSearchParams(query).toString();
+  return `${url}?${queryString}`;
+};
 
-const googleOAuthUrl = getGoogleAuthUrl()
+const googleOAuthUrl = getGoogleAuthUrl();
 
 export default function Home() {
-  const isAuthenticated = Boolean(localStorage.getItem('access_token'))
-  const profile = JSON.parse(localStorage.getItem('profile')) || {}
+  const isAuthenticated = Boolean(localStorage.getItem("access_token"));
+  const profile = JSON.parse(localStorage.getItem("profile")) || {};
   const logout = () => {
-    localStorage.removeItem('access_token')
-    localStorage.removeItem('refresh_token')
-    window.location.reload()
-  }
+    localStorage.removeItem("access_token");
+    localStorage.removeItem("refresh_token");
+    window.location.reload();
+  };
 
   return (
     <>
@@ -51,7 +54,7 @@ export default function Home() {
       <h2>Video Streaming</h2>
       <video controls width={500}>
         <source
-          src="http://localhost:4000/static/video-stream/tqgqfVjGyzNlyKq4x39nE/tqgqfVjGyzNlyKq4x39nE.mp4"
+          src="http://localhost:4000/static/video-stream/4856c41812efbbaf6336f4500.mp4"
           type="video/mp4"
         />
       </video>
@@ -74,7 +77,7 @@ export default function Home() {
       <p className="read-the-docs">
         {isAuthenticated ? (
           <>
-            {' '}
+            {" "}
             <span>
               Hello my <strong>{profile.email}</strong>, you are logged in.
             </span>
@@ -85,5 +88,5 @@ export default function Home() {
         )}
       </p>
     </>
-  )
+  );
 }
