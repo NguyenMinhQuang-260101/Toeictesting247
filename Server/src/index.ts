@@ -9,7 +9,9 @@ import { initFolder } from './utils/file'
 
 const app = express()
 const port = envConfig.port
-databaseServices.connect()
+databaseServices.connect().then(() => {
+  databaseServices.indexUsers(), databaseServices.indexRefreshTokens()
+})
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`)
 })

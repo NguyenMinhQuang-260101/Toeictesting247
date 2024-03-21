@@ -54,7 +54,7 @@ export default function Home() {
       <h2>Audio</h2>
       <audio controls>
         <source
-          src="http://localhost:4000/static/audio-stream/6d78dd6be5fea88f7ae98c900.mp3"
+          src="http://localhost:4000/static/audio-stream/68f7843e9250686884474ea00.m4a"
           type="audio/mpeg"
         />
       </audio>
