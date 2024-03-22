@@ -8,13 +8,13 @@ import databaseServices from './database.services'
 
 class TestsController {
   async createTest(body: TestReqBody) {
-    const course = await databaseServices.courses.findOne({ _id: new ObjectId(body.course_id) })
-    if (!course) {
-      throw new ErrorWithStatus({
-        message: TESTS_MESSAGES.COURSE_ID_DOES_NOT_EXIST,
-        status: HTTP_STATUS.NOT_FOUND
-      })
-    }
+    // const course = await databaseServices.courses.findOne({ _id: new ObjectId(body.course_id) })
+    // if (!course) {
+    //   throw new ErrorWithStatus({
+    //     message: TESTS_MESSAGES.COURSE_ID_DOES_NOT_EXIST,
+    //     status: HTTP_STATUS.NOT_FOUND
+    //   })
+    // }
 
     const result = await databaseServices.tests.insertOne(
       new Test({
@@ -28,7 +28,7 @@ class TestsController {
 
     await databaseServices.courses.findOneAndUpdate(
       { _id: new ObjectId(body.course_id) },
-      { $push: { tests: result.insertedId } },
+      { $push: { tests: result.insertedId }, $currentDate: { updated_at: true } },
       { returnDocument: 'after' }
     )
 

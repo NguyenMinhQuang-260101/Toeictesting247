@@ -1,6 +1,6 @@
 import { Router } from 'express'
-import { createCourseController } from '~/controllers/courses.controllers'
-import { createCourseValidator } from '~/middlewares/courses.middlewares'
+import { createCourseController, getCourseDetailController } from '~/controllers/courses.controllers'
+import { courseIdValidator, createCourseValidator } from '~/middlewares/courses.middlewares'
 import { accessTokenValidator, userRuleValidator, verifiedUserValidator } from '~/middlewares/users.middlewares'
 import { wrapRequestHandler } from '~/utils/handlers'
 
@@ -21,5 +21,14 @@ coursesRouter.post(
   createCourseValidator,
   wrapRequestHandler(createCourseController)
 )
+
+/**'
+ * Description: Get course detail
+ * Method: GET
+ * Path: /:course_id
+ * Headers: { Authorization?: Bearer <access token>}
+ */
+
+coursesRouter.get('/:course_id', courseIdValidator, wrapRequestHandler(getCourseDetailController))
 
 export default coursesRouter

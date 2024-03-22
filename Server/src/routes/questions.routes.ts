@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import { createQuestionController } from '~/controllers/questions.controllers'
 import { createQuestionValidator } from '~/middlewares/questions.middlewares'
+import { testIdValidator } from '~/middlewares/tests.middlewares'
 import { accessTokenValidator, userRuleValidator, verifiedUserValidator } from '~/middlewares/users.middlewares'
 import { wrapRequestHandler } from '~/utils/handlers'
 
@@ -19,6 +20,7 @@ questionsRouter.post(
   verifiedUserValidator,
   userRuleValidator,
   createQuestionValidator,
+  testIdValidator,
   wrapRequestHandler(createQuestionController)
 )
 

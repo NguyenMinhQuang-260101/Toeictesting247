@@ -1,6 +1,9 @@
 import { checkSchema } from 'express-validator'
 import { ObjectId } from 'mongodb'
+import HTTP_STATUS from '~/constants/httpStatus'
 import { TESTS_MESSAGES } from '~/constants/message'
+import { ErrorWithStatus } from '~/models/Errors'
+import databaseServices from '~/services/database.services'
 import { validate } from '~/utils/validation'
 
 export const createTestValidator = validate(
@@ -57,5 +60,30 @@ export const createTestValidator = validate(
       }
     },
     ['body']
+  )
+)
+
+export const testIdValidator = validate(
+  checkSchema(
+    {
+      test_id: {
+        isMongoId: {
+          errorMessage: TESTS_MESSAGES.TEST_ID_INVALID
+        },
+        custom: {
+          options: async (value, { req }) => {
+            const test = await databaseServices.tests.findOne({ _id: new ObjectId(value as string) })
+            if (!test) {
+              throw new ErrorWithStatus({
+                message: TESTS_MESSAGES.TEST_NOT_FOUND,
+                status: HTTP_STATUS.NOT_FOUND
+              })
+            }
+            return true
+          }
+        }
+      }
+    },
+    ['params', 'body']
   )
 )

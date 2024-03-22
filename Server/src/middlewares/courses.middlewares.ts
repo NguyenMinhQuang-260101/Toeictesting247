@@ -1,7 +1,12 @@
 import { checkSchema } from 'express-validator'
+import { Request } from 'express'
 import { ObjectId } from 'mongodb'
 import { CourseType, MediaType, OperatingStatus } from '~/constants/enums'
+import HTTP_STATUS from '~/constants/httpStatus'
 import { COURSES_MESSAGES } from '~/constants/message'
+import { ErrorWithStatus } from '~/models/Errors'
+import Course from '~/models/schemas/Course.schema'
+import databaseServices from '~/services/database.services'
 import { numberEnumToArray } from '~/utils/commons'
 import { validate } from '~/utils/validation'
 
@@ -73,4 +78,61 @@ export const createCourseValidator = validate(
       }
     }
   })
+)
+
+export const courseIdValidator = validate(
+  checkSchema(
+    {
+      course_id: {
+        isMongoId: {
+          errorMessage: COURSES_MESSAGES.COURSE_ID_INVALID
+        },
+        custom: {
+          options: async (value, { req }) => {
+            const [course] = await databaseServices.courses
+              .aggregate<Course>([
+                {
+                  $match: {
+                    _id: new ObjectId(value as string)
+                  }
+                },
+                {
+                  $lookup: {
+                    from: 'tests',
+                    localField: 'tests',
+                    foreignField: '_id',
+                    as: 'tests'
+                  }
+                },
+                {
+                  $addFields: {
+                    tests: {
+                      $map: {
+                        input: '$tests',
+                        as: 'test',
+                        in: {
+                          _id: '$$test._id',
+                          course_id: '$$test.course_id',
+                          title: '$$test.title'
+                        }
+                      }
+                    }
+                  }
+                }
+              ])
+              .toArray()
+            if (!course) {
+              throw new ErrorWithStatus({
+                message: COURSES_MESSAGES.COURSE_NOT_FOUND,
+                status: HTTP_STATUS.NOT_FOUND
+              })
+            }
+            ;(req as Request).course = course
+            return true
+          }
+        }
+      }
+    },
+    ['params', 'body']
+  )
 )

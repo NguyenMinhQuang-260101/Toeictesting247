@@ -63,6 +63,8 @@ export const USERS_MESSAGES = {
 } as const
 
 export const COURSES_MESSAGES = {
+  COURSE_ID_INVALID: 'Course id invalid',
+  COURSE_NOT_FOUND: 'Course not found',
   COURSE_TYPE_INVALID: 'Course type invalid',
   TITLE_MUST_BE_STRING: 'Title must be a string',
   DESCRIPTION_MUST_BE_STRING: 'Description must be a string',
@@ -74,6 +76,8 @@ export const COURSES_MESSAGES = {
 } as const
 
 export const TESTS_MESSAGES = {
+  TEST_ID_INVALID: 'Test id invalid',
+  TEST_NOT_FOUND: 'Test not found',
   COURSE_ID_MUST_NOT_BE_EMPTY: 'Course id must not be empty',
   COURSE_ID_MUST_BE_AN_OBJECT_ID: 'Course id must be an ObjectId',
   TITLE_MUST_NOT_BE_EMPTY: 'Title must not be empty',
@@ -82,8 +86,7 @@ export const TESTS_MESSAGES = {
   DESCRIPTION_MUST_BE_STRING: 'Description must be a string',
   TIMELINE_MUST_NOT_BE_EMPTY: 'Timeline must not be empty',
   TIMELINE_MUST_BE_A_NUMBER: 'Timeline must be a number',
-  QUESTIONS_MUST_BE_AN_ARRAY_OF_QUESTION_ID: 'Questions must be an array of question id',
-  COURSE_ID_DOES_NOT_EXIST: 'Course id does not exist'
+  QUESTIONS_MUST_BE_AN_ARRAY_OF_QUESTION_ID: 'Questions must be an array of question id'
 } as const
 
 export const QUESTIONS_MESSAGES = {
@@ -96,6 +99,5 @@ export const QUESTIONS_MESSAGES = {
   ANSWERS_MUST_BE_AN_ARRAY_OF_ANSWER_OBJECT: 'Answers must be an array of answer object',
   CORRECT_AT_MUST_BE_AN_ANSWER_OBJECT: 'Correct at must be an answer object',
   SELECTED_AT_MUST_BE_AN_ANSWER_OBJECT: 'Selected at must be an answer object',
-  SCORE_MUST_BE_A_NUMBER: 'Score must be a number',
-  TEST_ID_DOES_NOT_EXIST: 'Test id does not exist'
+  SCORE_MUST_BE_A_NUMBER: 'Score must be a number'
 } as const

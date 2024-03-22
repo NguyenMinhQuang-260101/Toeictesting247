@@ -12,3 +12,10 @@ export const createCourseController = async (req: Request<ParamsDictionary, any,
     result
   })
 }
+
+export const getCourseDetailController = async (req: Request, res: Response) => {
+  return res.json({
+    message: 'Get course detail successfully',
+    result: req.course
+  })
+}
