@@ -84,3 +84,16 @@ export const TESTS_MESSAGES = {
   TIMELINE_MUST_BE_A_NUMBER: 'Timeline must be a number',
   QUESTIONS_MUST_BE_AN_ARRAY_OF_QUESTION_ID: 'Questions must be an array of question id'
 } as const
+
+export const QUESTIONS_MESSAGES = {
+  TEST_ID_MUST_BE_STRING: 'Test id must be a string',
+  TEST_ID_MUST_BE_AN_OBJECT_ID: 'Test id must be an ObjectId',
+  NUM_QUEST_MUST_BE_A_NUMBER: 'Num quest must be a number',
+  DESCRIPTION_MUST_BE_STRING: 'Description must be a string',
+  CONTENT_MUST_BE_STRING_OR_MEDIA_OBJECT: 'Content must be a string or media object',
+  CONTENT_MUST_BE_STRING: 'Content must be a string',
+  ANSWERS_MUST_BE_AN_ARRAY_OF_ANSWER_OBJECT: 'Answers must be an array of answer object',
+  CORRECT_AT_MUST_BE_AN_ANSWER_OBJECT: 'Correct at must be an answer object',
+  SELECTED_AT_MUST_BE_AN_ANSWER_OBJECT: 'Selected at must be an answer object',
+  SCORE_MUST_BE_A_NUMBER: 'Score must be a number'
+} as const
