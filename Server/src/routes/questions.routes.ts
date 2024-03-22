@@ -11,6 +11,7 @@ const questionsRouter = Router()
  * Method: POST
  * Path: /
  * Body: { QuestionReqBody }
+ * Headers: { Authorization: 'Bearer <access_token>' }
  */
 questionsRouter.post(
   '/',

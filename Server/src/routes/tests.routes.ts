@@ -11,6 +11,7 @@ const testsRouter = Router()
  * Method: POST
  * Path: /
  * Body: TestReqBody }
+ * Headers: { Authorization: 'Bearer <access_token>' }
  */
 testsRouter.post(
   '/',

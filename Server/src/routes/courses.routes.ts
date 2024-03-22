@@ -10,7 +10,8 @@ const coursesRouter = Router()
  * Description: Create course
  * Method: POST
  * Path: /
- * Body: { email: string, password: string }
+ * Body: { CourseReqBody }
+ * Headers: { Authorization Bearer <access_token>}
  */
 coursesRouter.post(
   '/',
