@@ -10,3 +10,17 @@ export const createTestController = async (req: Request<ParamsDictionary, any, T
     result
   })
 }
+
+export const getTestDetailController = async (req: Request, res: Response) => {
+  return res.json({
+    message: 'Get test detail successfully',
+    result: req.test
+  })
+}
+
+export const getFullTestDetailController = async (req: Request, res: Response) => {
+  return res.json({
+    message: 'Get full test detail successfully',
+    result: req.test
+  })
+}

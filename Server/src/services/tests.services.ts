@@ -1,21 +1,10 @@
 import { ObjectId } from 'bson'
-import HTTP_STATUS from '~/constants/httpStatus'
-import { TESTS_MESSAGES } from '~/constants/message'
-import { ErrorWithStatus } from '~/models/Errors'
 import { TestReqBody } from '~/models/requests/Test.requests'
 import Test from '~/models/schemas/Test.schema'
 import databaseServices from './database.services'
 
 class TestsController {
   async createTest(body: TestReqBody) {
-    // const course = await databaseServices.courses.findOne({ _id: new ObjectId(body.course_id) })
-    // if (!course) {
-    //   throw new ErrorWithStatus({
-    //     message: TESTS_MESSAGES.COURSE_ID_DOES_NOT_EXIST,
-    //     status: HTTP_STATUS.NOT_FOUND
-    //   })
-    // }
-
     const result = await databaseServices.tests.insertOne(
       new Test({
         course_id: new ObjectId(body.course_id),

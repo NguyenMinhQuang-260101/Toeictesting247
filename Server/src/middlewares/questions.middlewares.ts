@@ -1,7 +1,12 @@
 import { checkSchema } from 'express-validator'
+import { Request } from 'express'
 import { ObjectId } from 'mongodb'
 import { MediaType } from '~/constants/enums'
+import HTTP_STATUS from '~/constants/httpStatus'
 import { QUESTIONS_MESSAGES } from '~/constants/message'
+import { ErrorWithStatus } from '~/models/Errors'
+import Question from '~/models/schemas/Question.schema'
+import databaseServices from '~/services/database.services'
 import { numberEnumToArray } from '~/utils/commons'
 import { validate } from '~/utils/validation'
 
@@ -90,4 +95,59 @@ export const createQuestionValidator = validate(
       }
     }
   })
+)
+
+export const questionIdValidator = validate(
+  checkSchema(
+    {
+      question_id: {
+        isMongoId: {
+          errorMessage: QUESTIONS_MESSAGES.QUESTION_ID_INVALID
+        },
+        custom: {
+          options: async (value, { req }) => {
+            const [question] = await databaseServices.questions
+              .aggregate<Question>([
+                {
+                  $match: {
+                    _id: new ObjectId('65fd1324be2653f8beb74a3c')
+                  }
+                },
+                {
+                  $lookup: {
+                    from: 'tests',
+                    localField: 'test_id',
+                    foreignField: '_id',
+                    as: 'course'
+                  }
+                },
+                {
+                  $unwind: {
+                    path: '$course'
+                  }
+                },
+                {
+                  $addFields: {
+                    course_id: '$course.course_id'
+                  }
+                },
+                {
+                  $unset: 'course'
+                }
+              ])
+              .toArray()
+            if (!question) {
+              throw new ErrorWithStatus({
+                message: QUESTIONS_MESSAGES.QUESTION_NOT_FOUND,
+                status: HTTP_STATUS.NOT_FOUND
+              })
+            }
+            ;(req as Request).question = question
+            return true
+          }
+        }
+      }
+    },
+    ['params', 'body']
+  )
 )

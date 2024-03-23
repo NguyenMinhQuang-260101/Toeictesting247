@@ -90,6 +90,9 @@ export const TESTS_MESSAGES = {
 } as const
 
 export const QUESTIONS_MESSAGES = {
+  QUESTION_ID_INVALID: 'Question id invalid',
+  QUESTION_NOT_FOUND: 'Question not found',
+  QUESTION_ID_MUST_BE_STRING: 'Question id must be a string',
   TEST_ID_MUST_BE_STRING: 'Test id must be a string',
   TEST_ID_MUST_BE_AN_OBJECT_ID: 'Test id must be an ObjectId',
   NUM_QUEST_MUST_BE_A_NUMBER: 'Num quest must be a number',

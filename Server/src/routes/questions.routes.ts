@@ -1,6 +1,6 @@
 import { Router } from 'express'
-import { createQuestionController } from '~/controllers/questions.controllers'
-import { createQuestionValidator } from '~/middlewares/questions.middlewares'
+import { createQuestionController, getQuestionDetailController } from '~/controllers/questions.controllers'
+import { createQuestionValidator, questionIdValidator } from '~/middlewares/questions.middlewares'
 import { testIdValidator } from '~/middlewares/tests.middlewares'
 import { accessTokenValidator, userRuleValidator, verifiedUserValidator } from '~/middlewares/users.middlewares'
 import { wrapRequestHandler } from '~/utils/handlers'
@@ -23,5 +23,13 @@ questionsRouter.post(
   testIdValidator,
   wrapRequestHandler(createQuestionController)
 )
+
+/**
+ * Description: Get question detail
+ * Method: GET
+ * Path: /:question_id
+ * Headers: { Authorization?: Bearer <access token>}
+ */
+questionsRouter.get('/:question_id', questionIdValidator, wrapRequestHandler(getQuestionDetailController))
 
 export default questionsRouter

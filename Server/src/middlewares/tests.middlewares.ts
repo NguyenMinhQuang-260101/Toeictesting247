@@ -1,8 +1,10 @@
 import { checkSchema } from 'express-validator'
+import { Request } from 'express'
 import { ObjectId } from 'mongodb'
 import HTTP_STATUS from '~/constants/httpStatus'
 import { TESTS_MESSAGES } from '~/constants/message'
 import { ErrorWithStatus } from '~/models/Errors'
+import Test from '~/models/schemas/Test.schema'
 import databaseServices from '~/services/database.services'
 import { validate } from '~/utils/validation'
 
@@ -72,13 +74,69 @@ export const testIdValidator = validate(
         },
         custom: {
           options: async (value, { req }) => {
-            const test = await databaseServices.tests.findOne({ _id: new ObjectId(value as string) })
+            const [test] = await databaseServices.tests
+              .aggregate<Test>([
+                {
+                  $match: {
+                    _id: new ObjectId(value as string)
+                  }
+                },
+                {
+                  $project: {
+                    questions: 0
+                  }
+                }
+              ])
+              .toArray()
             if (!test) {
               throw new ErrorWithStatus({
                 message: TESTS_MESSAGES.TEST_NOT_FOUND,
                 status: HTTP_STATUS.NOT_FOUND
               })
             }
+            ;(req as Request).test = test
+            return true
+          }
+        }
+      }
+    },
+    ['params', 'body']
+  )
+)
+
+export const fullTestIdValidator = validate(
+  checkSchema(
+    {
+      test_id: {
+        isMongoId: {
+          errorMessage: TESTS_MESSAGES.TEST_ID_INVALID
+        },
+        custom: {
+          options: async (value, { req }) => {
+            const [test] = await databaseServices.tests
+              .aggregate<Test>([
+                {
+                  $match: {
+                    _id: new ObjectId('65fd0d1cbe2653f8beb74a30')
+                  }
+                },
+                {
+                  $lookup: {
+                    from: 'questions',
+                    localField: 'questions',
+                    foreignField: '_id',
+                    as: 'questions'
+                  }
+                }
+              ])
+              .toArray()
+            if (!test) {
+              throw new ErrorWithStatus({
+                message: TESTS_MESSAGES.TEST_NOT_FOUND,
+                status: HTTP_STATUS.NOT_FOUND
+              })
+            }
+            ;(req as Request).test = test
             return true
           }
         }
