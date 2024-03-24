@@ -38,3 +38,13 @@ export enum OperatingStatus {
   Inactive,
   Updating
 }
+
+export enum TargetType {
+  Document,
+  Course
+}
+
+export enum NotificationType {
+  Update,
+  Other
+}

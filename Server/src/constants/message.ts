@@ -63,7 +63,6 @@ export const USERS_MESSAGES = {
 } as const
 
 export const COURSES_MESSAGES = {
-  COURSE_ID_MUST_BE_PROVIDED: 'Course id must be provided',
   COURSE_ID_INVALID: 'Course id invalid',
   COURSE_NOT_FOUND: 'Course not found',
   COURSE_TYPE_INVALID: 'Course type invalid',
@@ -72,13 +71,11 @@ export const COURSES_MESSAGES = {
   CONTENT_MUST_BE_STRING: 'Content must be a string',
   TEST_MUST_BE_AN_ARRAY_OF_TEST_ID: 'Test must be an array of test id',
   NOTIFICATION_MUST_BE_AN_OBJECT_ID: 'Notification must be an object id',
-  THUMBNAILS_MUST_BE_AN_ARRAY_OF_MEDIA_OBJECT: 'Thumbnails must be an array of media object',
-  STATUS_INVALID: 'Status invalid'
+  THUMBNAILS_MUST_BE_AN_ARRAY_OF_MEDIA_OBJECT: 'Thumbnails must be an array of media object'
 } as const
 
 export const TESTS_MESSAGES = {
   SOURCE_ID_INVALID: 'Source id invalid',
-  SOURCE_NOT_FOUND: 'Course or Document not found',
   TEST_ID_INVALID: 'Test id invalid',
   TEST_NOT_FOUND: 'Test not found',
   SOURCE_ID_MUST_NOT_BE_EMPTY: 'Source id must not be empty',
@@ -95,7 +92,6 @@ export const TESTS_MESSAGES = {
 export const QUESTIONS_MESSAGES = {
   QUESTION_ID_INVALID: 'Question id invalid',
   QUESTION_NOT_FOUND: 'Question not found',
-  QUESTION_ID_MUST_BE_STRING: 'Question id must be a string',
   TEST_ID_MUST_BE_STRING: 'Test id must be a string',
   TEST_ID_MUST_BE_AN_OBJECT_ID: 'Test id must be an ObjectId',
   NUM_QUEST_MUST_BE_A_NUMBER: 'Num quest must be a number',
@@ -106,4 +102,18 @@ export const QUESTIONS_MESSAGES = {
   CORRECT_AT_MUST_BE_AN_ANSWER_OBJECT: 'Correct at must be an answer object',
   SELECTED_AT_MUST_BE_AN_ANSWER_OBJECT: 'Selected at must be an answer object',
   SCORE_MUST_BE_A_NUMBER: 'Score must be a number'
+} as const
+
+export const NOTIFICATIONS_MESSAGES = {
+  NOTIFICATION_ID_INVALID: 'Notification id invalid',
+  NOTIFICATION_NOT_FOUND: 'Notification not found',
+  TYPE_INVALID: 'Notification type invalid',
+  TITLE_NOT_EMPTY: 'Title not empty',
+  TITLE_MUST_BE_STRING: 'Title must be a string',
+  CONTENT_NOT_EMPTY: 'Content not empty',
+  CONTENT_MUST_BE_STRING: 'Content must be a string',
+  TARGET_TYPE_INVALID: 'Target type invalid',
+  TARGET_TYPE_NOT_EMPTY: 'Target type not empty',
+  DAY_MUST_BE_ISO8601: 'Day must be ISO8601',
+  TARGETS_MUST_BE_AN_ARRAY_OF_OBJECT_ID: 'Targets must be an array of ObjectId'
 } as const

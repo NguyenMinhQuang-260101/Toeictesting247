@@ -155,6 +155,8 @@ export const sourceIdValidator = validate(
       },
       custom: {
         options: async (value, { req }) => {
+          // ** Chỉ mới kiểm tra cho collection courses **
+          // ** Cần kiểm tra thêm collection Document về sau **
           const course = await databaseServices.courses.findOne<Course>({ _id: new ObjectId(value as string) })
           if (!course) {
             throw new ErrorWithStatus({

@@ -1,8 +1,5 @@
 import { Request, Response } from 'express'
 import { ParamsDictionary } from 'express-serve-static-core'
-import HTTP_STATUS from '~/constants/httpStatus'
-import { COURSES_MESSAGES } from '~/constants/message'
-import { ErrorWithStatus } from '~/models/Errors'
 import { CourseReqBody } from '~/models/requests/Course.requests'
 import { TokenPayload } from '~/models/requests/User.requests'
 import coursesService from '~/services/courses.services'

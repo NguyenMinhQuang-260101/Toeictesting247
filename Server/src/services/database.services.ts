@@ -1,6 +1,7 @@
 import { Collection, Db, MongoClient } from 'mongodb'
 import { envConfig } from '~/constants/config'
 import Course from '~/models/schemas/Course.schema'
+import Notification from '~/models/schemas/Notification.schema'
 import Question from '~/models/schemas/Question.schema'
 import RefreshToken from '~/models/schemas/RefreshToken.schema'
 import Test from '~/models/schemas/Test.schema'
@@ -67,6 +68,10 @@ class DatabaseServices {
 
   get questions(): Collection<Question> {
     return this.db.collection(envConfig.dbQuestionsCollection)
+  }
+
+  get notifications(): Collection<Notification> {
+    return this.db.collection(envConfig.dbNotificationsCollection)
   }
 }
 
