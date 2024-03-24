@@ -14,7 +14,7 @@ import notificationsRouter from './routes/notifications.routes'
 const app = express()
 const port = envConfig.port
 databaseServices.connect().then(() => {
-  databaseServices.indexUsers(), databaseServices.indexRefreshTokens()
+  databaseServices.indexUsers(), databaseServices.indexRefreshTokens(), databaseServices.watchTimeFields()
 })
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`)
