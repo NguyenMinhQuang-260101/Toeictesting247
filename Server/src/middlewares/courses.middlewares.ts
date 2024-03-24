@@ -3,7 +3,7 @@ import { Request } from 'express'
 import { ObjectId } from 'mongodb'
 import { CourseType, MediaType, OperatingStatus } from '~/constants/enums'
 import HTTP_STATUS from '~/constants/httpStatus'
-import { COURSES_MESSAGES } from '~/constants/message'
+import { COURSES_MESSAGES, TESTS_MESSAGES } from '~/constants/message'
 import { ErrorWithStatus } from '~/models/Errors'
 import Course from '~/models/schemas/Course.schema'
 import databaseServices from '~/services/database.services'
@@ -69,12 +69,6 @@ export const createCourseValidator = validate(
           }
           return true
         }
-      }
-    },
-    status: {
-      isIn: {
-        options: [status],
-        errorMessage: COURSES_MESSAGES.STATUS_INVALID
       }
     }
   })

@@ -4,8 +4,12 @@ import {
   getFullTestDetailController,
   getTestDetailController
 } from '~/controllers/tests.controllers'
-import { courseIdValidator } from '~/middlewares/courses.middlewares'
-import { createTestValidator, fullTestIdValidator, testIdValidator } from '~/middlewares/tests.middlewares'
+import {
+  createTestValidator,
+  fullTestIdValidator,
+  sourceIdValidator,
+  testIdValidator
+} from '~/middlewares/tests.middlewares'
 import { accessTokenValidator, userRuleValidator, verifiedUserValidator } from '~/middlewares/users.middlewares'
 import { wrapRequestHandler } from '~/utils/handlers'
 
@@ -24,7 +28,7 @@ testsRouter.post(
   verifiedUserValidator,
   userRuleValidator,
   createTestValidator,
-  courseIdValidator,
+  sourceIdValidator,
   wrapRequestHandler(createTestController)
 )
 

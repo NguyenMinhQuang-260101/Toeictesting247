@@ -1,10 +1,11 @@
 import { Request, Response } from 'express'
 import { ParamsDictionary } from 'express-serve-static-core'
 import { TestReqBody } from '~/models/requests/Test.requests'
+import Course from '~/models/schemas/Course.schema'
 import testsService from '~/services/tests.services'
 
 export const createTestController = async (req: Request<ParamsDictionary, any, TestReqBody>, res: Response) => {
-  const result = await testsService.createTest(req.body)
+  const result = await testsService.createTest(req.body, req.course as Course)
   return res.json({
     message: 'Test created successfully',
     result

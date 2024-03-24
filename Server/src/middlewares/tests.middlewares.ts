@@ -2,23 +2,24 @@ import { checkSchema } from 'express-validator'
 import { Request } from 'express'
 import { ObjectId } from 'mongodb'
 import HTTP_STATUS from '~/constants/httpStatus'
-import { TESTS_MESSAGES } from '~/constants/message'
+import { COURSES_MESSAGES, TESTS_MESSAGES } from '~/constants/message'
 import { ErrorWithStatus } from '~/models/Errors'
 import Test from '~/models/schemas/Test.schema'
 import databaseServices from '~/services/database.services'
 import { validate } from '~/utils/validation'
+import Course from '~/models/schemas/Course.schema'
 
 export const createTestValidator = validate(
   checkSchema(
     {
-      course_id: {
+      source_id: {
         notEmpty: {
-          errorMessage: TESTS_MESSAGES.COURSE_ID_MUST_NOT_BE_EMPTY
+          errorMessage: TESTS_MESSAGES.SOURCE_ID_MUST_NOT_BE_EMPTY
         },
         custom: {
           options: (value, { req }) => {
             if (!ObjectId.isValid(value)) {
-              throw new Error(TESTS_MESSAGES.COURSE_ID_MUST_BE_AN_OBJECT_ID)
+              throw new Error(TESTS_MESSAGES.SOURCE_ID_MUST_BE_AN_OBJECT_ID)
             }
             return true
           }
@@ -144,4 +145,27 @@ export const fullTestIdValidator = validate(
     },
     ['params', 'body']
   )
+)
+
+export const sourceIdValidator = validate(
+  checkSchema({
+    source_id: {
+      isMongoId: {
+        errorMessage: TESTS_MESSAGES.SOURCE_ID_INVALID
+      },
+      custom: {
+        options: async (value, { req }) => {
+          const course = await databaseServices.courses.findOne<Course>({ _id: new ObjectId(value as string) })
+          if (!course) {
+            throw new ErrorWithStatus({
+              message: COURSES_MESSAGES.COURSE_NOT_FOUND,
+              status: HTTP_STATUS.NOT_FOUND
+            })
+          }
+          ;(req as Request).course = course
+          return true
+        }
+      }
+    }
+  })
 )

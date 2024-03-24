@@ -110,7 +110,7 @@ export const questionIdValidator = validate(
               .aggregate<Question>([
                 {
                   $match: {
-                    _id: new ObjectId('65fd1324be2653f8beb74a3c')
+                    _id: new ObjectId(value as string)
                   }
                 },
                 {
@@ -118,21 +118,21 @@ export const questionIdValidator = validate(
                     from: 'tests',
                     localField: 'test_id',
                     foreignField: '_id',
-                    as: 'course'
+                    as: 'origin'
                   }
                 },
                 {
                   $unwind: {
-                    path: '$course'
+                    path: '$origin'
                   }
                 },
                 {
                   $addFields: {
-                    course_id: '$course.course_id'
+                    origin_id: '$origin.source_id'
                   }
                 },
                 {
-                  $unset: 'course'
+                  $unset: 'origin'
                 }
               ])
               .toArray()

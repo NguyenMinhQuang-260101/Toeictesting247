@@ -2,7 +2,7 @@ import { ObjectId } from 'mongodb'
 
 interface TestConstructor {
   _id?: ObjectId
-  course_id: ObjectId
+  source_id: ObjectId
   title: string
   description: string
   timeline: number
@@ -13,17 +13,17 @@ interface TestConstructor {
 
 export default class Test {
   _id?: ObjectId
-  course_id: ObjectId
+  source_id: ObjectId
   title: string
   description: string
   timeline: number
   questions: ObjectId[]
   created_at: Date
   updated_at: Date
-  constructor({ _id, course_id, title, description, timeline, questions, created_at, updated_at }: TestConstructor) {
+  constructor({ _id, source_id, title, description, timeline, questions, created_at, updated_at }: TestConstructor) {
     const date = new Date()
     this._id = _id
-    this.course_id = course_id
+    this.source_id = source_id
     this.title = title
     this.description = description
     this.timeline = timeline

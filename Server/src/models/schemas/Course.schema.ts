@@ -15,7 +15,7 @@ interface CourseConstructor {
   user_views?: number
   created_at?: Date
   updated_at?: Date
-  status: OperatingStatus
+  status?: OperatingStatus
 }
 
 export default class Course {
@@ -60,6 +60,6 @@ export default class Course {
     this.type = type
     this.created_at = created_at || date
     this.updated_at = updated_at || date
-    this.status = status
+    this.status = status || OperatingStatus.Inactive
   }
 }

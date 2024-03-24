@@ -63,6 +63,7 @@ export const USERS_MESSAGES = {
 } as const
 
 export const COURSES_MESSAGES = {
+  COURSE_ID_MUST_BE_PROVIDED: 'Course id must be provided',
   COURSE_ID_INVALID: 'Course id invalid',
   COURSE_NOT_FOUND: 'Course not found',
   COURSE_TYPE_INVALID: 'Course type invalid',
@@ -76,10 +77,12 @@ export const COURSES_MESSAGES = {
 } as const
 
 export const TESTS_MESSAGES = {
+  SOURCE_ID_INVALID: 'Source id invalid',
+  SOURCE_NOT_FOUND: 'Course or Document not found',
   TEST_ID_INVALID: 'Test id invalid',
   TEST_NOT_FOUND: 'Test not found',
-  COURSE_ID_MUST_NOT_BE_EMPTY: 'Course id must not be empty',
-  COURSE_ID_MUST_BE_AN_OBJECT_ID: 'Course id must be an ObjectId',
+  SOURCE_ID_MUST_NOT_BE_EMPTY: 'Source id must not be empty',
+  SOURCE_ID_MUST_BE_AN_OBJECT_ID: 'Source id must be an ObjectId',
   TITLE_MUST_NOT_BE_EMPTY: 'Title must not be empty',
   TITLE_MUST_BE_STRING: 'Title must be a string',
   DESCRIPTION_MUST_NOT_BE_EMPTY: 'Description must not be empty',

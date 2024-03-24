@@ -14,8 +14,7 @@ class CoursesService {
         tests: body.tests,
         thumbnails: body.thumbnails,
         notification: body.notification,
-        type: body.type,
-        status: body.status
+        type: body.type
       })
     )
     const course = await databaseServices.courses.findOne({ _id: result.insertedId })

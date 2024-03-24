@@ -1,5 +1,5 @@
 export interface TestReqBody {
-  course_id: string
+  source_id: string
   title: string
   description: string
   timeline: number
