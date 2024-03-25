@@ -1,7 +1,12 @@
+import { Request } from 'express'
 import { ParamSchema, checkSchema } from 'express-validator'
 import { ObjectId } from 'mongodb'
 import { NotificationType, TargetType } from '~/constants/enums'
+import HTTP_STATUS from '~/constants/httpStatus'
 import { NOTIFICATIONS_MESSAGES } from '~/constants/message'
+import { ErrorWithStatus } from '~/models/Errors'
+import Notification from '~/models/schemas/Notification.schema'
+import databaseServices from '~/services/database.services'
 import { numberEnumToArray } from '~/utils/commons'
 import { validate } from '~/utils/validation'
 
@@ -72,4 +77,62 @@ export const createNotificationValidator = validate(
     start_at: daySchema,
     end_at: daySchema
   })
+)
+
+export const notificationIdValidator = validate(
+  checkSchema(
+    {
+      notification_id: {
+        isMongoId: {
+          errorMessage: NOTIFICATIONS_MESSAGES.NOTIFICATION_ID_INVALID
+        },
+        custom: {
+          options: async (value, { req }) => {
+            const [notification] = await databaseServices.notifications
+              .aggregate<Notification>([
+                {
+                  $match: {
+                    _id: new ObjectId(value as string)
+                  }
+                },
+                {
+                  $lookup: {
+                    from: 'courses',
+                    localField: 'targets',
+                    foreignField: '_id',
+                    as: 'targets'
+                  }
+                },
+                {
+                  $addFields: {
+                    targets: {
+                      $map: {
+                        input: '$targets',
+                        as: 'target',
+                        in: {
+                          _id: '$$target._id',
+                          user_id: '$$target.user_id',
+                          type: '$$target.type',
+                          title: '$$target.title',
+                          thumbnail: '$$target.thumbnail'
+                        }
+                      }
+                    }
+                  }
+                }
+              ])
+              .toArray()
+            if (!notification) {
+              throw new ErrorWithStatus({
+                message: NOTIFICATIONS_MESSAGES.NOTIFICATION_NOT_FOUND,
+                status: HTTP_STATUS.NOT_FOUND
+              })
+            }
+            ;(req as Request).notification = notification
+          }
+        }
+      }
+    },
+    ['params', 'body']
+  )
 )

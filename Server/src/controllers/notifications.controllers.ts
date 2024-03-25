@@ -15,3 +15,10 @@ export const notificationsController = async (
     result
   })
 }
+
+export const getNotificationDetailController = async (req: Request, res: Response) => {
+  return res.json({
+    message: 'Notification detail',
+    result: req.notification
+  })
+}

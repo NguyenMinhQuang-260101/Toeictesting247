@@ -2,6 +2,9 @@ import { Request } from 'express'
 import User from './models/schemas/User.schema'
 import { TokenPayload } from './models/requests/User.requests'
 import Course from './models/schemas/Course.schema'
+import Notification from './models/schemas/Notification.schema'
+import Test from './models/schemas/Test.schema'
+import Question from './models/schemas/Question.schema'
 
 declare module 'express' {
   interface Request {
@@ -13,5 +16,6 @@ declare module 'express' {
     course?: Course
     test?: Test
     question?: Question
+    notification?: Notification
   }
 }

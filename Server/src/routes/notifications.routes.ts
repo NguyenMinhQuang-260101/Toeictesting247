@@ -1,6 +1,6 @@
 import { Router } from 'express'
-import { notificationsController } from '~/controllers/notifications.controllers'
-import { createNotificationValidator } from '~/middlewares/notifications.middlewares'
+import { getNotificationDetailController, notificationsController } from '~/controllers/notifications.controllers'
+import { createNotificationValidator, notificationIdValidator } from '~/middlewares/notifications.middlewares'
 import { accessTokenValidator, userRuleValidator, verifiedUserValidator } from '~/middlewares/users.middlewares'
 import { wrapRequestHandler } from '~/utils/handlers'
 
@@ -20,6 +20,18 @@ notificationsRouter.post(
   userRuleValidator,
   createNotificationValidator,
   wrapRequestHandler(notificationsController)
+)
+
+/**
+ * Description: Get notification detail
+ * Method: GET
+ * Path: /:notification_id
+ * Headers: { Authorization?: Bearer <access token>}
+ */
+notificationsRouter.get(
+  '/:notification_id',
+  notificationIdValidator,
+  wrapRequestHandler(getNotificationDetailController)
 )
 
 export default notificationsRouter
