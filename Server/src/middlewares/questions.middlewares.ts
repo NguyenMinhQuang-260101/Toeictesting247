@@ -1,4 +1,4 @@
-import { checkSchema } from 'express-validator'
+import { ParamSchema, checkSchema } from 'express-validator'
 import { Request } from 'express'
 import { ObjectId } from 'mongodb'
 import { MediaType } from '~/constants/enums'
@@ -9,6 +9,61 @@ import Question from '~/models/schemas/Question.schema'
 import databaseServices from '~/services/database.services'
 import { numberEnumToArray } from '~/utils/commons'
 import { validate } from '~/utils/validation'
+
+const numQuestSchema: ParamSchema = {
+  isEmpty: {
+    errorMessage: QUESTIONS_MESSAGES.NUM_QUEST_MUST_NOT_BE_EMPTY
+  },
+  isInt: {
+    errorMessage: QUESTIONS_MESSAGES.NUM_QUEST_MUST_BE_A_NUMBER
+  }
+}
+
+const descriptionSchema: ParamSchema = {
+  notEmpty: {
+    errorMessage: QUESTIONS_MESSAGES.DESCRIPTION_MUST_NOT_BE_EMPTY
+  },
+  isString: {
+    errorMessage: QUESTIONS_MESSAGES.DESCRIPTION_MUST_BE_STRING
+  }
+}
+
+const contentSchema: ParamSchema = {
+  isEmpty: {
+    errorMessage: QUESTIONS_MESSAGES.CONTENT_MUST_NOT_BE_EMPTY
+  },
+  custom: {
+    options: (value, { req }) => {
+      if (typeof value === 'string') {
+        // Kiểm tra nếu giá trị là một chuỗi hoặc một mảng
+        return true
+      } else if (
+        Array.isArray(value) &&
+        value.every((item: any) => typeof item.url === 'string' && mediaTypes.includes(item.type))
+      ) {
+        return true
+      } else {
+        throw new Error(QUESTIONS_MESSAGES.CONTENT_MUST_BE_STRING_OR_MEDIA_OBJECT)
+      }
+    }
+  }
+}
+
+const answerSchema: ParamSchema = {
+  isArray: true,
+  custom: {
+    options: (value, { req }) => {
+      if (
+        value.some((item: any) => {
+          return typeof item.order_answer !== 'string' || typeof item.content_answer !== 'string'
+        })
+      ) {
+        throw new Error(QUESTIONS_MESSAGES.ANSWERS_MUST_BE_AN_ARRAY_OF_ANSWER_OBJECT)
+      }
+      return true
+    }
+  }
+}
 
 const mediaTypes = numberEnumToArray(MediaType)
 export const createQuestionValidator = validate(
@@ -26,48 +81,10 @@ export const createQuestionValidator = validate(
         }
       }
     },
-    num_quest: {
-      isInt: {
-        errorMessage: QUESTIONS_MESSAGES.NUM_QUEST_MUST_BE_A_NUMBER
-      }
-    },
-    description: {
-      isString: {
-        errorMessage: QUESTIONS_MESSAGES.DESCRIPTION_MUST_BE_STRING
-      }
-    },
-    content: {
-      custom: {
-        options: (value, { req }) => {
-          if (typeof value === 'string') {
-            // Kiểm tra nếu giá trị là một chuỗi hoặc một mảng
-            return true
-          } else if (
-            Array.isArray(value) &&
-            value.every((item: any) => typeof item.url === 'string' && mediaTypes.includes(item.type))
-          ) {
-            return true
-          } else {
-            throw new Error(QUESTIONS_MESSAGES.CONTENT_MUST_BE_STRING_OR_MEDIA_OBJECT)
-          }
-        }
-      }
-    },
-    answers: {
-      isArray: true,
-      custom: {
-        options: (value, { req }) => {
-          if (
-            value.some((item: any) => {
-              return typeof item.order_answer !== 'string' || typeof item.content_answer !== 'string'
-            })
-          ) {
-            throw new Error(QUESTIONS_MESSAGES.ANSWERS_MUST_BE_AN_ARRAY_OF_ANSWER_OBJECT)
-          }
-          return true
-        }
-      }
-    },
+    num_quest: numQuestSchema,
+    description: descriptionSchema,
+    content: contentSchema,
+    answers: answerSchema,
     correct_at: {
       custom: {
         options: (value, { req }) => {

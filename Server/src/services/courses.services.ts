@@ -34,16 +34,9 @@ class CoursesService {
       })
     }
 
-    if (payload.status === OperatingStatus.Active && course.status === OperatingStatus.Updating) {
+    if (payload.status === OperatingStatus.Active && course.notification !== null) {
       throw new ErrorWithStatus({
         message: COURSES_MESSAGES.ACTIVE_STATUS_CAN_ONLY_BE_SWITCHED_WHEN_NOTIFICATION_EXPIRED,
-        status: HTTP_STATUS.BAD_REQUEST
-      })
-    }
-
-    if (course.status === OperatingStatus.Active) {
-      throw new ErrorWithStatus({
-        message: COURSES_MESSAGES.CANNOT_UPDATE_ACTIVE_COURSE,
         status: HTTP_STATUS.BAD_REQUEST
       })
     }

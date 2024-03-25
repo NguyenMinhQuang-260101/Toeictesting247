@@ -35,7 +35,7 @@ class TestsController {
 
   async updateTest(payload: UpdateTestReqBody, course: Course) {
     const _payload = payload.source_id ? { ...payload, source_id: new ObjectId(payload.source_id) } : payload
-    if (course.status !== (OperatingStatus.Updating || OperatingStatus.Inactive)) {
+    if (course.status === OperatingStatus.Active) {
       throw new ErrorWithStatus({
         message: TESTS_MESSAGES.CAN_ONLY_UPDATE_TEST_WHEN_COURSE_IS_UPDATING_OR_INACTIVE,
         status: HTTP_STATUS.BAD_REQUEST

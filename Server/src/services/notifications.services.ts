@@ -4,7 +4,7 @@ import databaseServices from './database.services'
 import Notification from '~/models/schemas/Notification.schema'
 import { ObjectId, WithId } from 'mongodb'
 import { forEach } from 'lodash'
-import { NotificationType, TargetType } from '~/constants/enums'
+import { NotificationType, OperatingStatus, TargetType } from '~/constants/enums'
 import { ErrorWithStatus } from '~/models/Errors'
 import HTTP_STATUS from '~/constants/httpStatus'
 
@@ -32,7 +32,7 @@ class NotificationsService {
       if (body.target_type === TargetType.Course) {
         const courses = await databaseServices.courses.find({ _id: { $in: targets } }).toArray()
         forEach(courses, async (course) => {
-          if (course.notification === null) {
+          if (course.notification === null && course.status !== OperatingStatus.Inactive) {
             await databaseServices.courses.updateOne({ _id: course._id }, { $set: { notification: result.insertedId } })
           } else {
             failedTargets.push(course._id)
@@ -50,7 +50,7 @@ class NotificationsService {
         await databaseServices.notifications.deleteOne({ _id: result.insertedId })
 
         throw new ErrorWithStatus({
-          message: `Cannot add notification to course(s) or document(s) with ID(s): ${failedTargets_tamp.join(', ')} because they are not found or already have notification.`,
+          message: `Cannot add notification to course(s) or document(s) with ID(s): ${failedTargets_tamp.join(', ')}: \n Case 1: The course is in Inactive state so there is no need to create notifications. \n Case 2: Course is updating. Please wait for the course to be updated.`,
           status: HTTP_STATUS.INTERNAL_SERVER_ERROR
         })
       }
