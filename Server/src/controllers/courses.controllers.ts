@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import { ParamsDictionary } from 'express-serve-static-core'
 import { CourseReqBody, UpdateCourseReqBody } from '~/models/requests/Course.requests'
 import { TokenPayload } from '~/models/requests/User.requests'
+import Course from '~/models/schemas/Course.schema'
 import coursesService from '~/services/courses.services'
 
 export const createCourseController = async (req: Request<ParamsDictionary, any, CourseReqBody>, res: Response) => {
@@ -24,8 +25,11 @@ export const updateCourseController = async (
   req: Request<ParamsDictionary, any, UpdateCourseReqBody>,
   res: Response
 ) => {
+  const { body } = req
+  const course = await coursesService.updateCourse(body, req.course as Course)
+
   return res.json({
     message: 'Course updated successfully',
-    result: req
+    result: course
   })
 }

@@ -1,4 +1,4 @@
-import { checkSchema } from 'express-validator'
+import { ParamSchema, checkSchema } from 'express-validator'
 import { Request } from 'express'
 import { ObjectId } from 'mongodb'
 import HTTP_STATUS from '~/constants/httpStatus'
@@ -9,46 +9,68 @@ import databaseServices from '~/services/database.services'
 import { validate } from '~/utils/validation'
 import Course from '~/models/schemas/Course.schema'
 
+const sourceIdSchema: ParamSchema = {
+  notEmpty: {
+    errorMessage: TESTS_MESSAGES.SOURCE_ID_MUST_NOT_BE_EMPTY
+  },
+  custom: {
+    options: (value, { req }) => {
+      if (!ObjectId.isValid(value)) {
+        throw new Error(TESTS_MESSAGES.SOURCE_ID_MUST_BE_AN_OBJECT_ID)
+      }
+      return true
+    }
+  }
+}
+
+const testIdSchema: ParamSchema = {
+  notEmpty: {
+    errorMessage: TESTS_MESSAGES.SOURCE_ID_MUST_NOT_BE_EMPTY
+  },
+  custom: {
+    options: (value, { req }) => {
+      if (!ObjectId.isValid(value)) {
+        throw new Error(TESTS_MESSAGES.TEST_ID_MUST_BE_AN_OBJECT_ID)
+      }
+      return true
+    }
+  }
+}
+
+const titleSchema: ParamSchema = {
+  notEmpty: {
+    errorMessage: TESTS_MESSAGES.TITLE_MUST_NOT_BE_EMPTY
+  },
+  isString: {
+    errorMessage: TESTS_MESSAGES.TITLE_MUST_BE_STRING
+  }
+}
+
+const descriptionSchema: ParamSchema = {
+  notEmpty: {
+    errorMessage: TESTS_MESSAGES.DESCRIPTION_MUST_NOT_BE_EMPTY
+  },
+  isString: {
+    errorMessage: TESTS_MESSAGES.DESCRIPTION_MUST_BE_STRING
+  }
+}
+
+const timelineSchema: ParamSchema = {
+  notEmpty: {
+    errorMessage: TESTS_MESSAGES.TIMELINE_MUST_NOT_BE_EMPTY
+  },
+  isInt: {
+    errorMessage: TESTS_MESSAGES.TIMELINE_MUST_BE_A_NUMBER
+  }
+}
+
 export const createTestValidator = validate(
   checkSchema(
     {
-      source_id: {
-        notEmpty: {
-          errorMessage: TESTS_MESSAGES.SOURCE_ID_MUST_NOT_BE_EMPTY
-        },
-        custom: {
-          options: (value, { req }) => {
-            if (!ObjectId.isValid(value)) {
-              throw new Error(TESTS_MESSAGES.SOURCE_ID_MUST_BE_AN_OBJECT_ID)
-            }
-            return true
-          }
-        }
-      },
-      title: {
-        notEmpty: {
-          errorMessage: TESTS_MESSAGES.TITLE_MUST_NOT_BE_EMPTY
-        },
-        isString: {
-          errorMessage: TESTS_MESSAGES.TITLE_MUST_BE_STRING
-        }
-      },
-      description: {
-        notEmpty: {
-          errorMessage: TESTS_MESSAGES.DESCRIPTION_MUST_NOT_BE_EMPTY
-        },
-        isString: {
-          errorMessage: TESTS_MESSAGES.DESCRIPTION_MUST_BE_STRING
-        }
-      },
-      timeline: {
-        notEmpty: {
-          errorMessage: TESTS_MESSAGES.TIMELINE_MUST_NOT_BE_EMPTY
-        },
-        isInt: {
-          errorMessage: TESTS_MESSAGES.TIMELINE_MUST_BE_A_NUMBER
-        }
-      },
+      source_id: sourceIdSchema,
+      title: titleSchema,
+      description: descriptionSchema,
+      timeline: timelineSchema,
       questions: {
         isArray: true,
         custom: {
@@ -168,6 +190,25 @@ export const sourceIdValidator = validate(
           return true
         }
       }
+    }
+  })
+)
+
+export const testUpdateValidator = validate(
+  checkSchema({
+    test_id: testIdSchema,
+    source_id: sourceIdSchema,
+    title: {
+      ...titleSchema,
+      optional: true
+    },
+    description: {
+      ...descriptionSchema,
+      optional: true
+    },
+    timeline: {
+      ...timelineSchema,
+      optional: true
     }
   })
 )

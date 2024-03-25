@@ -6,7 +6,7 @@ interface TestConstructor {
   title: string
   description: string
   timeline: number
-  questions: string[]
+  questions: string[] | []
   created_at?: Date
   updated_at?: Date
 }
@@ -27,7 +27,7 @@ export default class Test {
     this.title = title
     this.description = description
     this.timeline = timeline
-    this.questions = questions.map((item) => new ObjectId(item))
+    this.questions = questions ? questions.map((question) => new ObjectId(question)) : []
     this.created_at = created_at || date
     this.updated_at = updated_at || date
   }

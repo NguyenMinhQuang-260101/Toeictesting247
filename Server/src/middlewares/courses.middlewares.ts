@@ -196,7 +196,18 @@ export const updateCourseValidator = validate(
     },
     status: {
       ...statusSchema,
-      optional: true
+      optional: true,
+      custom: {
+        options: (value, { req }) => {
+          if (value === OperatingStatus.Updating) {
+            throw new ErrorWithStatus({
+              message: COURSES_MESSAGES.UPDATE_STATUS_CAN_ONLY_BE_SWITCHED_BY_CREATING_A_NOTIFICATION,
+              status: HTTP_STATUS.BAD_REQUEST
+            })
+          }
+          return true
+        }
+      }
     }
   })
 )

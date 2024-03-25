@@ -1,5 +1,9 @@
 import { Router } from 'express'
-import { createQuestionController, getQuestionDetailController } from '~/controllers/questions.controllers'
+import {
+  createQuestionController,
+  getQuestionDetailController,
+  updateQuestionController
+} from '~/controllers/questions.controllers'
 import { createQuestionValidator, questionIdValidator } from '~/middlewares/questions.middlewares'
 import { testIdValidator } from '~/middlewares/tests.middlewares'
 import { accessTokenValidator, userRuleValidator, verifiedUserValidator } from '~/middlewares/users.middlewares'
@@ -31,5 +35,13 @@ questionsRouter.post(
  * Headers: { Authorization?: Bearer <access token>}
  */
 questionsRouter.get('/:question_id', questionIdValidator, wrapRequestHandler(getQuestionDetailController))
+
+/**
+ * Description: Update question
+ * Method: PATCH
+ * Path: /update
+ * Headers: { Authorization?: Bearer <access token>}
+ */
+questionsRouter.patch('/update', wrapRequestHandler(updateQuestionController))
 
 export default questionsRouter

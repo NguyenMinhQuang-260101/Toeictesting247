@@ -14,3 +14,10 @@ export const getQuestionDetailController = async (req: Request, res: Response) =
     result: req.question
   })
 }
+
+export const updateQuestionController = async (req: Request, res: Response) => {
+  return res.json({
+    message: 'Update question successfully',
+    result: req.body
+  })
+}

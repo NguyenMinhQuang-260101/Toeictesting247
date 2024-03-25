@@ -1,8 +1,13 @@
 import { ObjectId } from 'bson'
-import { TestReqBody } from '~/models/requests/Test.requests'
+import { TestReqBody, UpdateTestReqBody } from '~/models/requests/Test.requests'
 import Course from '~/models/schemas/Course.schema'
 import Test from '~/models/schemas/Test.schema'
 import databaseServices from './database.services'
+import { omit } from 'lodash'
+import { OperatingStatus } from '~/constants/enums'
+import { ErrorWithStatus } from '~/models/Errors'
+import { TESTS_MESSAGES } from '~/constants/message'
+import HTTP_STATUS from '~/constants/httpStatus'
 
 class TestsController {
   async createTest(body: TestReqBody, course: Course) {
@@ -25,6 +30,29 @@ class TestsController {
     }
 
     const test = await databaseServices.tests.findOne({ _id: result.insertedId })
+    return test
+  }
+
+  async updateTest(payload: UpdateTestReqBody, course: Course) {
+    const _payload = payload.source_id ? { ...payload, source_id: new ObjectId(payload.source_id) } : payload
+    if (course.status !== (OperatingStatus.Updating || OperatingStatus.Inactive)) {
+      throw new ErrorWithStatus({
+        message: TESTS_MESSAGES.CAN_ONLY_UPDATE_TEST_WHEN_COURSE_IS_UPDATING_OR_INACTIVE,
+        status: HTTP_STATUS.BAD_REQUEST
+      })
+    }
+
+    const test = await databaseServices.tests.findOneAndUpdate(
+      { _id: new ObjectId(payload.test_id) },
+      {
+        $set: {
+          ...(omit(_payload, ['test_id', 'source_id']) as UpdateTestReqBody & { source_id?: ObjectId })
+        },
+        $currentDate: { updated_at: true }
+      },
+      { returnDocument: 'after' }
+    )
+
     return test
   }
 }

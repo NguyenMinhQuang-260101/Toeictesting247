@@ -76,11 +76,19 @@ export const COURSES_MESSAGES = {
   TEST_MUST_BE_AN_ARRAY_OF_TEST_ID: 'Test must be an array of test id',
   NOTIFICATION_MUST_BE_AN_OBJECT_ID: 'Notification must be an object id',
   THUMBNAILS_MUST_BE_AN_ARRAY_OF_MEDIA_OBJECT: 'Thumbnails must be an array of media object',
-  STATUS_INVALID: 'Status invalid'
+  STATUS_INVALID: 'Status invalid',
+  UPDATE_STATUS_CAN_ONLY_BE_SWITCHED_BY_CREATING_A_NOTIFICATION:
+    'Update status can only be switched by creating a notification for this course',
+  INACTIVE_STATUS_CAN_ONLY_BE_SWITCHED_BY_CREATING_A_NOTIFICATION:
+    'The course is currently in Active status. The status can only be changed to Inactive by creating a notification',
+  CANNOT_UPDATE_ACTIVE_COURSE: 'Cannot update active course. Can only update when the status is Updating',
+  ACTIVE_STATUS_CAN_ONLY_BE_SWITCHED_WHEN_NOTIFICATION_EXPIRED:
+    'The course is in updating status and cannot be changed to Active. The course will automatically switch to active status when a notification is created for the course to expire'
 } as const
 
 export const TESTS_MESSAGES = {
   SOURCE_ID_INVALID: 'Source id invalid',
+  TEST_ID_MUST_BE_AN_OBJECT_ID: 'Test id must be an ObjectId',
   TEST_ID_INVALID: 'Test id invalid',
   TEST_NOT_FOUND: 'Test not found',
   SOURCE_ID_MUST_NOT_BE_EMPTY: 'Source id must not be empty',
@@ -91,7 +99,8 @@ export const TESTS_MESSAGES = {
   DESCRIPTION_MUST_BE_STRING: 'Description must be a string',
   TIMELINE_MUST_NOT_BE_EMPTY: 'Timeline must not be empty',
   TIMELINE_MUST_BE_A_NUMBER: 'Timeline must be a number',
-  QUESTIONS_MUST_BE_AN_ARRAY_OF_QUESTION_ID: 'Questions must be an array of question id'
+  QUESTIONS_MUST_BE_AN_ARRAY_OF_QUESTION_ID: 'Questions must be an array of question id',
+  CAN_ONLY_UPDATE_TEST_WHEN_COURSE_IS_UPDATING_OR_INACTIVE: 'Can only update test when course is updating or inactive'
 } as const
 
 export const QUESTIONS_MESSAGES = {
