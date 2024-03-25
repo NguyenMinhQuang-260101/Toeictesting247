@@ -1,9 +1,9 @@
-import { checkSchema } from 'express-validator'
 import { Request } from 'express'
+import { ParamSchema, checkSchema } from 'express-validator'
 import { ObjectId } from 'mongodb'
 import { CourseType, MediaType, OperatingStatus } from '~/constants/enums'
 import HTTP_STATUS from '~/constants/httpStatus'
-import { COURSES_MESSAGES, TESTS_MESSAGES } from '~/constants/message'
+import { COURSES_MESSAGES } from '~/constants/message'
 import { ErrorWithStatus } from '~/models/Errors'
 import Course from '~/models/schemas/Course.schema'
 import databaseServices from '~/services/database.services'
@@ -13,27 +13,73 @@ import { validate } from '~/utils/validation'
 const courseTypes = numberEnumToArray(CourseType)
 const status = numberEnumToArray(OperatingStatus)
 const mediaTypes = numberEnumToArray(MediaType)
+
+const typeSchema: ParamSchema = {
+  isIn: {
+    options: [courseTypes],
+    errorMessage: COURSES_MESSAGES.COURSE_TYPE_INVALID
+  }
+}
+
+const titleSchema: ParamSchema = {
+  notEmpty: {
+    errorMessage: COURSES_MESSAGES.TITLE_MUST_NOT_BE_EMPTY
+  },
+  isString: {
+    errorMessage: COURSES_MESSAGES.TITLE_MUST_BE_STRING
+  }
+}
+
+const descriptionSchema: ParamSchema = {
+  notEmpty: {
+    errorMessage: COURSES_MESSAGES.DESCRIPTION_MUST_NOT_BE_EMPTY
+  },
+  isString: {
+    errorMessage: COURSES_MESSAGES.DESCRIPTION_MUST_BE_STRING
+  }
+}
+
+const contentSchema: ParamSchema = {
+  notEmpty: {
+    errorMessage: COURSES_MESSAGES.CONTENT_MUST_NOT_BE_EMPTY
+  },
+  isString: {
+    errorMessage: COURSES_MESSAGES.CONTENT_MUST_BE_STRING
+  }
+}
+
+const thumbnailSchema: ParamSchema = {
+  isArray: true,
+  custom: {
+    options: (value, { req }) => {
+      // Yêu cầu mỗi phần tử trong mảng phải là Media Object
+      if (
+        value.some((item: any) => {
+          return typeof item.url !== 'string' || !mediaTypes.includes(item.type)
+        })
+      ) {
+        throw new Error(COURSES_MESSAGES.THUMBNAILS_MUST_BE_AN_ARRAY_OF_MEDIA_OBJECT)
+      }
+      return true
+    }
+  }
+}
+
+const statusSchema: ParamSchema = {
+  isIn: {
+    options: [status],
+    errorMessage: COURSES_MESSAGES.STATUS_INVALID
+  }
+}
+
 export const createCourseValidator = validate(
   checkSchema({
-    type: {
-      isIn: {
-        options: [courseTypes],
-        errorMessage: COURSES_MESSAGES.COURSE_TYPE_INVALID
-      }
-    },
-    title: {
-      isString: true,
-      errorMessage: COURSES_MESSAGES.TITLE_MUST_BE_STRING
-    },
-    description: {
-      isString: true,
-      errorMessage: COURSES_MESSAGES.DESCRIPTION_MUST_BE_STRING
-    },
-    content: {
-      isString: true,
-      errorMessage: COURSES_MESSAGES.CONTENT_MUST_BE_STRING
-    },
+    type: typeSchema,
+    title: titleSchema,
+    description: descriptionSchema,
+    content: contentSchema,
     tests: {
+      optional: true,
       isArray: true,
       custom: {
         options: (value, { req }) => {
@@ -46,6 +92,7 @@ export const createCourseValidator = validate(
       }
     },
     notification: {
+      optional: true,
       custom: {
         options: (value, { req }) => {
           if (value !== null && !ObjectId.isValid(value)) {
@@ -55,22 +102,7 @@ export const createCourseValidator = validate(
         }
       }
     },
-    thumbnails: {
-      isArray: true,
-      custom: {
-        options: (value, { req }) => {
-          // Yêu cầu mỗi phần tử trong mảng phải là Media Object
-          if (
-            value.some((item: any) => {
-              return typeof item.url !== 'string' || !mediaTypes.includes(item.type)
-            })
-          ) {
-            throw new Error(COURSES_MESSAGES.THUMBNAILS_MUST_BE_AN_ARRAY_OF_MEDIA_OBJECT)
-          }
-          return true
-        }
-      }
-    }
+    thumbnails: thumbnailSchema
   })
 )
 
@@ -129,4 +161,42 @@ export const courseIdValidator = validate(
     },
     ['params', 'body']
   )
+)
+
+export const updateCourseValidator = validate(
+  checkSchema({
+    course_id: {
+      notEmpty: {
+        errorMessage: COURSES_MESSAGES.COURSE_MUST_NOT_BE_EMPTY
+      }
+    },
+    type: {
+      ...typeSchema,
+      optional: true,
+      notEmpty: undefined
+    },
+    title: {
+      ...titleSchema,
+      optional: true,
+      notEmpty: undefined
+    },
+    description: {
+      ...descriptionSchema,
+      optional: true,
+      notEmpty: undefined
+    },
+    content: {
+      ...contentSchema,
+      optional: true,
+      notEmpty: undefined
+    },
+    thumbnails: {
+      ...thumbnailSchema,
+      optional: true
+    },
+    status: {
+      ...statusSchema,
+      optional: true
+    }
+  })
 )

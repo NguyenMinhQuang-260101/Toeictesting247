@@ -11,3 +11,13 @@ export interface CourseReqBody {
   notification: null | string
   status: OperatingStatus
 }
+
+export interface UpdateCourseReqBody {
+  course_id: string
+  type?: CourseType
+  title?: string
+  description?: string
+  content?: string
+  thumbnails?: Media[]
+  status?: OperatingStatus
+}

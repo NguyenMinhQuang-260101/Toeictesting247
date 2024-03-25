@@ -9,7 +9,7 @@ interface CourseConstructor {
   title: string
   description: string
   content: string
-  tests: string[]
+  tests: string[] | []
   thumbnails: Media[]
   notification: null | string
   user_views?: number
@@ -53,7 +53,7 @@ export default class Course {
     this.title = title
     this.description = description
     this.content = content
-    this.tests = tests.map((item) => new ObjectId(item))
+    this.tests = tests ? tests.map((test) => new ObjectId(test)) : []
     this.thumbnail = thumbnails
     this.notification = notification ? new ObjectId(notification) : null
     this.user_views = user_views || 0

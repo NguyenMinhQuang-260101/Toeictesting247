@@ -63,15 +63,20 @@ export const USERS_MESSAGES = {
 } as const
 
 export const COURSES_MESSAGES = {
+  COURSE_MUST_NOT_BE_EMPTY: 'Course must not be empty',
   COURSE_ID_INVALID: 'Course id invalid',
   COURSE_NOT_FOUND: 'Course not found',
   COURSE_TYPE_INVALID: 'Course type invalid',
   TITLE_MUST_BE_STRING: 'Title must be a string',
+  TITLE_MUST_NOT_BE_EMPTY: 'Title must not be empty',
   DESCRIPTION_MUST_BE_STRING: 'Description must be a string',
+  DESCRIPTION_MUST_NOT_BE_EMPTY: 'Description must not be empty',
   CONTENT_MUST_BE_STRING: 'Content must be a string',
+  CONTENT_MUST_NOT_BE_EMPTY: 'Content must not be empty',
   TEST_MUST_BE_AN_ARRAY_OF_TEST_ID: 'Test must be an array of test id',
   NOTIFICATION_MUST_BE_AN_OBJECT_ID: 'Notification must be an object id',
-  THUMBNAILS_MUST_BE_AN_ARRAY_OF_MEDIA_OBJECT: 'Thumbnails must be an array of media object'
+  THUMBNAILS_MUST_BE_AN_ARRAY_OF_MEDIA_OBJECT: 'Thumbnails must be an array of media object',
+  STATUS_INVALID: 'Status invalid'
 } as const
 
 export const TESTS_MESSAGES = {

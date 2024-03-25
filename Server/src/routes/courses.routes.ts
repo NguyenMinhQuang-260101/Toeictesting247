@@ -1,7 +1,13 @@
 import { Router } from 'express'
-import { createCourseController, getCourseDetailController } from '~/controllers/courses.controllers'
-import { courseIdValidator, createCourseValidator } from '~/middlewares/courses.middlewares'
+import {
+  createCourseController,
+  getCourseDetailController,
+  updateCourseController
+} from '~/controllers/courses.controllers'
+import { filterMiddleware } from '~/middlewares/common.middlewares'
+import { courseIdValidator, createCourseValidator, updateCourseValidator } from '~/middlewares/courses.middlewares'
 import { accessTokenValidator, userRuleValidator, verifiedUserValidator } from '~/middlewares/users.middlewares'
+import { UpdateCourseReqBody } from '~/models/requests/Course.requests'
 import { wrapRequestHandler } from '~/utils/handlers'
 
 const coursesRouter = Router()
@@ -22,7 +28,7 @@ coursesRouter.post(
   wrapRequestHandler(createCourseController)
 )
 
-/**'
+/**
  * Description: Get course detail
  * Method: GET
  * Path: /:course_id
@@ -30,5 +36,31 @@ coursesRouter.post(
  */
 
 coursesRouter.get('/:course_id', courseIdValidator, wrapRequestHandler(getCourseDetailController))
+
+/**
+ * Description: Update course
+ * Method: PATCH
+ * Path: /update
+ * Headers: { Authorization: Bearer <access_token> }
+ * Body: UpdateCourseReqBody
+ */
+coursesRouter.patch(
+  '/update',
+  accessTokenValidator,
+  verifiedUserValidator,
+  userRuleValidator,
+  updateCourseValidator,
+  courseIdValidator,
+  filterMiddleware<UpdateCourseReqBody>([
+    'course_id',
+    'type',
+    'title',
+    'description',
+    'content',
+    'thumbnails',
+    'status'
+  ]),
+  wrapRequestHandler(updateCourseController)
+)
 
 export default coursesRouter
