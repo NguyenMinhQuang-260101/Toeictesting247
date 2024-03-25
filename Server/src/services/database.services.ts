@@ -12,10 +12,12 @@ const uri = `mongodb+srv://${envConfig.dbUsername}:${envConfig.dbPassword}@toeic
 class DatabaseServices {
   private client: MongoClient
   private db: Db
+  watchTimeFieldsRunning: boolean = false
 
   constructor() {
     this.client = new MongoClient(uri)
     this.db = this.client.db(envConfig.dbName)
+    this.watchTimeFieldsRunning
   }
 
   async connect() {
@@ -52,6 +54,13 @@ class DatabaseServices {
   }
 
   async watchTimeFields() {
+    if (this.watchTimeFieldsRunning) {
+      console.log('watchTimeFields is already running.')
+      return
+    }
+
+    this.watchTimeFieldsRunning = true
+
     const interval = setInterval(async () => {
       const currentDate = new Date()
 
@@ -66,18 +75,21 @@ class DatabaseServices {
         .toArray()
 
       timeBoundDocuments.forEach((document) => {
-        const endAtDate = new Date(document.end_at)
-        if (!isNaN(endAtDate.getTime()) && endAtDate <= currentDate) {
-          console.log(`Document with ID ${document._id} has ended.`)
+        if (document.end_at <= currentDate) {
           // Thực hiện các hành động phù hợp với tài liệu đã kết thúc
           if (document.target_type === TargetType.Course) {
             // Thực hiện các hành động phù hợp với khóa học
             document.targets.forEach(async (target: ObjectId) => {
-              // Cap nhat trang thai cua target
+              const course = await this.courses.findOne({ _id: target })
+              if (course?.notification !== document._id) {
+                return
+              }
+              console.log(`Document with ID ${document._id} has ended.`)
               await this.courses.findOneAndUpdate(
                 { _id: target },
                 { $set: { status: OperatingStatus.Active, notification: null }, $currentDate: { updated_at: true } }
               )
+              // await this.courses.deleteOne({ _id: document._id }) // Xóa khóa học sau khi đã kết thúc
             })
           }
         } else {
@@ -87,6 +99,13 @@ class DatabaseServices {
             // Thực hiện các hành động phù hợp với khóa học
             document.targets.forEach(async (target: ObjectId) => {
               // Cap nhat trang thai cua target
+              const course = await this.courses.findOne({ _id: target })
+              if (course?.notification !== null) {
+                await this.courses.findOneAndUpdate(
+                  { _id: target },
+                  { $set: { status: OperatingStatus.Updating, notification: document._id } }
+                )
+              }
               await this.courses.findOneAndUpdate({ _id: target }, { $set: { status: OperatingStatus.Updating } })
             })
           }
@@ -101,6 +120,7 @@ class DatabaseServices {
       if (activeNotificationsCount === 0) {
         clearInterval(interval) // Dừng setInterval nếu không còn notification nào chưa hết hạn
         console.log('All notifications have expired. Stopping interval.')
+        this.watchTimeFieldsRunning = false // Đặt lại trạng thái của watchTimeFieldsRunning để có thể chạy lại sau này
         return
       }
     }, 30000) // Kiểm tra mỗi 30 giây

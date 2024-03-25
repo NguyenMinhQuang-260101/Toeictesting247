@@ -50,6 +50,10 @@ class NotificationsService {
         status: HTTP_STATUS.INTERNAL_SERVER_ERROR
       })
     }
+    if (databaseServices.watchTimeFieldsRunning) {
+      console.log('watchTimeFields is already running.')
+      return notification
+    }
     await databaseServices.watchTimeFields()
     return notification
   }
