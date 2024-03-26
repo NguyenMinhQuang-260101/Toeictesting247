@@ -87,6 +87,31 @@ export const COURSES_MESSAGES = {
   COURSE_CANNOT_BE_DELETED_WHEN_IT_IS_ACTIVE: 'Course cannot be deleted when it is active'
 } as const
 
+export const DOCUMENTS_MESSAGES = {
+  DOCUMENT_MUST_NOT_BE_EMPTY: 'Document must not be empty',
+  DOCUMENT_ID_INVALID: 'Document id invalid',
+  DOCUMENT_NOT_FOUND: 'Document not found',
+  DOCUMENT_TYPE_INVALID: 'Document type invalid',
+  TITLE_MUST_BE_STRING: 'Title must be a string',
+  TITLE_MUST_NOT_BE_EMPTY: 'Title must not be empty',
+  DESCRIPTION_MUST_BE_STRING: 'Description must be a string',
+  DESCRIPTION_MUST_NOT_BE_EMPTY: 'Description must not be empty',
+  CONTENT_MUST_BE_STRING: 'Content must be a string',
+  CONTENT_MUST_NOT_BE_EMPTY: 'Content must not be empty',
+  TEST_MUST_BE_AN_ARRAY_OF_TEST_ID: 'Test must be an array of test id',
+  NOTIFICATION_MUST_BE_AN_OBJECT_ID: 'Notification must be an object id',
+  THUMBNAILS_MUST_BE_AN_ARRAY_OF_MEDIA_OBJECT: 'Thumbnails must be an array of media object',
+  STATUS_INVALID: 'Status invalid',
+  UPDATE_STATUS_CAN_ONLY_BE_SWITCHED_BY_CREATING_A_NOTIFICATION:
+    'Update status can only be switched by creating a notification for this document ',
+  INACTIVE_STATUS_CAN_ONLY_BE_SWITCHED_BY_CREATING_A_NOTIFICATION:
+    'The document is currently in Active status. The status can only be changed to Inactive by creating a notification',
+  CANNOT_UPDATE_ACTIVE_DOCUMENT: 'Cannot update active document. Can only update when the status is Updating',
+  ACTIVE_STATUS_CAN_ONLY_BE_SWITCHED_WHEN_NOTIFICATION_EXPIRED:
+    'The document is in updating status and cannot be changed to Active. The document will automatically switch to active status when a notification is created for the course to expire',
+  COURSE_CANNOT_BE_DELETED_WHEN_IT_IS_ACTIVE: 'Document cannot be deleted when it is active'
+} as const
+
 export const TESTS_MESSAGES = {
   SOURCE_ID_INVALID: 'Source id invalid',
   TEST_ID_MUST_BE_AN_OBJECT_ID: 'Test id must be an ObjectId',

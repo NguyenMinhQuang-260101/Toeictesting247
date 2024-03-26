@@ -10,6 +10,7 @@ import coursesRouter from './routes/courses.routes'
 import testsRouter from './routes/tests.routes'
 import questionsRouter from './routes/questions.routes'
 import notificationsRouter from './routes/notifications.routes'
+import documentsRouter from './routes/documents.routes'
 
 const app = express()
 const port = envConfig.port
@@ -30,6 +31,7 @@ app.use('/courses', coursesRouter)
 app.use('/tests', testsRouter)
 app.use('/questions', questionsRouter)
 app.use('/notifications', notificationsRouter)
+app.use('/documents', documentsRouter)
 
 // Dùng sau khi đã sử dụng tất cả các routes
 app.use(defaultErrorHandler)

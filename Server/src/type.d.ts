@@ -5,6 +5,7 @@ import Course from './models/schemas/Course.schema'
 import Notification from './models/schemas/Notification.schema'
 import Test from './models/schemas/Test.schema'
 import Question from './models/schemas/Question.schema'
+import Document from './models/schemas/Document.schema'
 
 declare module 'express' {
   interface Request {
@@ -14,6 +15,7 @@ declare module 'express' {
     decoded_email_verify_token?: TokenPayload
     decoded_forgot_password_token?: TokenPayload
     course?: Course
+    document?: Document
     test?: Test
     question?: Question & { origin_id?: string }
     notification?: Notification

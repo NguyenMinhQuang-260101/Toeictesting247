@@ -15,6 +15,7 @@ export const envConfig = {
   dbUsersCollection: process.env.DB_USERS_COLLECTION as string,
   dbRefreshTokensCollection: process.env.DB_REFRESH_TOKENS_COLLECTION as string,
   dbCoursesCollection: process.env.DB_COURSES_COLLECTION as string,
+  dbDocumentsCollection: process.env.DB_DOCUMENTS_COLLECTION as string,
   dbTestsCollection: process.env.DB_TESTS_COLLECTION as string,
   dbQuestionsCollection: process.env.DB_QUESTIONS_COLLECTION as string,
   dbNotificationsCollection: process.env.DB_NOTIFICATIONS_COLLECTION as string,

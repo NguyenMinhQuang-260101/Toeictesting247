@@ -2,6 +2,7 @@ import { Collection, Db, MongoClient, ObjectId } from 'mongodb'
 import { envConfig } from '~/constants/config'
 import { OperatingStatus, TargetType } from '~/constants/enums'
 import Course from '~/models/schemas/Course.schema'
+import Document from '~/models/schemas/Document.schema'
 import Notification from '~/models/schemas/Notification.schema'
 import Question from '~/models/schemas/Question.schema'
 import RefreshToken from '~/models/schemas/RefreshToken.schema'
@@ -167,6 +168,10 @@ class DatabaseServices {
 
   get courses(): Collection<Course> {
     return this.db.collection(envConfig.dbCoursesCollection)
+  }
+
+  get documents(): Collection<Document> {
+    return this.db.collection(envConfig.dbDocumentsCollection)
   }
 
   get tests(): Collection<Test> {
