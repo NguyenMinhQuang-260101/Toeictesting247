@@ -81,6 +81,9 @@ class DatabaseServices {
             // Thực hiện các hành động phù hợp với khóa học
             document.targets.forEach(async (target: ObjectId) => {
               const course = (await this.courses.findOne({ _id: target })) as Course
+              if (!course) {
+                return
+              }
 
               // console.log(`Document with ID ${document._id} has ended.`)
               if (course.status === OperatingStatus.Inactive) {
@@ -113,7 +116,6 @@ class DatabaseServices {
               // Cap nhat trang thai cua target
               const course = await this.courses.findOne({ _id: target })
               if (!course) {
-                this.notifications.deleteOne({ targets: target })
                 return
               }
 

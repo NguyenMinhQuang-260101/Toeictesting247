@@ -75,6 +75,7 @@ export const createTestValidator = validate(
       description: descriptionSchema,
       timeline: timelineSchema,
       questions: {
+        optional: true,
         isArray: true,
         custom: {
           options: (value, { req }) => {

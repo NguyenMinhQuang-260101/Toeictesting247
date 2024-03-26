@@ -83,7 +83,8 @@ export const COURSES_MESSAGES = {
     'The course is currently in Active status. The status can only be changed to Inactive by creating a notification',
   CANNOT_UPDATE_ACTIVE_COURSE: 'Cannot update active course. Can only update when the status is Updating',
   ACTIVE_STATUS_CAN_ONLY_BE_SWITCHED_WHEN_NOTIFICATION_EXPIRED:
-    'The course is in updating status and cannot be changed to Active. The course will automatically switch to active status when a notification is created for the course to expire'
+    'The course is in updating status and cannot be changed to Active. The course will automatically switch to active status when a notification is created for the course to expire',
+  COURSE_CANNOT_BE_DELETED_WHEN_IT_IS_ACTIVE: 'Course cannot be deleted when it is active'
 } as const
 
 export const TESTS_MESSAGES = {
@@ -100,7 +101,9 @@ export const TESTS_MESSAGES = {
   TIMELINE_MUST_NOT_BE_EMPTY: 'Timeline must not be empty',
   TIMELINE_MUST_BE_A_NUMBER: 'Timeline must be a number',
   QUESTIONS_MUST_BE_AN_ARRAY_OF_QUESTION_ID: 'Questions must be an array of question id',
-  CAN_ONLY_UPDATE_TEST_WHEN_COURSE_IS_UPDATING_OR_INACTIVE: 'Can only update test when course is updating or inactive'
+  CAN_NOT_CREATE_TEST_WHEN_COURSE_OR_DOCUMENT_IS_ACTIVE: 'Cannot create test when course or document is active',
+  CAN_NOT_DELETE_TEST_WHEN_COURSE_OR_DOCUMENT_IS_ACTIVE: 'Cannot delete test when course or document is active',
+  CAN_NOT_UPDATE_TEST_WHEN_COURSE_OR_DOCUMENT_IS_ACTIVE: 'Cannot update test when course or document is active'
 } as const
 
 export const QUESTIONS_MESSAGES = {
@@ -116,6 +119,7 @@ export const QUESTIONS_MESSAGES = {
   CONTENT_MUST_BE_STRING: 'Content must be a string',
   CONTENT_MUST_NOT_BE_EMPTY: 'Content must not be empty',
   ANSWERS_MUST_BE_AN_ARRAY_OF_ANSWER_OBJECT: 'Answers must be an array of answer object',
+  ANSWERS_MUST_NOT_BE_EMPTY: 'Answers must not be empty',
   CORRECT_AT_MUST_BE_AN_ANSWER_OBJECT: 'Correct at must be an answer object',
   CORRECT_AT_MUST_NOT_BE_EMPTY: 'Correct at must not be empty',
   SELECTED_AT_MUST_BE_AN_ANSWER_OBJECT: 'Selected at must be an answer object',
@@ -123,8 +127,12 @@ export const QUESTIONS_MESSAGES = {
   SCORE_MUST_BE_A_NUMBER: 'Score must be a number',
   SCORE_MUST_NOT_BE_EMPTY: 'Score must not be empty',
   COURSE_OF_QUESTION_NOT_FOUND: 'Course of question not found',
-  CAN_ONLY_UPDATE_QUESTION_WHEN_COURSE_IS_UPDATING_OR_INACTIVE:
-    'Can only update question when course is updating or inactive'
+  CAN_ONLY_CREATE_QUESTION_WHEN_COURSE_OR_DOCUMENT_IS_UPDATING_OR_INACTIVE:
+    'Can only create question when course or document is updating or inactive',
+  CAN_ONLY_UPDATE_QUESTION_WHEN_COURSE_OR_DOCUMENT_IS_UPDATING_OR_INACTIVE:
+    'Can only update question when course or document is updating or inactive',
+  CAN_ONLY_DELETE_QUESTION_WHEN_COURSE_OR_DOCUMENT_IS_UPDATING_OR_INACTIVE:
+    'Can only delete question when course or document is updating or inactive'
 } as const
 
 export const NOTIFICATIONS_MESSAGES = {

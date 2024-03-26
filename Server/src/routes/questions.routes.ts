@@ -1,9 +1,11 @@
 import { Router } from 'express'
 import {
   createQuestionController,
+  deleteQuestionController,
   getQuestionDetailController,
   updateQuestionController
 } from '~/controllers/questions.controllers'
+import { deleteTestController } from '~/controllers/tests.controllers'
 import { filterMiddleware } from '~/middlewares/common.middlewares'
 import {
   createQuestionValidator,
@@ -68,6 +70,24 @@ questionsRouter.patch(
     'score'
   ]),
   wrapRequestHandler(updateQuestionController)
+)
+
+/**
+ * Description: Delete question
+ * Method: DELETE
+ * Path: /delete
+ * Headers: { Authorization?: Bearer <access token>}
+ * Body: { question_id: string, test_id: string}
+ */
+questionsRouter.delete(
+  '/delete',
+  accessTokenValidator,
+  verifiedUserValidator,
+  userRuleValidator,
+  questionIdValidator,
+  originIdValidator,
+  testIdValidator,
+  wrapRequestHandler(deleteQuestionController)
 )
 
 export default questionsRouter

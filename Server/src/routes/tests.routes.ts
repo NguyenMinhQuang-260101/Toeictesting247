@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import {
   createTestController,
+  deleteTestController,
   getFullTestDetailController,
   getTestDetailController,
   updateTestController
@@ -69,6 +70,23 @@ testsRouter.patch(
   sourceIdValidator,
   filterMiddleware<UpdateTestReqBody>(['test_id', 'source_id', 'title', 'description', 'timeline']),
   wrapRequestHandler(updateTestController)
+)
+
+/**
+ * Description: Delete test
+ * Method: DELETE
+ * Path: /delete
+ * Headers: { Authorization?: Bearer <access token>}
+ * Body: { test_id: string, source_id: string }
+ */
+testsRouter.delete(
+  '/delete',
+  accessTokenValidator,
+  verifiedUserValidator,
+  userRuleValidator,
+  testIdValidator,
+  sourceIdValidator,
+  wrapRequestHandler(deleteTestController)
 )
 
 export default testsRouter

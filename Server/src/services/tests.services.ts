@@ -11,6 +11,13 @@ import HTTP_STATUS from '~/constants/httpStatus'
 
 class TestsController {
   async createTest(body: TestReqBody, course: Course) {
+    if (course.status === OperatingStatus.Active) {
+      throw new ErrorWithStatus({
+        message: TESTS_MESSAGES.CAN_NOT_CREATE_TEST_WHEN_COURSE_OR_DOCUMENT_IS_ACTIVE,
+        status: HTTP_STATUS.BAD_REQUEST
+      })
+    }
+
     const result = await databaseServices.tests.insertOne(
       new Test({
         source_id: new ObjectId(body.source_id),
@@ -37,7 +44,7 @@ class TestsController {
     const _payload = payload.source_id ? { ...payload, source_id: new ObjectId(payload.source_id) } : payload
     if (course.status === OperatingStatus.Active) {
       throw new ErrorWithStatus({
-        message: TESTS_MESSAGES.CAN_ONLY_UPDATE_TEST_WHEN_COURSE_IS_UPDATING_OR_INACTIVE,
+        message: TESTS_MESSAGES.CAN_NOT_UPDATE_TEST_WHEN_COURSE_OR_DOCUMENT_IS_ACTIVE,
         status: HTTP_STATUS.BAD_REQUEST
       })
     }
@@ -54,6 +61,23 @@ class TestsController {
     )
 
     return test
+  }
+
+  async deleteTest(test: Test, course: Course) {
+    if (course.status === OperatingStatus.Active) {
+      throw new ErrorWithStatus({
+        message: TESTS_MESSAGES.CAN_NOT_DELETE_TEST_WHEN_COURSE_OR_DOCUMENT_IS_ACTIVE,
+        status: HTTP_STATUS.BAD_REQUEST
+      })
+    }
+
+    await Promise.all([
+      databaseServices.tests.findOneAndDelete({ _id: test._id }),
+      databaseServices.courses.findOneAndUpdate(
+        { _id: test.source_id },
+        { $pull: { tests: test._id }, $currentDate: { updated_at: true } }
+      )
+    ])
   }
 }
 

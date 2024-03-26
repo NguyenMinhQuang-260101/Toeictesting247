@@ -35,3 +35,10 @@ export const updateTestController = async (req: Request, res: Response) => {
     result: test
   })
 }
+
+export const deleteTestController = async (req: Request, res: Response) => {
+  await testsService.deleteTest(req.test as Test, req.course as Course)
+  return res.json({
+    message: 'Delete test successfully'
+  })
+}

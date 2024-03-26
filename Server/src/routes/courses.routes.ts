@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import {
   createCourseController,
+  deleteCourseController,
   getCourseDetailController,
   updateCourseController
 } from '~/controllers/courses.controllers'
@@ -61,6 +62,22 @@ coursesRouter.patch(
     'status'
   ]),
   wrapRequestHandler(updateCourseController)
+)
+
+/**
+ * Description: Delete course
+ * Method: DELETE
+ * Path: /delete/:course_id
+ * Headers: { Authorization?: Bearer <access token>}
+ */
+
+coursesRouter.delete(
+  '/delete/:course_id',
+  accessTokenValidator,
+  verifiedUserValidator,
+  userRuleValidator,
+  courseIdValidator,
+  wrapRequestHandler(deleteCourseController)
 )
 
 export default coursesRouter

@@ -33,3 +33,10 @@ export const updateCourseController = async (
     result: course
   })
 }
+
+export const deleteCourseController = async (req: Request, res: Response) => {
+  await coursesService.deleteCourse(req.course as Course)
+  return res.json({
+    message: 'Course deleted successfully'
+  })
+}

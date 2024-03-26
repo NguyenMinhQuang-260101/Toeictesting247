@@ -11,7 +11,7 @@ import { numberEnumToArray } from '~/utils/commons'
 import { validate } from '~/utils/validation'
 
 const numQuestSchema: ParamSchema = {
-  isEmpty: {
+  notEmpty: {
     errorMessage: QUESTIONS_MESSAGES.NUM_QUEST_MUST_NOT_BE_EMPTY
   },
   isInt: {
@@ -29,7 +29,7 @@ const descriptionSchema: ParamSchema = {
 }
 
 const contentSchema: ParamSchema = {
-  isEmpty: {
+  notEmpty: {
     errorMessage: QUESTIONS_MESSAGES.CONTENT_MUST_NOT_BE_EMPTY
   },
   custom: {
@@ -50,6 +50,9 @@ const contentSchema: ParamSchema = {
 }
 
 const answerSchema: ParamSchema = {
+  notEmpty: {
+    errorMessage: QUESTIONS_MESSAGES.ANSWERS_MUST_NOT_BE_EMPTY
+  },
   isArray: true,
   custom: {
     options: (value, { req }) => {
@@ -191,7 +194,6 @@ export const questionIdValidator = validate(
 export const originIdValidator = async (req: Request, res: Response, next: NextFunction) => {
   const question = req.question
   if (question) {
-    // console.log(question.origin_id)
     const course = await databaseServices.courses.findOne({ _id: new ObjectId(question.origin_id) })
     if (!course) {
       return next(

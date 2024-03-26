@@ -57,6 +57,16 @@ class CoursesService {
     )
     return new_course
   }
+
+  async deleteCourse(course: Course) {
+    if (course.status === OperatingStatus.Active) {
+      throw new ErrorWithStatus({
+        message: COURSES_MESSAGES.COURSE_CANNOT_BE_DELETED_WHEN_IT_IS_ACTIVE,
+        status: HTTP_STATUS.BAD_REQUEST
+      })
+    }
+    await databaseServices.courses.deleteOne({ _id: course._id })
+  }
 }
 
 const coursesService = new CoursesService()

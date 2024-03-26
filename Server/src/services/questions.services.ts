@@ -8,9 +8,17 @@ import { ErrorWithStatus } from '~/models/Errors'
 import HTTP_STATUS from '~/constants/httpStatus'
 import { QUESTIONS_MESSAGES } from '~/constants/message'
 import { omit } from 'lodash'
+import Test from '~/models/schemas/Test.schema'
 
 class QuestionsService {
-  async createQuestion(body: QuestionReqBody) {
+  async createQuestion(body: QuestionReqBody, test: Test) {
+    if ((await databaseServices.courses.findOne({ _id: test.source_id }))?.status === OperatingStatus.Active) {
+      throw new ErrorWithStatus({
+        message: QUESTIONS_MESSAGES.CAN_ONLY_CREATE_QUESTION_WHEN_COURSE_OR_DOCUMENT_IS_UPDATING_OR_INACTIVE,
+        status: HTTP_STATUS.BAD_REQUEST
+      })
+    }
+
     const result = await databaseServices.questions.insertOne(
       new Question({
         test_id: new ObjectId(body.test_id),
@@ -35,12 +43,13 @@ class QuestionsService {
   }
 
   async updateQuestion(payload: UpdateQuestionReqBody, course: Course) {
-    if (course.status === OperatingStatus.Active) {
+    if (course && course.status === OperatingStatus.Active) {
       throw new ErrorWithStatus({
-        message: QUESTIONS_MESSAGES.CAN_ONLY_UPDATE_QUESTION_WHEN_COURSE_IS_UPDATING_OR_INACTIVE,
+        message: QUESTIONS_MESSAGES.CAN_ONLY_UPDATE_QUESTION_WHEN_COURSE_OR_DOCUMENT_IS_UPDATING_OR_INACTIVE,
         status: HTTP_STATUS.BAD_REQUEST
       })
     }
+
     const question = await databaseServices.questions.findOneAndUpdate(
       { _id: new ObjectId(payload.question_id) },
       {
@@ -52,6 +61,23 @@ class QuestionsService {
       { returnDocument: 'after' }
     )
     return question
+  }
+
+  async deleteQuestion(question_id: string, course: Course, test: Test) {
+    if (course.status === OperatingStatus.Active) {
+      throw new ErrorWithStatus({
+        message: QUESTIONS_MESSAGES.CAN_ONLY_DELETE_QUESTION_WHEN_COURSE_OR_DOCUMENT_IS_UPDATING_OR_INACTIVE,
+        status: HTTP_STATUS.BAD_REQUEST
+      })
+    }
+
+    await Promise.all([
+      databaseServices.questions.deleteOne({ _id: new ObjectId(question_id) }),
+      databaseServices.tests.findOneAndUpdate(
+        { _id: test._id },
+        { $pull: { questions: new ObjectId(question_id) }, $currentDate: { updated_at: true } }
+      )
+    ])
   }
 }
 

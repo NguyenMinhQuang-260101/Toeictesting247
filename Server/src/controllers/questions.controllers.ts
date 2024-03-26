@@ -2,10 +2,11 @@ import { Request, Response } from 'express'
 import { ParamsDictionary } from 'express-serve-static-core'
 import { QuestionReqBody, UpdateQuestionReqBody } from '~/models/requests/Question.requests'
 import Course from '~/models/schemas/Course.schema'
+import Test from '~/models/schemas/Test.schema'
 import questionsService from '~/services/questions.services'
 
 export const createQuestionController = async (req: Request<ParamsDictionary, any, QuestionReqBody>, res: Response) => {
-  const result = await questionsService.createQuestion(req.body)
+  const result = await questionsService.createQuestion(req.body, req.test as Test)
   return res.json({ message: 'Create question successfully', result })
 }
 
@@ -25,4 +26,9 @@ export const updateQuestionController = async (
     message: 'Update question successfully',
     result: question
   })
+}
+
+export const deleteQuestionController = async (req: Request, res: Response) => {
+  await questionsService.deleteQuestion(req.body.question_id, req.course as Course, req.test as Test)
+  return res.json({ message: 'Delete question successfully' })
 }
