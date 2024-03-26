@@ -9,10 +9,21 @@ import HTTP_STATUS from '~/constants/httpStatus'
 import { QUESTIONS_MESSAGES } from '~/constants/message'
 import { omit } from 'lodash'
 import Test from '~/models/schemas/Test.schema'
+import Document from '~/models/schemas/Document.schema'
 
 class QuestionsService {
   async createQuestion(body: QuestionReqBody, test: Test) {
-    if ((await databaseServices.courses.findOne({ _id: test.source_id }))?.status === OperatingStatus.Active) {
+    const [course, document] = await Promise.all([
+      databaseServices.courses.findOne({ _id: test.source_id }),
+      databaseServices.documents.findOne({ _id: test.source_id })
+    ])
+
+    if (course && course.status === OperatingStatus.Active) {
+      throw new ErrorWithStatus({
+        message: QUESTIONS_MESSAGES.CAN_ONLY_CREATE_QUESTION_WHEN_COURSE_OR_DOCUMENT_IS_UPDATING_OR_INACTIVE,
+        status: HTTP_STATUS.BAD_REQUEST
+      })
+    } else if (document && document.status === OperatingStatus.Active) {
       throw new ErrorWithStatus({
         message: QUESTIONS_MESSAGES.CAN_ONLY_CREATE_QUESTION_WHEN_COURSE_OR_DOCUMENT_IS_UPDATING_OR_INACTIVE,
         status: HTTP_STATUS.BAD_REQUEST
@@ -42,8 +53,19 @@ class QuestionsService {
     return question
   }
 
-  async updateQuestion(payload: UpdateQuestionReqBody, course: Course) {
+  async updateQuestion(payload: UpdateQuestionReqBody, source: Course | Document) {
+    const [course, document] = await Promise.all([
+      databaseServices.courses.findOne<Course>({ _id: source._id }),
+      databaseServices.documents.findOne<Document>({ _id: source._id })
+    ])
     if (course && course.status === OperatingStatus.Active) {
+      throw new ErrorWithStatus({
+        message: QUESTIONS_MESSAGES.CAN_ONLY_UPDATE_QUESTION_WHEN_COURSE_OR_DOCUMENT_IS_UPDATING_OR_INACTIVE,
+        status: HTTP_STATUS.BAD_REQUEST
+      })
+    }
+
+    if (document && document.status === OperatingStatus.Active) {
       throw new ErrorWithStatus({
         message: QUESTIONS_MESSAGES.CAN_ONLY_UPDATE_QUESTION_WHEN_COURSE_OR_DOCUMENT_IS_UPDATING_OR_INACTIVE,
         status: HTTP_STATUS.BAD_REQUEST
@@ -63,8 +85,19 @@ class QuestionsService {
     return question
   }
 
-  async deleteQuestion(question_id: string, course: Course, test: Test) {
-    if (course.status === OperatingStatus.Active) {
+  async deleteQuestion(question_id: string, source: Course | Document, test: Test) {
+    const [course, document] = await Promise.all([
+      databaseServices.courses.findOne<Course>({ _id: source._id }),
+      databaseServices.documents.findOne<Document>({ _id: source._id })
+    ])
+    if (course && course.status === OperatingStatus.Active) {
+      throw new ErrorWithStatus({
+        message: QUESTIONS_MESSAGES.CAN_ONLY_DELETE_QUESTION_WHEN_COURSE_OR_DOCUMENT_IS_UPDATING_OR_INACTIVE,
+        status: HTTP_STATUS.BAD_REQUEST
+      })
+    }
+
+    if (document && document.status === OperatingStatus.Active) {
       throw new ErrorWithStatus({
         message: QUESTIONS_MESSAGES.CAN_ONLY_DELETE_QUESTION_WHEN_COURSE_OR_DOCUMENT_IS_UPDATING_OR_INACTIVE,
         status: HTTP_STATUS.BAD_REQUEST

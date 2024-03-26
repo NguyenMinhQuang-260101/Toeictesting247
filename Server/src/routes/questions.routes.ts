@@ -5,7 +5,6 @@ import {
   getQuestionDetailController,
   updateQuestionController
 } from '~/controllers/questions.controllers'
-import { deleteTestController } from '~/controllers/tests.controllers'
 import { filterMiddleware } from '~/middlewares/common.middlewares'
 import {
   createQuestionValidator,

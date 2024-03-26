@@ -9,6 +9,7 @@ import Question from '~/models/schemas/Question.schema'
 import databaseServices from '~/services/database.services'
 import { numberEnumToArray } from '~/utils/commons'
 import { validate } from '~/utils/validation'
+import Document from '~/models/schemas/Document.schema'
 
 const numQuestSchema: ParamSchema = {
   notEmpty: {
@@ -194,16 +195,25 @@ export const questionIdValidator = validate(
 export const originIdValidator = async (req: Request, res: Response, next: NextFunction) => {
   const question = req.question
   if (question) {
-    const course = await databaseServices.courses.findOne({ _id: new ObjectId(question.origin_id) })
-    if (!course) {
+    const [course, document] = await Promise.all([
+      databaseServices.courses.findOne({ _id: new ObjectId(question.origin_id) }),
+      databaseServices.documents.findOne({ _id: new ObjectId(question.origin_id) })
+    ])
+
+    if (!course && !document) {
       return next(
         new ErrorWithStatus({
-          message: QUESTIONS_MESSAGES.COURSE_OF_QUESTION_NOT_FOUND,
+          message: QUESTIONS_MESSAGES.ORIGIN_NOT_FOUND,
           status: HTTP_STATUS.NOT_FOUND
         })
       )
     }
-    ;(req as Request).course = course
+
+    if (course) {
+      ;(req as Request).source = course
+    } else if (document) {
+      ;(req as Request).source = document
+    }
   }
 
   // Nhớ next() để chạy tiếp middleware tiếp theo không thì sẽ bị treo

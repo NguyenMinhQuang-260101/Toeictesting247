@@ -137,6 +137,7 @@ export const TESTS_MESSAGES = {
 export const QUESTIONS_MESSAGES = {
   QUESTION_ID_INVALID: 'Question id invalid',
   QUESTION_NOT_FOUND: 'Question not found',
+  ORIGIN_NOT_FOUND: 'Origin not found. Meaning that cannot find the course or document that the question belongs to',
   TEST_ID_MUST_BE_STRING: 'Test id must be a string',
   TEST_ID_MUST_BE_AN_OBJECT_ID: 'Test id must be an ObjectId',
   NUM_QUEST_MUST_BE_A_NUMBER: 'Num quest must be a number',
