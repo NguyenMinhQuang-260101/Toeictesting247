@@ -8,6 +8,7 @@ import Test from '~/models/schemas/Test.schema'
 import databaseServices from '~/services/database.services'
 import { validate } from '~/utils/validation'
 import Course from '~/models/schemas/Course.schema'
+import Document from '~/models/schemas/Document.schema'
 
 const sourceIdSchema: ParamSchema = {
   notEmpty: {
@@ -144,7 +145,7 @@ export const fullTestIdValidator = validate(
               .aggregate<Test>([
                 {
                   $match: {
-                    _id: new ObjectId('65fd0d1cbe2653f8beb74a30')
+                    _id: new ObjectId(value as string)
                   }
                 },
                 {
@@ -184,13 +185,18 @@ export const sourceIdValidator = validate(
           // ** Chỉ mới kiểm tra cho collection courses **
           // ** Cần kiểm tra thêm collection Document về sau **
           const course = await databaseServices.courses.findOne<Course>({ _id: new ObjectId(value as string) })
-          if (!course) {
+          const document = await databaseServices.documents.findOne<Document>({ _id: new ObjectId(value as string) })
+          if (!course && !document) {
             throw new ErrorWithStatus({
-              message: COURSES_MESSAGES.COURSE_NOT_FOUND,
+              message: TESTS_MESSAGES.CAN_NOT_FOUND_COURSE_OR_DOCUMENT,
               status: HTTP_STATUS.NOT_FOUND
             })
           }
-          ;(req as Request).course = course
+          if (course) {
+            ;(req as Request).source = course
+          } else if (document) {
+            ;(req as Request).source = document
+          }
           return true
         }
       }

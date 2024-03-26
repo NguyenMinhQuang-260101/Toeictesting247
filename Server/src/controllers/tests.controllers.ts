@@ -4,9 +4,10 @@ import { TestReqBody } from '~/models/requests/Test.requests'
 import Course from '~/models/schemas/Course.schema'
 import Test from '~/models/schemas/Test.schema'
 import testsService from '~/services/tests.services'
+import Document from '~/models/schemas/Document.schema'
 
 export const createTestController = async (req: Request<ParamsDictionary, any, TestReqBody>, res: Response) => {
-  const result = await testsService.createTest(req.body, req.course as Course)
+  const result = await testsService.createTest(req.body, req.source as Course | Document)
   return res.json({
     message: 'Test created successfully',
     result
@@ -29,7 +30,7 @@ export const getFullTestDetailController = async (req: Request, res: Response) =
 
 export const updateTestController = async (req: Request, res: Response) => {
   const { body } = req
-  const test = await testsService.updateTest(body, req.course as Course)
+  const test = await testsService.updateTest(body, req.source as Course | Document)
   return res.json({
     message: 'Update test successfully',
     result: test
@@ -37,7 +38,7 @@ export const updateTestController = async (req: Request, res: Response) => {
 }
 
 export const deleteTestController = async (req: Request, res: Response) => {
-  await testsService.deleteTest(req.test as Test, req.course as Course)
+  await testsService.deleteTest(req.test as Test, req.source as Course | Document)
   return res.json({
     message: 'Delete test successfully'
   })

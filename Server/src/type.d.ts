@@ -19,5 +19,6 @@ declare module 'express' {
     test?: Test
     question?: Question & { origin_id?: string }
     notification?: Notification
+    source?: Course | Document
   }
 }

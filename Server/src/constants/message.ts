@@ -118,6 +118,8 @@ export const TESTS_MESSAGES = {
   TEST_ID_MUST_BE_AN_OBJECT_ID: 'Test id must be an ObjectId',
   TEST_ID_INVALID: 'Test id invalid',
   TEST_NOT_FOUND: 'Test not found',
+  DOCUMENT_NOT_FOUND: 'Document not found',
+  CAN_NOT_FOUND_COURSE_OR_DOCUMENT: 'Cannot found course or document',
   SOURCE_ID_MUST_NOT_BE_EMPTY: 'Source id must not be empty',
   SOURCE_ID_MUST_BE_AN_OBJECT_ID: 'Source id must be an ObjectId',
   TITLE_MUST_NOT_BE_EMPTY: 'Title must not be empty',
