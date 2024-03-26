@@ -119,7 +119,7 @@ export const documentIdValidator = validate(
               .aggregate<Document>([
                 {
                   $match: {
-                    _id: new ObjectId('660292514ed93c30f0cd798c')
+                    _id: new ObjectId(value as string)
                   }
                 },
                 {
