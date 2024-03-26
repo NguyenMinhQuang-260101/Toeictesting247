@@ -12,3 +12,10 @@ export const createDocumentController = async (req: Request<ParamsDictionary, an
     result: document
   })
 }
+
+export const getDocumentDetailController = async (req: Request, res: Response) => {
+  return res.json({
+    message: 'Get document detail successfully',
+    result: req.document
+  })
+}

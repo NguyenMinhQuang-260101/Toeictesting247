@@ -1,6 +1,6 @@
 import { Router } from 'express'
-import { createDocumentController } from '~/controllers/documents.controllers'
-import { createDocumentValidator } from '~/middlewares/documents.middlewares'
+import { createDocumentController, getDocumentDetailController } from '~/controllers/documents.controllers'
+import { createDocumentValidator, documentIdValidator } from '~/middlewares/documents.middlewares'
 import { accessTokenValidator, userRuleValidator, verifiedUserValidator } from '~/middlewares/users.middlewares'
 import { wrapRequestHandler } from '~/utils/handlers'
 
@@ -21,5 +21,14 @@ documentsRouter.post(
   createDocumentValidator,
   wrapRequestHandler(createDocumentController)
 )
+
+/**
+ * Description: Get document detail
+ * Method: GET
+ * Path: /:document_id
+ * Headers: { Authorization?: Bearer <access token>}
+ */
+
+documentsRouter.get('/:document_id', documentIdValidator, wrapRequestHandler(getDocumentDetailController))
 
 export default documentsRouter

@@ -138,7 +138,7 @@ export const courseIdValidator = validate(
                         as: 'test',
                         in: {
                           _id: '$$test._id',
-                          course_id: '$$test.course_id',
+                          source_id: '$$test.source_id',
                           title: '$$test.title'
                         }
                       }
