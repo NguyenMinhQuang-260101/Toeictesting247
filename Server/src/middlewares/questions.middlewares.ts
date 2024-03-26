@@ -1,9 +1,9 @@
 import { ParamSchema, checkSchema } from 'express-validator'
-import { Request } from 'express'
+import { NextFunction, Request, Response } from 'express'
 import { ObjectId } from 'mongodb'
 import { MediaType } from '~/constants/enums'
 import HTTP_STATUS from '~/constants/httpStatus'
-import { QUESTIONS_MESSAGES } from '~/constants/message'
+import { COURSES_MESSAGES, QUESTIONS_MESSAGES } from '~/constants/message'
 import { ErrorWithStatus } from '~/models/Errors'
 import Question from '~/models/schemas/Question.schema'
 import databaseServices from '~/services/database.services'
@@ -65,7 +65,45 @@ const answerSchema: ParamSchema = {
   }
 }
 
+const correctAtSchema: ParamSchema = {
+  notEmpty: {
+    errorMessage: QUESTIONS_MESSAGES.CORRECT_AT_MUST_NOT_BE_EMPTY
+  },
+  custom: {
+    options: (value, { req }) => {
+      if (typeof value.order_answer !== 'string' || typeof value.content_answer !== 'string') {
+        throw new Error(QUESTIONS_MESSAGES.CORRECT_AT_MUST_BE_AN_ANSWER_OBJECT)
+      }
+      return true
+    }
+  }
+}
+
+const selectedAtSchema: ParamSchema = {
+  notEmpty: {
+    errorMessage: QUESTIONS_MESSAGES.SELECTED_AT_MUST_NOT_BE_EMPTY
+  },
+  custom: {
+    options: (value, { req }) => {
+      if (value !== null && (typeof value.order_answer !== 'string' || typeof value.content_answer !== 'string')) {
+        throw new Error(QUESTIONS_MESSAGES.SELECTED_AT_MUST_BE_AN_ANSWER_OBJECT)
+      }
+      return true
+    }
+  }
+}
+
+const scoreSchema: ParamSchema = {
+  notEmpty: {
+    errorMessage: QUESTIONS_MESSAGES.SCORE_MUST_NOT_BE_EMPTY
+  },
+  isInt: {
+    errorMessage: QUESTIONS_MESSAGES.SCORE_MUST_BE_A_NUMBER
+  }
+}
+
 const mediaTypes = numberEnumToArray(MediaType)
+
 export const createQuestionValidator = validate(
   checkSchema({
     test_id: {
@@ -85,32 +123,13 @@ export const createQuestionValidator = validate(
     description: descriptionSchema,
     content: contentSchema,
     answers: answerSchema,
-    correct_at: {
-      custom: {
-        options: (value, { req }) => {
-          if (typeof value.order_answer !== 'string' || typeof value.content_answer !== 'string') {
-            throw new Error(QUESTIONS_MESSAGES.CORRECT_AT_MUST_BE_AN_ANSWER_OBJECT)
-          }
-          return true
-        }
-      }
-    },
+    correct_at: correctAtSchema,
     selected_at: {
+      ...selectedAtSchema,
       optional: true,
-      custom: {
-        options: (value, { req }) => {
-          if (value !== null && (typeof value.order_answer !== 'string' || typeof value.content_answer !== 'string')) {
-            throw new Error(QUESTIONS_MESSAGES.SELECTED_AT_MUST_BE_AN_ANSWER_OBJECT)
-          }
-          return true
-        }
-      }
+      notEmpty: undefined
     },
-    score: {
-      isInt: {
-        errorMessage: QUESTIONS_MESSAGES.SCORE_MUST_BE_A_NUMBER
-      }
-    }
+    score: scoreSchema
   })
 )
 
@@ -167,4 +186,64 @@ export const questionIdValidator = validate(
     },
     ['params', 'body']
   )
+)
+
+export const originIdValidator = async (req: Request, res: Response, next: NextFunction) => {
+  const question = req.question
+  if (question) {
+    // console.log(question.origin_id)
+    const course = await databaseServices.courses.findOne({ _id: new ObjectId(question.origin_id) })
+    if (!course) {
+      return next(
+        new ErrorWithStatus({
+          message: QUESTIONS_MESSAGES.COURSE_OF_QUESTION_NOT_FOUND,
+          status: HTTP_STATUS.NOT_FOUND
+        })
+      )
+    }
+    ;(req as Request).course = course
+  }
+
+  // Nhớ next() để chạy tiếp middleware tiếp theo không thì sẽ bị treo
+  next()
+}
+
+export const updateQuestionValidator = validate(
+  checkSchema({
+    num_quest: {
+      ...numQuestSchema,
+      optional: true,
+      notEmpty: undefined
+    },
+    description: {
+      ...descriptionSchema,
+      optional: true,
+      notEmpty: undefined
+    },
+    content: {
+      ...contentSchema,
+      optional: true,
+      notEmpty: undefined
+    },
+    answers: {
+      ...answerSchema,
+      optional: true,
+      notEmpty: undefined
+    },
+    correct_at: {
+      ...correctAtSchema,
+      optional: true,
+      notEmpty: undefined
+    },
+    selected_at: {
+      ...selectedAtSchema,
+      optional: true,
+      notEmpty: undefined
+    },
+    score: {
+      ...scoreSchema,
+      optional: true,
+      notEmpty: undefined
+    }
+  })
 )

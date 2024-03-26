@@ -117,8 +117,14 @@ export const QUESTIONS_MESSAGES = {
   CONTENT_MUST_NOT_BE_EMPTY: 'Content must not be empty',
   ANSWERS_MUST_BE_AN_ARRAY_OF_ANSWER_OBJECT: 'Answers must be an array of answer object',
   CORRECT_AT_MUST_BE_AN_ANSWER_OBJECT: 'Correct at must be an answer object',
+  CORRECT_AT_MUST_NOT_BE_EMPTY: 'Correct at must not be empty',
   SELECTED_AT_MUST_BE_AN_ANSWER_OBJECT: 'Selected at must be an answer object',
-  SCORE_MUST_BE_A_NUMBER: 'Score must be a number'
+  SELECTED_AT_MUST_NOT_BE_EMPTY: 'Selected at must not be empty',
+  SCORE_MUST_BE_A_NUMBER: 'Score must be a number',
+  SCORE_MUST_NOT_BE_EMPTY: 'Score must not be empty',
+  COURSE_OF_QUESTION_NOT_FOUND: 'Course of question not found',
+  CAN_ONLY_UPDATE_QUESTION_WHEN_COURSE_IS_UPDATING_OR_INACTIVE:
+    'Can only update question when course is updating or inactive'
 } as const
 
 export const NOTIFICATIONS_MESSAGES = {

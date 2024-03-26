@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import { ParamsDictionary } from 'express-serve-static-core'
 import { QuestionReqBody, UpdateQuestionReqBody } from '~/models/requests/Question.requests'
+import Course from '~/models/schemas/Course.schema'
 import questionsService from '~/services/questions.services'
 
 export const createQuestionController = async (req: Request<ParamsDictionary, any, QuestionReqBody>, res: Response) => {
@@ -19,8 +20,9 @@ export const updateQuestionController = async (
   req: Request<ParamsDictionary, any, UpdateQuestionReqBody>,
   res: Response
 ) => {
+  const question = await questionsService.updateQuestion(req.body, req.course as Course)
   return res.json({
     message: 'Update question successfully',
-    result: req.body
+    result: question
   })
 }

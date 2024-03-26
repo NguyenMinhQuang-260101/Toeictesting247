@@ -15,7 +15,7 @@ declare module 'express' {
     decoded_forgot_password_token?: TokenPayload
     course?: Course
     test?: Test
-    question?: Question
+    question?: Question & { origin_id?: string }
     notification?: Notification
   }
 }

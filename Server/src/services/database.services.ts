@@ -82,10 +82,10 @@ class DatabaseServices {
             document.targets.forEach(async (target: ObjectId) => {
               const course = (await this.courses.findOne({ _id: target })) as Course
 
-              console.log(`Document with ID ${document._id} has ended.`)
+              // console.log(`Document with ID ${document._id} has ended.`)
               if (course.status === OperatingStatus.Inactive) {
-                console.log('status 1:', course?.status)
-                console.log(`Document with ID ${document._id} has ended. 1`)
+                // console.log('status 1:', course?.status)
+                // console.log(`Document with ID ${document._id} has ended. 1`)
                 await this.courses.findOneAndUpdate(
                   { _id: target },
                   {
@@ -95,8 +95,8 @@ class DatabaseServices {
                 )
                 await this.notifications.deleteOne({ _id: document._id }) // Xóa khóa học sau khi đã kết thúc
               } else if (course.status === OperatingStatus.Updating || course.status === OperatingStatus.Active) {
-                console.log(`Document with ID ${document._id} has ended. 2`)
-                console.log('status 2:', course?.status)
+                // console.log(`Document with ID ${document._id} has ended. 2`)
+                // console.log('status 2:', course?.status)
                 await this.courses.findOneAndUpdate(
                   { _id: target },
                   { $set: { status: OperatingStatus.Active, notification: null }, $currentDate: { updated_at: true } }
@@ -118,7 +118,7 @@ class DatabaseServices {
               }
 
               if (course.status === OperatingStatus.Inactive) {
-                console.log(`Document with ID ${document._id} has started. 1`)
+                // console.log(`Document with ID ${document._id} has started. 1`)
                 if (course?.notification !== null) {
                   await this.courses.findOneAndUpdate(
                     { _id: target },
@@ -127,7 +127,7 @@ class DatabaseServices {
                 }
                 await this.courses.findOneAndUpdate({ _id: target }, { $set: { status: OperatingStatus.Inactive } })
               } else {
-                console.log(`Document with ID ${document._id} has started. 2`)
+                // console.log(`Document with ID ${document._id} has started. 2`)
                 if (course?.notification !== null) {
                   await this.courses.findOneAndUpdate(
                     { _id: target },

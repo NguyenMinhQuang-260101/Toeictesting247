@@ -4,9 +4,16 @@ import {
   getQuestionDetailController,
   updateQuestionController
 } from '~/controllers/questions.controllers'
-import { createQuestionValidator, questionIdValidator } from '~/middlewares/questions.middlewares'
+import { filterMiddleware } from '~/middlewares/common.middlewares'
+import {
+  createQuestionValidator,
+  originIdValidator,
+  questionIdValidator,
+  updateQuestionValidator
+} from '~/middlewares/questions.middlewares'
 import { testIdValidator } from '~/middlewares/tests.middlewares'
 import { accessTokenValidator, userRuleValidator, verifiedUserValidator } from '~/middlewares/users.middlewares'
+import { UpdateQuestionReqBody } from '~/models/requests/Question.requests'
 import { wrapRequestHandler } from '~/utils/handlers'
 
 const questionsRouter = Router()
@@ -42,6 +49,25 @@ questionsRouter.get('/:question_id', questionIdValidator, wrapRequestHandler(get
  * Path: /update
  * Headers: { Authorization?: Bearer <access token>}
  */
-questionsRouter.patch('/update', wrapRequestHandler(updateQuestionController))
+questionsRouter.patch(
+  '/update',
+  accessTokenValidator,
+  verifiedUserValidator,
+  userRuleValidator,
+  updateQuestionValidator,
+  questionIdValidator,
+  originIdValidator,
+  filterMiddleware<UpdateQuestionReqBody>([
+    'question_id',
+    'num_quest',
+    'description',
+    'content',
+    'answers',
+    'correct_at',
+    'selected_at',
+    'score'
+  ]),
+  wrapRequestHandler(updateQuestionController)
+)
 
 export default questionsRouter
