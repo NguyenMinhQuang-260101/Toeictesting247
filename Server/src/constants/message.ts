@@ -130,7 +130,9 @@ export const QUESTIONS_MESSAGES = {
 export const NOTIFICATIONS_MESSAGES = {
   NOTIFICATION_ID_INVALID: 'Notification id invalid',
   NOTIFICATION_NOT_FOUND: 'Notification not found',
+  NOTIFICATION_ID_NOT_EMPTY: 'Notification id not empty',
   TYPE_INVALID: 'Notification type invalid',
+  TYPE_OF_NOTIFICATION_NOT_EMPTY: 'Notification type not empty',
   TITLE_NOT_EMPTY: 'Title not empty',
   TITLE_MUST_BE_STRING: 'Title must be a string',
   CONTENT_NOT_EMPTY: 'Content not empty',
@@ -138,5 +140,10 @@ export const NOTIFICATIONS_MESSAGES = {
   TARGET_TYPE_INVALID: 'Target type invalid',
   TARGET_TYPE_NOT_EMPTY: 'Target type not empty',
   DAY_MUST_BE_ISO8601: 'Day must be ISO8601',
-  TARGETS_MUST_BE_AN_ARRAY_OF_OBJECT_ID: 'Targets must be an array of ObjectId'
+  DAY_NOT_EMPTY: 'Day not empty',
+  START_AT_MUST_BE_GREATER_THAN_CURRENT_DATE: 'Start at must be greater than current date',
+  START_AT_MUST_BE_LESS_THAN_END_AT: 'Start at must be less than end at',
+  END_AT_MUST_BE_GREATER_THAN_START_AT: 'End at must be greater than start at',
+  TARGETS_MUST_BE_AN_ARRAY_OF_OBJECT_ID: 'Targets must be an array of ObjectId',
+  CANNOT_UPDATE_NOTIFICATION_HAS_EXPIRED: 'Cannot update notification has expired'
 } as const

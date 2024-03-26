@@ -30,7 +30,10 @@ const testIdSchema: ParamSchema = {
   custom: {
     options: (value, { req }) => {
       if (!ObjectId.isValid(value)) {
-        throw new Error(TESTS_MESSAGES.TEST_ID_MUST_BE_AN_OBJECT_ID)
+        throw new ErrorWithStatus({
+          message: TESTS_MESSAGES.TEST_ID_MUST_BE_AN_OBJECT_ID,
+          status: HTTP_STATUS.BAD_REQUEST
+        })
       }
       return true
     }

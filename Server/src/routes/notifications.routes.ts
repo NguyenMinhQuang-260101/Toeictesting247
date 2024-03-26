@@ -1,7 +1,17 @@
 import { Router } from 'express'
-import { getNotificationDetailController, notificationsController } from '~/controllers/notifications.controllers'
-import { createNotificationValidator, notificationIdValidator } from '~/middlewares/notifications.middlewares'
+import {
+  getNotificationDetailController,
+  notificationsController,
+  updateNotificationController
+} from '~/controllers/notifications.controllers'
+import { filterMiddleware } from '~/middlewares/common.middlewares'
+import {
+  createNotificationValidator,
+  notificationIdValidator,
+  updateNotificationValidator
+} from '~/middlewares/notifications.middlewares'
 import { accessTokenValidator, userRuleValidator, verifiedUserValidator } from '~/middlewares/users.middlewares'
+import { UpdateNotificationReqBody } from '~/models/requests/Notification.requests'
 import { wrapRequestHandler } from '~/utils/handlers'
 
 const notificationsRouter = Router()
@@ -32,6 +42,24 @@ notificationsRouter.get(
   '/:notification_id',
   notificationIdValidator,
   wrapRequestHandler(getNotificationDetailController)
+)
+
+/**
+ * Description: Update notification
+ * Method: PATCH
+ * Path: /update
+ * Body: { NotificationUpdateReqBody }
+ * Headers: { Authorization Bearer <access token>}
+ */
+notificationsRouter.patch(
+  '/update',
+  accessTokenValidator,
+  verifiedUserValidator,
+  userRuleValidator,
+  updateNotificationValidator,
+  notificationIdValidator,
+  filterMiddleware<UpdateNotificationReqBody>(['notification_id', 'title', 'content', 'start_at', 'end_at']),
+  wrapRequestHandler(updateNotificationController)
 )
 
 export default notificationsRouter

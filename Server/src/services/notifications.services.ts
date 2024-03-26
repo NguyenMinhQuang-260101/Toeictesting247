@@ -1,12 +1,13 @@
-import { NotificationReqBody } from '~/models/requests/Notification.requests'
+import { NotificationReqBody, UpdateNotificationReqBody } from '~/models/requests/Notification.requests'
 
 import databaseServices from './database.services'
 import Notification from '~/models/schemas/Notification.schema'
 import { ObjectId, WithId } from 'mongodb'
-import { forEach } from 'lodash'
+import { forEach, omit } from 'lodash'
 import { NotificationType, OperatingStatus, TargetType } from '~/constants/enums'
 import { ErrorWithStatus } from '~/models/Errors'
 import HTTP_STATUS from '~/constants/httpStatus'
+import { NOTIFICATIONS_MESSAGES } from '~/constants/message'
 
 class NotificationsService {
   async createNotification(user_id: string, body: NotificationReqBody) {
@@ -62,6 +63,42 @@ class NotificationsService {
       return notification
     }
   }
+
+  async updateNotification(notification: Notification, payload: UpdateNotificationReqBody) {
+    const _payload = Object.fromEntries(
+      Object.entries(payload)
+        .filter(([key, value]) => value !== undefined && value !== null)
+        .map(([key, value]) => {
+          if (key === 'notification_id') return [key, new ObjectId(value)]
+          if (key === 'start_at' || key === 'end_at') return [key, new Date(value)]
+          return [key, value]
+        })
+    )
+
+    if (notification.end_at < new Date()) {
+      throw new ErrorWithStatus({
+        message: NOTIFICATIONS_MESSAGES.CANNOT_UPDATE_NOTIFICATION_HAS_EXPIRED,
+        status: HTTP_STATUS.BAD_REQUEST
+      })
+    }
+
+    const new_notification = await databaseServices.notifications.findOneAndUpdate(
+      { _id: new ObjectId(payload.notification_id) },
+      {
+        $set: {
+          ...(omit(_payload, ['notification_id']) as UpdateNotificationReqBody & {
+            notification_id?: ObjectId
+            start_at?: Date
+            end_at?: Date
+          })
+        },
+        $currentDate: { updated_at: true }
+      },
+      { returnDocument: 'after' }
+    )
+    return new_notification
+  }
 }
+
 const notificationsService = new NotificationsService()
 export default notificationsService

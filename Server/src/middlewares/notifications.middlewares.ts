@@ -11,6 +11,9 @@ import { numberEnumToArray } from '~/utils/commons'
 import { validate } from '~/utils/validation'
 
 const daySchema: ParamSchema = {
+  notEmpty: {
+    errorMessage: NOTIFICATIONS_MESSAGES.DAY_NOT_EMPTY
+  },
   isISO8601: {
     options: {
       strict: true,
@@ -20,33 +23,40 @@ const daySchema: ParamSchema = {
   }
 }
 
+const titleSchema: ParamSchema = {
+  notEmpty: {
+    errorMessage: NOTIFICATIONS_MESSAGES.TITLE_NOT_EMPTY
+  },
+  isString: {
+    errorMessage: NOTIFICATIONS_MESSAGES.TITLE_MUST_BE_STRING
+  }
+}
+
+const contentSchema: ParamSchema = {
+  notEmpty: {
+    errorMessage: NOTIFICATIONS_MESSAGES.CONTENT_NOT_EMPTY
+  },
+  isString: {
+    errorMessage: NOTIFICATIONS_MESSAGES.CONTENT_MUST_BE_STRING
+  }
+}
+
 const notificationTypes = numberEnumToArray(NotificationType)
 const targetTypes = numberEnumToArray(TargetType)
 
 export const createNotificationValidator = validate(
   checkSchema({
     type: {
+      notEmpty: {
+        errorMessage: NOTIFICATIONS_MESSAGES.TYPE_OF_NOTIFICATION_NOT_EMPTY
+      },
       isIn: {
         options: [notificationTypes],
         errorMessage: NOTIFICATIONS_MESSAGES.TYPE_INVALID
       }
     },
-    title: {
-      notEmpty: {
-        errorMessage: NOTIFICATIONS_MESSAGES.TITLE_NOT_EMPTY
-      },
-      isString: {
-        errorMessage: NOTIFICATIONS_MESSAGES.TITLE_MUST_BE_STRING
-      }
-    },
-    content: {
-      notEmpty: {
-        errorMessage: NOTIFICATIONS_MESSAGES.CONTENT_NOT_EMPTY
-      },
-      isString: {
-        errorMessage: NOTIFICATIONS_MESSAGES.CONTENT_MUST_BE_STRING
-      }
-    },
+    title: titleSchema,
+    content: contentSchema,
     target_type: {
       custom: {
         options: (value, { req }) => {
@@ -74,8 +84,40 @@ export const createNotificationValidator = validate(
         }
       }
     },
-    start_at: daySchema,
-    end_at: daySchema
+    start_at: {
+      ...daySchema,
+      custom: {
+        options: (value, { req }) => {
+          if (new Date(value) < new Date()) {
+            throw new ErrorWithStatus({
+              message: NOTIFICATIONS_MESSAGES.START_AT_MUST_BE_GREATER_THAN_CURRENT_DATE,
+              status: HTTP_STATUS.BAD_REQUEST
+            })
+          }
+          if (new Date(value) > new Date(req.body.end_at)) {
+            throw new ErrorWithStatus({
+              message: NOTIFICATIONS_MESSAGES.START_AT_MUST_BE_LESS_THAN_END_AT,
+              status: HTTP_STATUS.BAD_REQUEST
+            })
+          }
+          return true
+        }
+      }
+    },
+    end_at: {
+      ...daySchema,
+      custom: {
+        options: (value, { req }) => {
+          if (new Date(value) < new Date(req.body.start_at)) {
+            throw new ErrorWithStatus({
+              message: NOTIFICATIONS_MESSAGES.END_AT_MUST_BE_GREATER_THAN_START_AT,
+              status: HTTP_STATUS.BAD_REQUEST
+            })
+          }
+          return true
+        }
+      }
+    }
   })
 )
 
@@ -135,4 +177,73 @@ export const notificationIdValidator = validate(
     },
     ['params', 'body']
   )
+)
+
+export const updateNotificationValidator = validate(
+  checkSchema({
+    notification_id: {
+      notEmpty: {
+        errorMessage: NOTIFICATIONS_MESSAGES.NOTIFICATION_ID_NOT_EMPTY
+      },
+      custom: {
+        options: (value, { req }) => {
+          if (!ObjectId.isValid(value)) {
+            throw new ErrorWithStatus({
+              message: NOTIFICATIONS_MESSAGES.NOTIFICATION_ID_INVALID,
+              status: HTTP_STATUS.BAD_REQUEST
+            })
+          }
+          return true
+        }
+      }
+    },
+    title: {
+      ...titleSchema,
+      optional: true,
+      notEmpty: undefined
+    },
+    content: {
+      ...contentSchema,
+      optional: true,
+      notEmpty: undefined
+    },
+    start_at: {
+      ...daySchema,
+      optional: true,
+      notEmpty: undefined,
+      custom: {
+        options: (value, { req }) => {
+          if (new Date(value) < new Date()) {
+            throw new ErrorWithStatus({
+              message: NOTIFICATIONS_MESSAGES.START_AT_MUST_BE_GREATER_THAN_CURRENT_DATE,
+              status: HTTP_STATUS.BAD_REQUEST
+            })
+          }
+          if (new Date(value) > new Date(req.body.end_at)) {
+            throw new ErrorWithStatus({
+              message: NOTIFICATIONS_MESSAGES.START_AT_MUST_BE_LESS_THAN_END_AT,
+              status: HTTP_STATUS.BAD_REQUEST
+            })
+          }
+          return true
+        }
+      }
+    },
+    end_at: {
+      ...daySchema,
+      optional: true,
+      notEmpty: undefined,
+      custom: {
+        options: (value, { req }) => {
+          if (new Date(value) < new Date(req.body.start_at)) {
+            throw new ErrorWithStatus({
+              message: NOTIFICATIONS_MESSAGES.END_AT_MUST_BE_GREATER_THAN_START_AT,
+              status: HTTP_STATUS.BAD_REQUEST
+            })
+          }
+          return true
+        }
+      }
+    }
+  })
 )

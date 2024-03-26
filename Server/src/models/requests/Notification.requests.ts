@@ -11,3 +11,11 @@ export interface NotificationReqBody {
   start_at: string
   end_at: string
 }
+
+export interface UpdateNotificationReqBody {
+  notification_id: string
+  title?: string
+  content?: string
+  start_at?: string
+  end_at?: string
+}

@@ -1,7 +1,8 @@
 import { Request, Response } from 'express'
 import { ParamsDictionary } from 'express-serve-static-core'
-import { NotificationReqBody } from '~/models/requests/Notification.requests'
+import { NotificationReqBody, UpdateNotificationReqBody } from '~/models/requests/Notification.requests'
 import { TokenPayload } from '~/models/requests/User.requests'
+import Notification from '~/models/schemas/Notification.schema'
 import notificationsService from '~/services/notifications.services'
 
 export const notificationsController = async (
@@ -20,5 +21,16 @@ export const getNotificationDetailController = async (req: Request, res: Respons
   return res.json({
     message: 'Notification detail',
     result: req.notification
+  })
+}
+
+export const updateNotificationController = async (
+  req: Request<ParamsDictionary, any, UpdateNotificationReqBody>,
+  res: Response
+) => {
+  const notification = await notificationsService.updateNotification(req.notification as Notification, req.body)
+  return res.json({
+    message: 'Notification updated successfully',
+    result: notification
   })
 }
