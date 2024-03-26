@@ -7,7 +7,7 @@ interface NotificationConstructor {
   type: NotificationType
   title: string
   content: string
-  target_type?: TargetType
+  target_type: TargetType
   targets: string[]
   start_at: Date
   end_at: Date
@@ -21,7 +21,7 @@ export default class Notification {
   type: NotificationType
   title: string
   content: string
-  target_type: TargetType | null
+  target_type: TargetType
   targets: ObjectId[]
   start_at: Date
   end_at: Date
@@ -46,7 +46,7 @@ export default class Notification {
     this.type = type
     this.title = title
     this.content = content
-    this.target_type = target_type || null // Chỉ null khi type là NotificationType.Other
+    this.target_type = target_type
     this.targets = targets.map((item) => new ObjectId(item))
     this.start_at = start_at
     this.end_at = end_at

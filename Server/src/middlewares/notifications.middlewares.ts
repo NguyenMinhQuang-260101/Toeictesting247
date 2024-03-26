@@ -58,14 +58,26 @@ export const createNotificationValidator = validate(
     title: titleSchema,
     content: contentSchema,
     target_type: {
+      notEmpty: {
+        errorMessage: NOTIFICATIONS_MESSAGES.TARGET_TYPE_NOT_EMPTY
+      },
       custom: {
         options: (value, { req }) => {
           if (req.body.type === NotificationType.Update) {
-            if (!value) {
-              throw new Error(NOTIFICATIONS_MESSAGES.TARGET_TYPE_NOT_EMPTY)
-            }
             if (value && !targetTypes.includes(value)) {
               throw new Error(NOTIFICATIONS_MESSAGES.TARGET_TYPE_INVALID)
+            }
+            // Yêu cầu target_type phải là Course hoac Document khi type notification là Update
+            if (value === TargetType.Other) {
+              throw new Error(NOTIFICATIONS_MESSAGES.TARGET_TYPE_OTHER_CANNOT_BE_USE_FOR_UPDATE_NOTIFICATION)
+            }
+          } else if (req.body.type === NotificationType.Other) {
+            if (value && !targetTypes.includes(value)) {
+              throw new Error(NOTIFICATIONS_MESSAGES.TARGET_TYPE_INVALID)
+            }
+            // Yêu cầu target_type phải là Other khi type notification là Other
+            if (!value || value !== TargetType.Other) {
+              throw new Error(NOTIFICATIONS_MESSAGES.CAN_ONLY_USE_TARGET_TYPE_OTHER_FOR_OTHER_NOTIFICATION)
             }
           }
           return true

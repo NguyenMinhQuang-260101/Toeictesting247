@@ -6,7 +6,7 @@ export interface NotificationReqBody {
   type: NotificationType
   title: string
   content: string
-  target_type?: TargetType
+  target_type: TargetType
   targets: string[]
   start_at: string
   end_at: string

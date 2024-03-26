@@ -5,15 +5,16 @@ import { TokenPayload } from '~/models/requests/User.requests'
 import Notification from '~/models/schemas/Notification.schema'
 import notificationsService from '~/services/notifications.services'
 
-export const notificationsController = async (
+export const createNotificationsController = async (
   req: Request<ParamsDictionary, any, NotificationReqBody>,
   res: Response
 ) => {
   const { user_id } = req.decoded_authorization as TokenPayload
-  const result = await notificationsService.createNotification(user_id, req.body)
+  const notification = await notificationsService.createNotification(user_id, req.body)
+
   return res.json({
     message: 'Notification created successfully',
-    result
+    result: notification
   })
 }
 

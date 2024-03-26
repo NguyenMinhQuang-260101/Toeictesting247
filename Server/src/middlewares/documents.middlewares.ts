@@ -162,3 +162,52 @@ export const documentIdValidator = validate(
     ['params', 'body']
   )
 )
+
+export const updateDocumentValidator = validate(
+  checkSchema({
+    document_id: {
+      notEmpty: {
+        errorMessage: DOCUMENTS_MESSAGES.DOCUMENT_MUST_NOT_BE_EMPTY
+      }
+    },
+    type: {
+      ...typeSchema,
+      optional: true,
+      notEmpty: undefined
+    },
+    title: {
+      ...titleSchema,
+      optional: true,
+      notEmpty: undefined
+    },
+    description: {
+      ...descriptionSchema,
+      optional: true,
+      notEmpty: undefined
+    },
+    content: {
+      ...contentSchema,
+      optional: true,
+      notEmpty: undefined
+    },
+    thumbnails: {
+      ...thumbnailSchema,
+      optional: true
+    },
+    status: {
+      ...statusSchema,
+      optional: true,
+      custom: {
+        options: (value, { req }) => {
+          if (value === OperatingStatus.Updating) {
+            throw new ErrorWithStatus({
+              message: DOCUMENTS_MESSAGES.UPDATE_STATUS_CAN_ONLY_BE_SWITCHED_BY_CREATING_A_NOTIFICATION,
+              status: HTTP_STATUS.BAD_REQUEST
+            })
+          }
+          return true
+        }
+      }
+    }
+  })
+)

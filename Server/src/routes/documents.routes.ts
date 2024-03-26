@@ -1,7 +1,18 @@
 import { Router } from 'express'
-import { createDocumentController, getDocumentDetailController } from '~/controllers/documents.controllers'
-import { createDocumentValidator, documentIdValidator } from '~/middlewares/documents.middlewares'
+import {
+  createDocumentController,
+  deleteDocumentController,
+  getDocumentDetailController,
+  updateDocumentController
+} from '~/controllers/documents.controllers'
+import { filterMiddleware } from '~/middlewares/common.middlewares'
+import {
+  createDocumentValidator,
+  documentIdValidator,
+  updateDocumentValidator
+} from '~/middlewares/documents.middlewares'
 import { accessTokenValidator, userRuleValidator, verifiedUserValidator } from '~/middlewares/users.middlewares'
+import { UpdateDocumentReqBody } from '~/models/requests/Document.requests'
 import { wrapRequestHandler } from '~/utils/handlers'
 
 const documentsRouter = Router()
@@ -30,5 +41,47 @@ documentsRouter.post(
  */
 
 documentsRouter.get('/:document_id', documentIdValidator, wrapRequestHandler(getDocumentDetailController))
+
+/**
+ * Description: Update document
+ * Method: PATCH
+ * Path: /update
+ * Headers: { Authorization: Bearer <access_token> }
+ * Body: UpdateDocumentReqBody
+ */
+documentsRouter.patch(
+  '/update',
+  accessTokenValidator,
+  verifiedUserValidator,
+  userRuleValidator,
+  updateDocumentValidator,
+  documentIdValidator,
+  filterMiddleware<UpdateDocumentReqBody>([
+    'document_id',
+    'type',
+    'title',
+    'description',
+    'content',
+    'thumbnails',
+    'status'
+  ]),
+  wrapRequestHandler(updateDocumentController)
+)
+
+/**
+ * Description: Delete document
+ * Method: DELETE
+ * Path: /delete/:document_id
+ * Headers: { Authorization?: Bearer <access token>}
+ */
+
+documentsRouter.delete(
+  '/delete/:document_id',
+  accessTokenValidator,
+  verifiedUserValidator,
+  userRuleValidator,
+  documentIdValidator,
+  wrapRequestHandler(deleteDocumentController)
+)
 
 export default documentsRouter

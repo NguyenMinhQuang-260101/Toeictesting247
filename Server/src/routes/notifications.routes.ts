@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import {
   getNotificationDetailController,
-  notificationsController,
+  createNotificationsController,
   updateNotificationController
 } from '~/controllers/notifications.controllers'
 import { filterMiddleware } from '~/middlewares/common.middlewares'
@@ -29,7 +29,7 @@ notificationsRouter.post(
   verifiedUserValidator,
   userRuleValidator,
   createNotificationValidator,
-  wrapRequestHandler(notificationsController)
+  wrapRequestHandler(createNotificationsController)
 )
 
 /**

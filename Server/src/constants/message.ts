@@ -109,7 +109,8 @@ export const DOCUMENTS_MESSAGES = {
   CANNOT_UPDATE_ACTIVE_DOCUMENT: 'Cannot update active document. Can only update when the status is Updating',
   ACTIVE_STATUS_CAN_ONLY_BE_SWITCHED_WHEN_NOTIFICATION_EXPIRED:
     'The document is in updating status and cannot be changed to Active. The document will automatically switch to active status when a notification is created for the course to expire',
-  COURSE_CANNOT_BE_DELETED_WHEN_IT_IS_ACTIVE: 'Document cannot be deleted when it is active'
+  COURSE_CANNOT_BE_DELETED_WHEN_IT_IS_ACTIVE: 'Document cannot be deleted when it is active',
+  DOCUMENT_CANNOT_BE_DELETED_WHEN_IT_IS_ACTIVE: 'Document cannot be deleted when it is active'
 } as const
 
 export const TESTS_MESSAGES = {
@@ -172,6 +173,8 @@ export const NOTIFICATIONS_MESSAGES = {
   CONTENT_MUST_BE_STRING: 'Content must be a string',
   TARGET_TYPE_INVALID: 'Target type invalid',
   TARGET_TYPE_NOT_EMPTY: 'Target type not empty',
+  TARGET_TYPE_OTHER_CANNOT_BE_USE_FOR_UPDATE_NOTIFICATION: 'Target type Other cannot be use for update notification',
+  CAN_ONLY_USE_TARGET_TYPE_OTHER_FOR_OTHER_NOTIFICATION: 'Can only use target type Other for Other notification',
   DAY_MUST_BE_ISO8601: 'Day must be ISO8601',
   DAY_NOT_EMPTY: 'Day not empty',
   START_AT_MUST_BE_GREATER_THAN_CURRENT_DATE: 'Start at must be greater than current date',

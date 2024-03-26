@@ -41,7 +41,8 @@ export enum OperatingStatus {
 
 export enum TargetType {
   Document,
-  Course
+  Course,
+  Other
 }
 
 export enum NotificationType {

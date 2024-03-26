@@ -1,4 +1,4 @@
-import { Collection, Db, MongoClient, ObjectId } from 'mongodb'
+import { Collection, Db, MongoClient, ObjectId, WithId } from 'mongodb'
 import { envConfig } from '~/constants/config'
 import { OperatingStatus, TargetType } from '~/constants/enums'
 import Course from '~/models/schemas/Course.schema'
@@ -79,67 +79,20 @@ class DatabaseServices {
         if (document.end_at <= currentDate) {
           // Thực hiện các hành động phù hợp với tài liệu đã kết thúc
           if (document.target_type === TargetType.Course) {
-            // Thực hiện các hành động phù hợp với khóa học
-            document.targets.forEach(async (target: ObjectId) => {
-              const course = (await this.courses.findOne({ _id: target })) as Course
-              if (!course) {
-                return
-              }
-
-              // console.log(`Document with ID ${document._id} has ended.`)
-              if (course.status === OperatingStatus.Inactive) {
-                // console.log('status 1:', course?.status)
-                // console.log(`Document with ID ${document._id} has ended. 1`)
-                await this.courses.findOneAndUpdate(
-                  { _id: target },
-                  {
-                    $set: { status: OperatingStatus.Inactive, notification: null },
-                    $currentDate: { updated_at: true }
-                  }
-                )
-                await this.notifications.deleteOne({ _id: document._id }) // Xóa khóa học sau khi đã kết thúc
-              } else if (course.status === OperatingStatus.Updating || course.status === OperatingStatus.Active) {
-                // console.log(`Document with ID ${document._id} has ended. 2`)
-                // console.log('status 2:', course?.status)
-                await this.courses.findOneAndUpdate(
-                  { _id: target },
-                  { $set: { status: OperatingStatus.Active, notification: null }, $currentDate: { updated_at: true } }
-                )
-                await this.notifications.deleteOne({ _id: document._id }) // Xóa khóa học sau khi đã kết thúc
-              }
-            })
+            // Thực hiện các hành động phù hợp với khóa học khi notification kết thúc
+            this.checkEndAtNotificationForCourse(document)
+          } else if (document.target_type === TargetType.Document) {
+            // Thực hiện các hành động phù hợp với tài liệu khi notification kết thúc
+            this.checkEndAtNotificationForDocument(document)
           }
         } else {
           // Thực hiện các hành động phù hợp với tài liệu đã bắt đầu
           if (document.target_type === TargetType.Course) {
-            // Thực hiện các hành động phù hợp với khóa học
-            document.targets.forEach(async (target: ObjectId) => {
-              // Cap nhat trang thai cua target
-              const course = await this.courses.findOne({ _id: target })
-              if (!course) {
-                return
-              }
-
-              if (course.status === OperatingStatus.Inactive) {
-                // console.log(`Document with ID ${document._id} has started. 1`)
-                if (course?.notification !== null) {
-                  await this.courses.findOneAndUpdate(
-                    { _id: target },
-                    { $set: { status: OperatingStatus.Inactive, notification: document._id } }
-                  )
-                }
-                await this.courses.findOneAndUpdate({ _id: target }, { $set: { status: OperatingStatus.Inactive } })
-              } else {
-                // console.log(`Document with ID ${document._id} has started. 2`)
-                if (course?.notification !== null) {
-                  await this.courses.findOneAndUpdate(
-                    { _id: target },
-                    { $set: { status: OperatingStatus.Updating, notification: document._id } }
-                  )
-                }
-                await this.courses.findOneAndUpdate({ _id: target }, { $set: { status: OperatingStatus.Updating } })
-              }
-            })
+            // Thực hiện các hành động phù hợp với khóa học khi notification bắt đầu
+            this.checkStartAtNotificationForCourse(document)
+          } else if (document.target_type === TargetType.Document) {
+            // Thực hiện các hành động phù hợp với tài liệu khi notification bắt đầu
+            this.checkStartAtNotificationForDocument(document)
           }
         }
       })
@@ -156,6 +109,128 @@ class DatabaseServices {
         return
       }
     }, 30000) // Kiểm tra mỗi 30 giây
+  }
+
+  async checkEndAtNotificationForCourse(document: WithId<Notification>) {
+    document.targets.forEach(async (target: ObjectId) => {
+      const course = (await this.courses.findOne({ _id: target })) as Course
+      if (!course) {
+        return
+      }
+
+      // console.log(`Document with ID ${document._id} has ended.`)
+      if (course.status === OperatingStatus.Inactive) {
+        // console.log('status 1:', course?.status)
+        // console.log(`Document with ID ${document._id} has ended. 1`)
+        await this.courses.findOneAndUpdate(
+          { _id: target },
+          {
+            $set: { status: OperatingStatus.Inactive, notification: null },
+            $currentDate: { updated_at: true }
+          }
+        )
+        await this.notifications.deleteOne({ _id: document._id }) // Xóa khóa học sau khi đã kết thúc
+      } else if (course.status === OperatingStatus.Updating || course.status === OperatingStatus.Active) {
+        // console.log(`Document with ID ${document._id} has ended. 2`)
+        // console.log('status 2:', course?.status)
+        await this.courses.findOneAndUpdate(
+          { _id: target },
+          { $set: { status: OperatingStatus.Active, notification: null }, $currentDate: { updated_at: true } }
+        )
+        await this.notifications.deleteOne({ _id: document._id }) // Xóa khóa học sau khi đã kết thúc
+      }
+    })
+  }
+
+  async checkStartAtNotificationForCourse(document: WithId<Notification>) {
+    document.targets.forEach(async (target: ObjectId) => {
+      // Cap nhat trang thai cua target
+      const course = await this.courses.findOne({ _id: target })
+      if (!course) {
+        return
+      }
+
+      if (course.status === OperatingStatus.Inactive) {
+        // console.log(`Document with ID ${document._id} has started. 1`)
+        if (course?.notification !== null) {
+          await this.courses.findOneAndUpdate(
+            { _id: target },
+            { $set: { status: OperatingStatus.Inactive, notification: document._id } }
+          )
+        }
+        await this.courses.findOneAndUpdate({ _id: target }, { $set: { status: OperatingStatus.Inactive } })
+      } else {
+        // console.log(`Document with ID ${document._id} has started. 2`)
+        if (course?.notification !== null) {
+          await this.courses.findOneAndUpdate(
+            { _id: target },
+            { $set: { status: OperatingStatus.Updating, notification: document._id } }
+          )
+        }
+        await this.courses.findOneAndUpdate({ _id: target }, { $set: { status: OperatingStatus.Updating } })
+      }
+    })
+  }
+
+  async checkEndAtNotificationForDocument(document: WithId<Notification>) {
+    document.targets.forEach(async (target: ObjectId) => {
+      const _document = (await this.documents.findOne({ _id: target })) as Document
+      if (!_document) {
+        return
+      }
+
+      // console.log(`Document with ID ${document._id} has ended.`)
+      if (_document.status === OperatingStatus.Inactive) {
+        // console.log('status 1:', document?.status)
+        // console.log(`Document with ID ${document._id} has ended. 1`)
+        await this.documents.findOneAndUpdate(
+          { _id: target },
+          {
+            $set: { status: OperatingStatus.Inactive, notification: null },
+            $currentDate: { updated_at: true }
+          }
+        )
+        await this.notifications.deleteOne({ _id: document._id }) // Xóa notification sau khi đã kết thúc
+      } else if (_document.status === OperatingStatus.Updating || _document.status === OperatingStatus.Active) {
+        // console.log(`Document with ID ${document._id} has ended. 2`)
+        // console.log('status 2:', document?.status)
+        await this.documents.findOneAndUpdate(
+          { _id: target },
+          { $set: { status: OperatingStatus.Active, notification: null }, $currentDate: { updated_at: true } }
+        )
+        await this.notifications.deleteOne({ _id: document._id }) // Xóa notification sau khi đã kết thúc
+      }
+    })
+  }
+
+  async checkStartAtNotificationForDocument(document: WithId<Notification>) {
+    document.targets.forEach(async (target: ObjectId) => {
+      // Cap nhat trang thai cua target
+      const _document = await this.documents.findOne({ _id: target })
+      if (!_document) {
+        return
+      }
+
+      if (_document.status === OperatingStatus.Inactive) {
+        console.log(`Document with ID ${document._id} has started. 1`)
+        if (_document?.notification !== null) {
+          await this.documents.findOneAndUpdate(
+            { _id: target },
+            { $set: { status: OperatingStatus.Inactive, notification: document._id } }
+          )
+        }
+        await this.documents.findOneAndUpdate({ _id: target }, { $set: { status: OperatingStatus.Inactive } })
+      } else {
+        console.log(`Document with ID ${document._id} has started. 2`)
+        if (_document?.notification !== null) {
+          await this.documents.findOneAndUpdate(
+            { _id: target },
+            { $set: { status: OperatingStatus.Updating, notification: document._id } }
+          )
+        }
+        await this.documents.findOneAndUpdate({ _id: target }, { $set: { status: OperatingStatus.Updating } })
+      }
+    })
   }
 
   get users(): Collection<User> {

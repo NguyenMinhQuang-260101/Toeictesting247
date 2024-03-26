@@ -1,13 +1,13 @@
 import { NotificationReqBody, UpdateNotificationReqBody } from '~/models/requests/Notification.requests'
 
-import databaseServices from './database.services'
-import Notification from '~/models/schemas/Notification.schema'
-import { ObjectId, WithId } from 'mongodb'
 import { forEach, omit } from 'lodash'
+import { ObjectId, WithId } from 'mongodb'
 import { NotificationType, OperatingStatus, TargetType } from '~/constants/enums'
-import { ErrorWithStatus } from '~/models/Errors'
 import HTTP_STATUS from '~/constants/httpStatus'
 import { NOTIFICATIONS_MESSAGES } from '~/constants/message'
+import { ErrorWithStatus } from '~/models/Errors'
+import Notification from '~/models/schemas/Notification.schema'
+import databaseServices from './database.services'
 
 class NotificationsService {
   async createNotification(user_id: string, body: NotificationReqBody) {
@@ -17,7 +17,7 @@ class NotificationsService {
         type: body.type,
         title: body.title,
         content: body.content,
-        target_type: body.target_type,
+        target_type: body.target_type as TargetType,
         targets: body.targets,
         start_at: new Date(body.start_at),
         end_at: new Date(body.end_at)
@@ -39,6 +39,18 @@ class NotificationsService {
             failedTargets.push(course._id)
           }
         })
+      } else if (body.target_type === TargetType.Document) {
+        const documents = await databaseServices.documents.find({ _id: { $in: targets } }).toArray()
+        forEach(documents, async (document) => {
+          if (document.notification === null) {
+            await databaseServices.documents.updateOne(
+              { _id: document._id },
+              { $set: { notification: result.insertedId } }
+            )
+          } else {
+            failedTargets.push(document._id)
+          }
+        })
       }
 
       if (failedTargets.length > 0) {
@@ -51,7 +63,7 @@ class NotificationsService {
         await databaseServices.notifications.deleteOne({ _id: result.insertedId })
 
         throw new ErrorWithStatus({
-          message: `Cannot add notification to course(s) or document(s) with ID(s): ${failedTargets_tamp.join(', ')}: \n Case 1: The course is in Inactive state so there is no need to create notifications. \n Case 2: Course is updating. Please wait for the course to be updated.`,
+          message: `Cannot add notification to course(s) or document(s) with ID(s): ${failedTargets_tamp.join(', ')}: \n Case 1: The course or document is in Inactive state so there is no need to create notifications. \n Case 2: Course or Document is updating. Please wait for the course or document to be updated.`,
           status: HTTP_STATUS.INTERNAL_SERVER_ERROR
         })
       }
