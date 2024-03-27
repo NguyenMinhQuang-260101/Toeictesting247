@@ -3,7 +3,7 @@ import { QuestionReqBody, UpdateQuestionReqBody } from '~/models/requests/Questi
 import Question from '~/models/schemas/Question.schema'
 import databaseServices from './database.services'
 import Course from '~/models/schemas/Course.schema'
-import { OperatingStatus } from '~/constants/enums'
+import { OperatingStatus, UserRuleType } from '~/constants/enums'
 import { ErrorWithStatus } from '~/models/Errors'
 import HTTP_STATUS from '~/constants/httpStatus'
 import { QUESTIONS_MESSAGES } from '~/constants/message'
@@ -53,7 +53,19 @@ class QuestionsService {
     return question
   }
 
-  async getListQuestions({ test_id, limit, page }: { test_id: string; page: number; limit: number }) {
+  async getListQuestions({
+    rule,
+    source,
+    test_id,
+    limit,
+    page
+  }: {
+    rule: UserRuleType
+    source: Course | Document
+    test_id: string
+    page: number
+    limit: number
+  }) {
     const questions = await databaseServices.questions
       .aggregate<Question>([
         {
@@ -70,6 +82,23 @@ class QuestionsService {
       ])
       .toArray()
     const total = await databaseServices.questions.countDocuments({ test_id: new ObjectId(test_id) })
+    const [course, document] = await Promise.all([
+      databaseServices.courses.findOne<Course>({ _id: source._id }),
+      databaseServices.documents.findOne<Document>({ _id: source._id })
+    ])
+    if (rule === UserRuleType.User && course) {
+      await databaseServices.courses.findOneAndUpdate(
+        { _id: course._id },
+        {
+          $inc: {
+            user_views: 1
+          },
+          $currentDate: {
+            updated_at: true
+          }
+        }
+      )
+    }
     return {
       questions,
       total

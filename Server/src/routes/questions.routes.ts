@@ -44,7 +44,12 @@ questionsRouter.post(
  * Parameters: { test_id: string }
  * Query: { page: number, limit: number }
  */
-questionsRouter.get('/list/:test_id', wrapRequestHandler(getListQuestionsController))
+questionsRouter.get(
+  '/list/:test_id',
+  accessTokenValidator,
+  verifiedUserValidator,
+  wrapRequestHandler(getListQuestionsController)
+)
 
 /**
  * Description: Get question detail
@@ -52,7 +57,13 @@ questionsRouter.get('/list/:test_id', wrapRequestHandler(getListQuestionsControl
  * Path: /:question_id
  * Parameters: { question_id: string }
  */
-questionsRouter.get('/:question_id', questionIdValidator, wrapRequestHandler(getQuestionDetailController))
+questionsRouter.get(
+  '/:question_id',
+  accessTokenValidator,
+  verifiedUserValidator,
+  questionIdValidator,
+  wrapRequestHandler(getQuestionDetailController)
+)
 
 /**
  * Description: Update question
