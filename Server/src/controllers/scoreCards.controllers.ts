@@ -15,3 +15,10 @@ export const createScoreCardController = async (
     result: scoreCard
   })
 }
+
+export const getScoreCardController = async (req: Request, res: Response) => {
+  return res.json({
+    message: 'Get Scorecard successfully',
+    result: req.scorecard
+  })
+}

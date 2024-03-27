@@ -8,6 +8,8 @@ import { Answer } from '~/models/Other'
 import databaseServices from '~/services/database.services'
 import { numberEnumToArray } from '~/utils/commons'
 import { validate } from '~/utils/validation'
+import { Request } from 'express'
+import ScoreCard from '~/models/schemas/ScoreCard.schema'
 
 const mediaTypes = numberEnumToArray(MediaType)
 
@@ -145,4 +147,53 @@ export const crateScoreCardValidator = validate(
       }
     }
   })
+)
+
+export const scoreCardIdValidator = validate(
+  checkSchema(
+    {
+      scorecard_id: {
+        isMongoId: {
+          errorMessage: SCORECARDS_MESSAGES.SCORECARD_ID_INVALID
+        },
+        custom: {
+          options: async (value, { req }) => {
+            const [scoreCard] = await databaseServices.scorecards
+              .aggregate<ScoreCard>([
+                {
+                  $match: {
+                    _id: new ObjectId(value as string)
+                  }
+                },
+                {
+                  $lookup: {
+                    from: 'questions',
+                    localField: 'questions',
+                    foreignField: '_id',
+                    as: 'questions'
+                  }
+                },
+                {
+                  $addFields: {
+                    total_question: {
+                      $size: '$questions'
+                    }
+                  }
+                }
+              ])
+              .toArray()
+            if (!scoreCard) {
+              throw new ErrorWithStatus({
+                message: SCORECARDS_MESSAGES.SCORECARD_NOT_FOUND,
+                status: HTTP_STATUS.NOT_FOUND
+              })
+            }
+            ;(req as Request).scorecard = scoreCard
+            return true
+          }
+        }
+      }
+    },
+    ['params', 'body']
+  )
 )
