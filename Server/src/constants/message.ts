@@ -186,3 +186,15 @@ export const NOTIFICATIONS_MESSAGES = {
   TARGETS_MUST_BE_AN_ARRAY_OF_OBJECT_ID: 'Targets must be an array of ObjectId',
   CANNOT_UPDATE_NOTIFICATION_HAS_EXPIRED: 'Cannot update notification has expired'
 } as const
+
+export const SCORECARDS_MESSAGES = {
+  SCORECARD_ID_INVALID: 'ScoreCard id invalid',
+  SCORECARD_NOT_FOUND: 'ScoreCard not found',
+  TOTAL_TIME_MUST_BE_A_NUMBER: 'Total time must be a number of seconds',
+  QUESTIONS_MUST_BE_AN_ARRAY: 'Questions must be an array of question',
+  QUESTION_ID_INVALID: 'Question id invalid',
+  TOTAL_TIME_MUST_NOT_BE_EMPTY: 'Total time must not be empty',
+  QUESTION_ID_MUST_NOT_BE_EMPTY: 'Question id must not be empty',
+  TEST_ID_QUESTION_MUST_BE_THE_SAME_AS_THE_TEST_ID_IN_THE_BODY:
+    'Test id question must be the same as the test id in the body'
+} as const

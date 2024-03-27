@@ -6,6 +6,7 @@ import Document from '~/models/schemas/Document.schema'
 import Notification from '~/models/schemas/Notification.schema'
 import Question from '~/models/schemas/Question.schema'
 import RefreshToken from '~/models/schemas/RefreshToken.schema'
+import ScoreCard from '~/models/schemas/ScoreCard.schema'
 import Test from '~/models/schemas/Test.schema'
 import User from '~/models/schemas/User.schema'
 const uri = `mongodb+srv://${envConfig.dbUsername}:${envConfig.dbPassword}@toeictesting247.bcdy1vx.mongodb.net/?retryWrites=true&w=majority&appName=ToeicTesting247`
@@ -259,6 +260,10 @@ class DatabaseServices {
 
   get notifications(): Collection<Notification> {
     return this.db.collection(envConfig.dbNotificationsCollection)
+  }
+
+  get scorecards(): Collection<ScoreCard> {
+    return this.db.collection(envConfig.dbScoreCardsCollection)
   }
 }
 

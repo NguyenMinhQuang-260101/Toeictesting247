@@ -1,14 +1,14 @@
-import { ParamSchema, checkSchema } from 'express-validator'
 import { Request } from 'express'
+import { ParamSchema, checkSchema } from 'express-validator'
 import { ObjectId } from 'mongodb'
 import HTTP_STATUS from '~/constants/httpStatus'
-import { COURSES_MESSAGES, TESTS_MESSAGES } from '~/constants/message'
+import { TESTS_MESSAGES } from '~/constants/message'
 import { ErrorWithStatus } from '~/models/Errors'
+import Course from '~/models/schemas/Course.schema'
+import Document from '~/models/schemas/Document.schema'
 import Test from '~/models/schemas/Test.schema'
 import databaseServices from '~/services/database.services'
 import { validate } from '~/utils/validation'
-import Course from '~/models/schemas/Course.schema'
-import Document from '~/models/schemas/Document.schema'
 
 const sourceIdSchema: ParamSchema = {
   notEmpty: {

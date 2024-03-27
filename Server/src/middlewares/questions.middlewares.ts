@@ -9,7 +9,6 @@ import Question from '~/models/schemas/Question.schema'
 import databaseServices from '~/services/database.services'
 import { numberEnumToArray } from '~/utils/commons'
 import { validate } from '~/utils/validation'
-import Document from '~/models/schemas/Document.schema'
 
 const numQuestSchema: ParamSchema = {
   notEmpty: {

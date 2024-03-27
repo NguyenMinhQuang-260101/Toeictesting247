@@ -11,6 +11,7 @@ import testsRouter from './routes/tests.routes'
 import questionsRouter from './routes/questions.routes'
 import notificationsRouter from './routes/notifications.routes'
 import documentsRouter from './routes/documents.routes'
+import scoreCardsRouter from './routes/scorecards.routes'
 
 const app = express()
 const port = envConfig.port
@@ -32,6 +33,7 @@ app.use('/tests', testsRouter)
 app.use('/questions', questionsRouter)
 app.use('/notifications', notificationsRouter)
 app.use('/documents', documentsRouter)
+app.use('/scorecards', scoreCardsRouter)
 
 // Dùng sau khi đã sử dụng tất cả các routes
 app.use(defaultErrorHandler)

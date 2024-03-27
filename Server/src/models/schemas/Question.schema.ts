@@ -8,7 +8,7 @@ interface QuestionConstructor {
   description: string
   content: string | Media[]
   answers: Answer[]
-  correct_at: Answer
+  correct_at?: Answer
   selected_at?: Answer
   score: number
   created_at?: Date
@@ -22,7 +22,7 @@ export default class Question {
   description: string
   content: string | Media[]
   answers: Answer[]
-  correct_at: Answer
+  correct_at: null | Answer
   selected_at: null | Answer
   score: number
   created_at: Date
@@ -47,7 +47,7 @@ export default class Question {
     this.description = description
     this.content = content
     this.answers = answers
-    this.correct_at = correct_at
+    this.correct_at = correct_at || null
     this.selected_at = selected_at || null
     this.score = score
     this.created_at = created_at || date
