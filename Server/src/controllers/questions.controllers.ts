@@ -15,12 +15,12 @@ export const createQuestionController = async (req: Request<ParamsDictionary, an
 export const getListQuestionsController = async (req: Request, res: Response) => {
   const test_id = req.params.test_id
   const { rule } = req.decoded_authorization as TokenPayload
-  const source = req.source as Course | Document
+  const test = req.test as Test
   const limit = Number(req.query.limit as string)
   const page = Number(req.query.page as string)
   const { questions, total } = await questionsService.getListQuestions({
     rule,
-    source,
+    test,
     test_id,
     limit,
     page

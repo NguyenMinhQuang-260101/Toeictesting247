@@ -13,7 +13,7 @@ import {
   questionIdValidator,
   updateQuestionValidator
 } from '~/middlewares/questions.middlewares'
-import { testIdValidator } from '~/middlewares/tests.middlewares'
+import { sourceIdValidator, testIdValidator } from '~/middlewares/tests.middlewares'
 import { accessTokenValidator, userRuleValidator, verifiedUserValidator } from '~/middlewares/users.middlewares'
 import { UpdateQuestionReqBody } from '~/models/requests/Question.requests'
 import { wrapRequestHandler } from '~/utils/handlers'
@@ -48,6 +48,7 @@ questionsRouter.get(
   '/list/:test_id',
   accessTokenValidator,
   verifiedUserValidator,
+  testIdValidator,
   wrapRequestHandler(getListQuestionsController)
 )
 

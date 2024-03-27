@@ -55,13 +55,13 @@ class QuestionsService {
 
   async getListQuestions({
     rule,
-    source,
+    test,
     test_id,
     limit,
     page
   }: {
     rule: UserRuleType
-    source: Course | Document
+    test: Test
     test_id: string
     page: number
     limit: number
@@ -83,12 +83,24 @@ class QuestionsService {
       .toArray()
     const total = await databaseServices.questions.countDocuments({ test_id: new ObjectId(test_id) })
     const [course, document] = await Promise.all([
-      databaseServices.courses.findOne<Course>({ _id: source._id }),
-      databaseServices.documents.findOne<Document>({ _id: source._id })
+      databaseServices.courses.findOne<Course>({ _id: test.source_id }),
+      databaseServices.documents.findOne<Document>({ _id: test.source_id })
     ])
     if (rule === UserRuleType.User && course) {
       await databaseServices.courses.findOneAndUpdate(
-        { _id: course._id },
+        { _id: new ObjectId(course._id) },
+        {
+          $inc: {
+            user_views: 1
+          },
+          $currentDate: {
+            updated_at: true
+          }
+        }
+      )
+    } else if (rule === UserRuleType.User && document) {
+      await databaseServices.documents.findOneAndUpdate(
+        { _id: new ObjectId(document._id) },
         {
           $inc: {
             user_views: 1
