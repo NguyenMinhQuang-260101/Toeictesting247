@@ -14,6 +14,26 @@ export const createTestController = async (req: Request<ParamsDictionary, any, T
   })
 }
 
+export const getListTestsController = async (req: Request, res: Response) => {
+  const source_id = req.params.source_id
+  const limit = Number(req.query.limit as string)
+  const page = Number(req.query.page as string)
+  const { tests, total } = await testsService.getListTests({
+    source_id,
+    limit,
+    page
+  })
+  return res.json({
+    message: 'Get list of tests successfully',
+    result: {
+      tests,
+      limit,
+      page,
+      total_page: Math.ceil(total / limit)
+    }
+  })
+}
+
 export const getTestDetailController = async (req: Request, res: Response) => {
   return res.json({
     message: 'Get test detail successfully',

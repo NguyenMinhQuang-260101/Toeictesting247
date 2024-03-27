@@ -2,6 +2,7 @@ import { Router } from 'express'
 import {
   createQuestionController,
   deleteQuestionController,
+  getListQuestionsController,
   getQuestionDetailController,
   updateQuestionController
 } from '~/controllers/questions.controllers'
@@ -37,10 +38,19 @@ questionsRouter.post(
 )
 
 /**
+ * Description: Get list of questions by test_id
+ * Method: GET
+ * Path: /:test_id
+ * Parameters: { test_id: string }
+ * Query: { page: number, limit: number }
+ */
+questionsRouter.get('/list/:test_id', wrapRequestHandler(getListQuestionsController))
+
+/**
  * Description: Get question detail
  * Method: GET
  * Path: /:question_id
- * Headers: { Authorization?: Bearer <access token>}
+ * Parameters: { question_id: string }
  */
 questionsRouter.get('/:question_id', questionIdValidator, wrapRequestHandler(getQuestionDetailController))
 

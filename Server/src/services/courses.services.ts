@@ -3,7 +3,7 @@ import databaseServices from './database.services'
 import Course from '~/models/schemas/Course.schema'
 import { ObjectId } from 'mongodb'
 import { omit } from 'lodash'
-import { OperatingStatus } from '~/constants/enums'
+import { CourseType, OperatingStatus } from '~/constants/enums'
 import { ErrorWithStatus } from '~/models/Errors'
 import HTTP_STATUS from '~/constants/httpStatus'
 import { COURSES_MESSAGES } from '~/constants/message'
@@ -66,6 +66,29 @@ class CoursesService {
       })
     }
     await databaseServices.courses.deleteOne({ _id: course._id })
+  }
+
+  async getListCourse({ limit, page, course_type }: { limit: number; page: number; course_type: CourseType }) {
+    const courses = await databaseServices.courses
+      .aggregate<Course>([
+        {
+          $match: {
+            type: course_type
+          }
+        },
+        {
+          $skip: limit * (page - 1) // Công thức phân trang
+        },
+        {
+          $limit: limit
+        }
+      ])
+      .toArray()
+    const total = await databaseServices.courses.countDocuments({ type: course_type })
+    return {
+      courses,
+      total
+    }
   }
 }
 

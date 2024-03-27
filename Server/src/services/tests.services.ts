@@ -75,6 +75,29 @@ class TestsController {
     }
   }
 
+  async getListTests({ source_id, page, limit }: { source_id: string; page: number; limit: number }) {
+    const tests = await databaseServices.tests
+      .aggregate<Test>([
+        {
+          $match: {
+            source_id: new ObjectId(source_id)
+          }
+        },
+        {
+          $skip: limit * (page - 1) // Công thức phân trang
+        },
+        {
+          $limit: limit
+        }
+      ])
+      .toArray()
+    const total = await databaseServices.tests.countDocuments({ source_id: new ObjectId(source_id) })
+    return {
+      tests,
+      total
+    }
+  }
+
   async updateTest(payload: UpdateTestReqBody, source: Course | Document) {
     const _payload = payload.source_id ? { ...payload, source_id: new ObjectId(payload.source_id) } : payload
     const course = (await databaseServices.courses.findOne({ _id: new ObjectId(payload.source_id) })) as Course

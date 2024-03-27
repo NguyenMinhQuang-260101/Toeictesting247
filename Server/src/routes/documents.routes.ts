@@ -3,6 +3,7 @@ import {
   createDocumentController,
   deleteDocumentController,
   getDocumentDetailController,
+  getListDocumentController,
   updateDocumentController
 } from '~/controllers/documents.controllers'
 import { filterMiddleware } from '~/middlewares/common.middlewares'
@@ -32,6 +33,16 @@ documentsRouter.post(
   createDocumentValidator,
   wrapRequestHandler(createDocumentController)
 )
+
+/**
+ * Description: Get Document List
+ * Method: GET
+ * Path: /:course_id/reading
+ * Headers: { Authorization?: Bearer <access token>}
+ * Query: {limit: number , page: number, document_type: DocumentType}
+ */
+
+documentsRouter.get('/list', wrapRequestHandler(getListDocumentController))
 
 /**
  * Description: Get document detail

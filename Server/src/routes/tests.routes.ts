@@ -3,6 +3,7 @@ import {
   createTestController,
   deleteTestController,
   getFullTestDetailController,
+  getListTestsController,
   getTestDetailController,
   updateTestController
 } from '~/controllers/tests.controllers'
@@ -38,10 +39,20 @@ testsRouter.post(
 )
 
 /**
+ * Description: Get list of tests by source_id
+ * Method: GET
+ * Path: /:source_id
+ * Headers: { Authorization?: Bearer <access token>}
+ * Parameters: { source_id: string }
+ * Query: { page: number, limit: number }
+ */
+testsRouter.get('/list/:source_id', wrapRequestHandler(getListTestsController))
+
+/**
  * Description: Get test detail
  * Method: GET
  * Path: /:test_id
- * Headers: { Authorization?: Bearer <access token>}
+ * Parameters: { test_id: string }
  */
 testsRouter.get('/:test_id', testIdValidator, wrapRequestHandler(getTestDetailController))
 

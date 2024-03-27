@@ -11,6 +11,26 @@ export const createQuestionController = async (req: Request<ParamsDictionary, an
   return res.json({ message: 'Create question successfully', result })
 }
 
+export const getListQuestionsController = async (req: Request, res: Response) => {
+  const test_id = req.params.test_id
+  const limit = Number(req.query.limit as string)
+  const page = Number(req.query.page as string)
+  const { questions, total } = await questionsService.getListQuestions({
+    test_id,
+    limit,
+    page
+  })
+  return res.json({
+    message: 'Get list of questions successfully',
+    result: {
+      questions,
+      limit,
+      page,
+      total_page: Math.ceil(total / limit)
+    }
+  })
+}
+
 export const getQuestionDetailController = async (req: Request, res: Response) => {
   return res.json({
     message: 'Get question detail successfully',

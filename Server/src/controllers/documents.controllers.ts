@@ -4,6 +4,7 @@ import { DocumentReqBody, UpdateDocumentReqBody } from '~/models/requests/Docume
 import { TokenPayload } from '~/models/requests/User.requests'
 import documentsService from '~/services/documents.services'
 import Document from '~/models/schemas/Document.schema'
+import { DocumentType } from '~/constants/enums'
 
 export const createDocumentController = async (req: Request<ParamsDictionary, any, DocumentReqBody>, res: Response) => {
   const { user_id } = req.decoded_authorization as TokenPayload
@@ -14,10 +15,32 @@ export const createDocumentController = async (req: Request<ParamsDictionary, an
   })
 }
 
+export const getListDocumentController = async (req: Request, res: Response) => {
+  const document_type = Number(req.query.document_type as string) as DocumentType
+  const limit = Number(req.query.limit as string)
+  const page = Number(req.query.page as string)
+  const { total, documents } = await documentsService.getListDocument({
+    document_type,
+    limit,
+    page
+  })
+  return res.json({
+    message: 'Get list document successfully',
+    result: {
+      documents,
+      document_type,
+      limit,
+      page,
+      total_page: Math.ceil(total / limit)
+    }
+  })
+}
+
 export const getDocumentDetailController = async (req: Request, res: Response) => {
+  const incViewsDocument = await documentsService.incViewsDocument(req.document as Document)
   return res.json({
     message: 'Get document detail successfully',
-    result: req.document
+    result: incViewsDocument
   })
 }
 

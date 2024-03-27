@@ -2,7 +2,7 @@ import { ObjectId } from 'mongodb'
 import databaseServices from './database.services'
 import { DocumentReqBody, UpdateDocumentReqBody } from '~/models/requests/Document.requests'
 import Document from '~/models/schemas/Document.schema'
-import { OperatingStatus } from '~/constants/enums'
+import { DocumentType, OperatingStatus } from '~/constants/enums'
 import { ErrorWithStatus } from '~/models/Errors'
 import { DOCUMENTS_MESSAGES } from '~/constants/message'
 import HTTP_STATUS from '~/constants/httpStatus'
@@ -67,6 +67,47 @@ class DocumentsService {
       })
     }
     await databaseServices.documents.deleteOne({ _id: document._id })
+  }
+
+  async incViewsDocument(_document: Document) {
+    const document = await databaseServices.documents.findOneAndUpdate(
+      { _id: _document._id },
+      {
+        $inc: {
+          user_views: 1
+        },
+        $currentDate: {
+          updated_at: true
+        }
+      },
+      {
+        returnDocument: 'after'
+      }
+    )
+    return document
+  }
+
+  async getListDocument({ limit, page, document_type }: { limit: number; page: number; document_type: DocumentType }) {
+    const documents = await databaseServices.documents
+      .aggregate<Document>([
+        {
+          $match: {
+            type: document_type
+          }
+        },
+        {
+          $skip: limit * (page - 1) // Công thức phân trang
+        },
+        {
+          $limit: limit
+        }
+      ])
+      .toArray()
+    const total = await databaseServices.documents.countDocuments({ type: document_type })
+    return {
+      documents,
+      total
+    }
   }
 }
 

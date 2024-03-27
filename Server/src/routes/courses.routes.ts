@@ -3,6 +3,7 @@ import {
   createCourseController,
   deleteCourseController,
   getCourseDetailController,
+  getListCourseController,
   updateCourseController
 } from '~/controllers/courses.controllers'
 import { filterMiddleware } from '~/middlewares/common.middlewares'
@@ -28,6 +29,16 @@ coursesRouter.post(
   createCourseValidator,
   wrapRequestHandler(createCourseController)
 )
+
+/**
+ * Description: Get Course List
+ * Method: GET
+ * Path: /:course_id/reading
+ * Headers: { Authorization?: Bearer <access token>}
+ * Query: {limit: number , page: number, course_type: CourseType}
+ */
+
+coursesRouter.get('/list', wrapRequestHandler(getListCourseController))
 
 /**
  * Description: Get course detail

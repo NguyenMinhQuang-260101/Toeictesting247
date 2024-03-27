@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
 import { ParamsDictionary } from 'express-serve-static-core'
+import { CourseType } from '~/constants/enums'
 import { CourseReqBody, UpdateCourseReqBody } from '~/models/requests/Course.requests'
 import { TokenPayload } from '~/models/requests/User.requests'
 import Course from '~/models/schemas/Course.schema'
@@ -18,6 +19,27 @@ export const getCourseDetailController = async (req: Request, res: Response) => 
   return res.json({
     message: 'Get course detail successfully',
     result: req.course
+  })
+}
+
+export const getListCourseController = async (req: Request, res: Response) => {
+  const course_type = Number(req.query.course_type as string) as CourseType
+  const limit = Number(req.query.limit as string)
+  const page = Number(req.query.page as string)
+  const { total, courses } = await coursesService.getListCourse({
+    course_type,
+    limit,
+    page
+  })
+  return res.json({
+    message: 'Get list course successfully',
+    result: {
+      courses,
+      course_type,
+      limit,
+      page,
+      total_page: Math.ceil(total / limit)
+    }
   })
 }
 

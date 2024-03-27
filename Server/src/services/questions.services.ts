@@ -53,6 +53,29 @@ class QuestionsService {
     return question
   }
 
+  async getListQuestions({ test_id, limit, page }: { test_id: string; page: number; limit: number }) {
+    const questions = await databaseServices.questions
+      .aggregate<Question>([
+        {
+          $match: {
+            test_id: new ObjectId(test_id)
+          }
+        },
+        {
+          $skip: limit * (page - 1)
+        },
+        {
+          $limit: limit
+        }
+      ])
+      .toArray()
+    const total = await databaseServices.questions.countDocuments({ test_id: new ObjectId(test_id) })
+    return {
+      questions,
+      total
+    }
+  }
+
   async updateQuestion(payload: UpdateQuestionReqBody, source: Course | Document) {
     const [course, document] = await Promise.all([
       databaseServices.courses.findOne<Course>({ _id: source._id }),
