@@ -20,6 +20,7 @@ databaseServices.connect().then(() => {
   databaseServices.indexUsers(),
     databaseServices.indexRefreshTokens(),
     databaseServices.indexCourses(),
+    databaseServices.indexDocuments(),
     databaseServices.watchTimeFields()
 })
 app.listen(port, () => {

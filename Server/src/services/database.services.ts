@@ -62,6 +62,13 @@ class DatabaseServices {
     }
   }
 
+  async indexDocuments() {
+    const exists = await this.documents.indexExists(['title_text'])
+    if (!exists) {
+      this.documents.createIndex({ title: 'text' }, { default_language: 'none' })
+    }
+  }
+
   async watchTimeFields() {
     if (this.watchTimeFieldsRunning) {
       console.log('watchTimeFields is already running.')

@@ -202,5 +202,8 @@ export const SCORECARDS_MESSAGES = {
 export const SEARCH_MESSAGES = {
   TITLE_MUST_BE_STRING: 'Title must be a string',
   TITLE_MUST_NOT_BE_EMPTY: 'Title must not be empty',
-  COURSE_TYPE_QUERY_MUST_BE_IN_ENUM_VALUES_COURSE_TYPE_QUERY: 'Course type query must be in enum values CourseTypeQuery'
+  COURSE_TYPE_QUERY_MUST_BE_IN_ENUM_VALUES_COURSE_TYPE_QUERY:
+    'Course type query must be in enum values CourseTypeQuery',
+  DOCUMENT_TYPE_QUERY_MUST_BE_IN_ENUM_VALUES_DOCUMENT_TYPE_QUERY:
+    'Document type query must be in enum values DocumentTypeQuery'
 } as const
