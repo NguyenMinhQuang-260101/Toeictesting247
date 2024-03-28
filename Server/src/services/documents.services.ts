@@ -6,7 +6,7 @@ import { DocumentType, OperatingStatus } from '~/constants/enums'
 import { ErrorWithStatus } from '~/models/Errors'
 import { DOCUMENTS_MESSAGES } from '~/constants/message'
 import HTTP_STATUS from '~/constants/httpStatus'
-import { omit } from 'lodash'
+import { get, omit } from 'lodash'
 
 class DocumentsService {
   async createDocument(user_id: string, body: DocumentReqBody) {
@@ -66,7 +66,16 @@ class DocumentsService {
         status: HTTP_STATUS.BAD_REQUEST
       })
     }
-    await databaseServices.documents.deleteOne({ _id: document._id })
+    await Promise.all([
+      document.tests.map(
+        async (test) =>
+          await Promise.all([
+            databaseServices.questions.deleteMany({ test_id: get(test, '_id') }),
+            databaseServices.tests.deleteOne({ _id: get(test, '_id') })
+          ])
+      ),
+      databaseServices.documents.deleteOne({ _id: document._id })
+    ])
   }
 
   async incViewsDocument(_document: Document) {

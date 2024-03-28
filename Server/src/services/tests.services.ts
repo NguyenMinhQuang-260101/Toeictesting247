@@ -153,6 +153,7 @@ class TestsController {
 
     await Promise.all([
       databaseServices.tests.findOneAndDelete({ _id: test._id }),
+      databaseServices.questions.deleteMany({ test_id: test._id }),
       databaseServices.courses.findOne({ _id: new ObjectId(test.source_id) }).then((course) => {
         if (course) {
           databaseServices.courses.findOneAndUpdate(

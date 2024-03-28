@@ -2,7 +2,7 @@ import { CourseReqBody, UpdateCourseReqBody } from '~/models/requests/Course.req
 import databaseServices from './database.services'
 import Course from '~/models/schemas/Course.schema'
 import { ObjectId } from 'mongodb'
-import { omit } from 'lodash'
+import { get, omit } from 'lodash'
 import { CourseType, OperatingStatus } from '~/constants/enums'
 import { ErrorWithStatus } from '~/models/Errors'
 import HTTP_STATUS from '~/constants/httpStatus'
@@ -65,7 +65,16 @@ class CoursesService {
         status: HTTP_STATUS.BAD_REQUEST
       })
     }
-    await databaseServices.courses.deleteOne({ _id: course._id })
+    await Promise.all([
+      course.tests.map(
+        async (test) =>
+          await Promise.all([
+            databaseServices.questions.deleteMany({ test_id: get(test, '_id') }),
+            databaseServices.tests.deleteOne({ _id: get(test, '_id') })
+          ])
+      ),
+      databaseServices.courses.deleteOne({ _id: course._id })
+    ])
   }
 
   async getListCourse({ limit, page, course_type }: { limit: number; page: number; course_type: CourseType }) {
