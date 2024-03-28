@@ -78,12 +78,16 @@ class CoursesService {
   }
 
   async getListCourse({ limit, page, course_type }: { limit: number; page: number; course_type: CourseType }) {
+    const $match: any = {}
+
+    if (course_type || course_type === CourseType.Listening) {
+      $match['type'] = course_type
+    }
+
     const courses = await databaseServices.courses
       .aggregate<Course>([
         {
-          $match: {
-            type: course_type
-          }
+          $match
         },
         {
           $skip: limit * (page - 1) // Công thức phân trang
@@ -93,7 +97,12 @@ class CoursesService {
         }
       ])
       .toArray()
-    const total = await databaseServices.courses.countDocuments({ type: course_type })
+
+    const total =
+      course_type || course_type === CourseType.Listening
+        ? await databaseServices.courses.countDocuments($match)
+        : await databaseServices.courses.countDocuments()
+
     return {
       courses,
       total

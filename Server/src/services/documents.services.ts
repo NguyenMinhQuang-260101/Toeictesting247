@@ -97,12 +97,16 @@ class DocumentsService {
   }
 
   async getListDocument({ limit, page, document_type }: { limit: number; page: number; document_type: DocumentType }) {
+    const $match: any = {}
+
+    if (document_type || document_type === DocumentType.Vocabulary) {
+      $match['type'] = document_type
+    }
+
     const documents = await databaseServices.documents
       .aggregate<Document>([
         {
-          $match: {
-            type: document_type
-          }
+          $match
         },
         {
           $skip: limit * (page - 1) // Công thức phân trang
@@ -112,7 +116,12 @@ class DocumentsService {
         }
       ])
       .toArray()
-    const total = await databaseServices.documents.countDocuments({ type: document_type })
+
+    const total =
+      document_type || document_type === DocumentType.Vocabulary
+        ? await databaseServices.documents.countDocuments($match)
+        : await databaseServices.documents.countDocuments()
+
     return {
       documents,
       total
