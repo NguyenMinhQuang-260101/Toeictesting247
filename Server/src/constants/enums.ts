@@ -49,3 +49,14 @@ export enum NotificationType {
   Update,
   Other
 }
+
+export enum CourseTypeQuery {
+  Listening = 'listening',
+  Reading = 'reading',
+  Full = 'full'
+}
+
+export enum DocumentTypeQuery {
+  Vocabulary = 'vocabulary',
+  Grammar = 'grammar'
+}

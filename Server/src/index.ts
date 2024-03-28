@@ -12,11 +12,15 @@ import questionsRouter from './routes/questions.routes'
 import notificationsRouter from './routes/notifications.routes'
 import documentsRouter from './routes/documents.routes'
 import scoreCardsRouter from './routes/scorecards.routes'
+import searchRouter from './routes/search.routes'
 
 const app = express()
 const port = envConfig.port
 databaseServices.connect().then(() => {
-  databaseServices.indexUsers(), databaseServices.indexRefreshTokens(), databaseServices.watchTimeFields()
+  databaseServices.indexUsers(),
+    databaseServices.indexRefreshTokens(),
+    databaseServices.indexCourses(),
+    databaseServices.watchTimeFields()
 })
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`)
@@ -34,6 +38,7 @@ app.use('/questions', questionsRouter)
 app.use('/notifications', notificationsRouter)
 app.use('/documents', documentsRouter)
 app.use('/scorecards', scoreCardsRouter)
+app.use('/search', searchRouter)
 
 // Dùng sau khi đã sử dụng tất cả các routes
 app.use(defaultErrorHandler)

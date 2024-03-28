@@ -8,7 +8,7 @@ import {
 } from '~/controllers/courses.controllers'
 import { filterMiddleware } from '~/middlewares/common.middlewares'
 import { courseIdValidator, createCourseValidator, updateCourseValidator } from '~/middlewares/courses.middlewares'
-import { paginationValidation } from '~/middlewares/paginations.middlewares'
+import { paginationValidation } from '~/middlewares/pagination.middlewares'
 import { accessTokenValidator, userRuleValidator, verifiedUserValidator } from '~/middlewares/users.middlewares'
 import { UpdateCourseReqBody } from '~/models/requests/Course.requests'
 import { wrapRequestHandler } from '~/utils/handlers'

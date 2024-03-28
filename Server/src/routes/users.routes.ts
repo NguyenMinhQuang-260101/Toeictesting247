@@ -17,7 +17,7 @@ import {
   verifyForgotPasswordController
 } from '~/controllers/users.controllers'
 import { filterMiddleware } from '~/middlewares/common.middlewares'
-import { paginationValidation } from '~/middlewares/paginations.middlewares'
+import { paginationValidation } from '~/middlewares/pagination.middlewares'
 import {
   accessTokenValidator,
   changePasswordValidator,

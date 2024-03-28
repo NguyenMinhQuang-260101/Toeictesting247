@@ -198,3 +198,9 @@ export const SCORECARDS_MESSAGES = {
   TEST_ID_QUESTION_MUST_BE_THE_SAME_AS_THE_TEST_ID_IN_THE_BODY:
     'Test id question must be the same as the test id in the body'
 } as const
+
+export const SEARCH_MESSAGES = {
+  TITLE_MUST_BE_STRING: 'Title must be a string',
+  TITLE_MUST_NOT_BE_EMPTY: 'Title must not be empty',
+  COURSE_TYPE_QUERY_MUST_BE_IN_ENUM_VALUES_COURSE_TYPE_QUERY: 'Course type query must be in enum values CourseTypeQuery'
+} as const
