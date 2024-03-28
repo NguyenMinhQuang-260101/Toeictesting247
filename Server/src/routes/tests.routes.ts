@@ -8,6 +8,7 @@ import {
   updateTestController
 } from '~/controllers/tests.controllers'
 import { filterMiddleware } from '~/middlewares/common.middlewares'
+import { paginationValidation } from '~/middlewares/paginations.middlewares'
 import {
   createTestValidator,
   fullTestIdValidator,
@@ -46,7 +47,7 @@ testsRouter.post(
  * Parameters: { source_id: string }
  * Query: { page: number, limit: number }
  */
-testsRouter.get('/list/:source_id', wrapRequestHandler(getListTestsController))
+testsRouter.get('/list/:source_id', paginationValidation, sourceIdValidator, wrapRequestHandler(getListTestsController))
 
 /**
  * Description: Get test detail

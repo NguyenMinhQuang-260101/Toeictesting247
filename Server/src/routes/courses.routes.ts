@@ -8,6 +8,7 @@ import {
 } from '~/controllers/courses.controllers'
 import { filterMiddleware } from '~/middlewares/common.middlewares'
 import { courseIdValidator, createCourseValidator, updateCourseValidator } from '~/middlewares/courses.middlewares'
+import { paginationValidation } from '~/middlewares/paginations.middlewares'
 import { accessTokenValidator, userRuleValidator, verifiedUserValidator } from '~/middlewares/users.middlewares'
 import { UpdateCourseReqBody } from '~/models/requests/Course.requests'
 import { wrapRequestHandler } from '~/utils/handlers'
@@ -38,7 +39,7 @@ coursesRouter.post(
  * Query: {limit: number , page: number, course_type: CourseType}
  */
 
-coursesRouter.get('/list', wrapRequestHandler(getListCourseController))
+coursesRouter.get('/list', paginationValidation, wrapRequestHandler(getListCourseController))
 
 /**
  * Description: Get course detail

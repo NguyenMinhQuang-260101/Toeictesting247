@@ -12,6 +12,7 @@ import {
   documentIdValidator,
   updateDocumentValidator
 } from '~/middlewares/documents.middlewares'
+import { paginationValidation } from '~/middlewares/paginations.middlewares'
 import { accessTokenValidator, userRuleValidator, verifiedUserValidator } from '~/middlewares/users.middlewares'
 import { UpdateDocumentReqBody } from '~/models/requests/Document.requests'
 import { wrapRequestHandler } from '~/utils/handlers'
@@ -42,7 +43,7 @@ documentsRouter.post(
  * Query: {limit: number , page: number, document_type: DocumentType}
  */
 
-documentsRouter.get('/list', wrapRequestHandler(getListDocumentController))
+documentsRouter.get('/list', paginationValidation, wrapRequestHandler(getListDocumentController))
 
 /**
  * Description: Get document detail

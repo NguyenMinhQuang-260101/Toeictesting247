@@ -7,6 +7,7 @@ import {
   updateQuestionController
 } from '~/controllers/questions.controllers'
 import { filterMiddleware } from '~/middlewares/common.middlewares'
+import { paginationValidation } from '~/middlewares/paginations.middlewares'
 import {
   createQuestionValidator,
   originIdValidator,
@@ -48,6 +49,7 @@ questionsRouter.get(
   '/list/:test_id',
   accessTokenValidator,
   verifiedUserValidator,
+  paginationValidation,
   testIdValidator,
   wrapRequestHandler(getListQuestionsController)
 )

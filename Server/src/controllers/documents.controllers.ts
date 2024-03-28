@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import { ParamsDictionary } from 'express-serve-static-core'
-import { DocumentReqBody, UpdateDocumentReqBody } from '~/models/requests/Document.requests'
+import { DocumentQuery, DocumentReqBody, UpdateDocumentReqBody } from '~/models/requests/Document.requests'
 import { TokenPayload } from '~/models/requests/User.requests'
 import documentsService from '~/services/documents.services'
 import Document from '~/models/schemas/Document.schema'
@@ -15,10 +15,10 @@ export const createDocumentController = async (req: Request<ParamsDictionary, an
   })
 }
 
-export const getListDocumentController = async (req: Request, res: Response) => {
-  const document_type = Number(req.query.document_type as string) as DocumentType
-  const limit = Number(req.query.limit as string)
-  const page = Number(req.query.page as string)
+export const getListDocumentController = async (req: Request<any, any, any, DocumentQuery>, res: Response) => {
+  const document_type = Number(req.query.document_type) as DocumentType
+  const limit = Number(req.query.limit)
+  const page = Number(req.query.page)
   const { total, documents } = await documentsService.getListDocument({
     document_type,
     limit,

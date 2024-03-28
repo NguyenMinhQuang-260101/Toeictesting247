@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import { ParamsDictionary } from 'express-serve-static-core'
-import { QuestionReqBody, UpdateQuestionReqBody } from '~/models/requests/Question.requests'
+import { QuestionQuery, QuestionReqBody, UpdateQuestionReqBody } from '~/models/requests/Question.requests'
+import { TestParams } from '~/models/requests/Test.requests'
 import { TokenPayload } from '~/models/requests/User.requests'
 import Course from '~/models/schemas/Course.schema'
 import Document from '~/models/schemas/Document.schema'
@@ -12,12 +13,12 @@ export const createQuestionController = async (req: Request<ParamsDictionary, an
   return res.json({ message: 'Create question successfully', result })
 }
 
-export const getListQuestionsController = async (req: Request, res: Response) => {
+export const getListQuestionsController = async (req: Request<TestParams, any, any, QuestionQuery>, res: Response) => {
   const test_id = req.params.test_id
   const { rule } = req.decoded_authorization as TokenPayload
   const test = req.test as Test
-  const limit = Number(req.query.limit as string)
-  const page = Number(req.query.page as string)
+  const limit = Number(req.query.limit)
+  const page = Number(req.query.page)
   const { questions, total } = await questionsService.getListQuestions({
     rule,
     test,

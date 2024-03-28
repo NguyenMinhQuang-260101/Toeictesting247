@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import { ParamsDictionary } from 'express-serve-static-core'
-import { TestReqBody } from '~/models/requests/Test.requests'
+import { TestParams, TestQuery, TestReqBody } from '~/models/requests/Test.requests'
 import Course from '~/models/schemas/Course.schema'
 import Test from '~/models/schemas/Test.schema'
 import testsService from '~/services/tests.services'
@@ -14,10 +14,10 @@ export const createTestController = async (req: Request<ParamsDictionary, any, T
   })
 }
 
-export const getListTestsController = async (req: Request, res: Response) => {
+export const getListTestsController = async (req: Request<TestParams, any, any, TestQuery>, res: Response) => {
   const source_id = req.params.source_id
-  const limit = Number(req.query.limit as string)
-  const page = Number(req.query.page as string)
+  const limit = Number(req.query.limit)
+  const page = Number(req.query.page)
   const { tests, total } = await testsService.getListTests({
     source_id,
     limit,

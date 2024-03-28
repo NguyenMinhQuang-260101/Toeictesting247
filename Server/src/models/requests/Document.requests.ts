@@ -1,5 +1,6 @@
 import { DocumentType, OperatingStatus } from '~/constants/enums'
 import { Media } from '../Other'
+import { ParamsDictionary, Query } from 'express-serve-static-core'
 
 export interface DocumentReqBody {
   type: DocumentType
@@ -20,4 +21,14 @@ export interface UpdateDocumentReqBody {
   content?: string
   thumbnails?: Media[]
   status?: OperatingStatus
+}
+
+export interface DocumentParams extends ParamsDictionary {
+  document_id: string
+}
+
+export interface DocumentQuery extends Query {
+  limit: string
+  page: string
+  document_type: string
 }
