@@ -12,6 +12,7 @@ import { ObjectId } from 'mongodb'
 import { USERS_MESSAGES } from '~/constants/message'
 import HTTP_STATUS from '~/constants/httpStatus'
 import axios from 'axios'
+import { sendVerifyEmail } from '~/utils/email'
 
 class UsersServices {
   private signAccessToken({
@@ -169,7 +170,15 @@ class UsersServices {
     await databaseServices.refreshTokens.insertOne(
       new RefreshToken({ user_id: new ObjectId(user_id), token: refresh_token, iat, exp })
     )
-    console.log('email_verify_token: ', email_verify_token)
+
+    await sendVerifyEmail(
+      payload.email,
+      'Verify your email',
+      `<h1 style="text-align: center;">Verify your email</h1>
+      <p style="text-align: center;">Click the link below to verify your email</p>
+      <a href="${envConfig.clientUrl}/verify-email?token=${email_verify_token}" style="display: block; text-align: center;">Verify</a>`
+    )
+
     return {
       access_token,
       refresh_token
