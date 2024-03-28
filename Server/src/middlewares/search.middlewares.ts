@@ -48,3 +48,19 @@ export const searchDocumentValidator = validate(
     ['query']
   )
 )
+
+export const searchUserValidator = validate(
+  checkSchema(
+    {
+      name_email: {
+        notEmpty: {
+          errorMessage: SEARCH_MESSAGES.USER_OR_EMAIL_MUST_NOT_BE_EMPTY
+        },
+        isString: {
+          errorMessage: SEARCH_MESSAGES.USER_OR_EMAIL_MUST_BE_STRING
+        }
+      }
+    },
+    ['query']
+  )
+)

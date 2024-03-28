@@ -205,5 +205,7 @@ export const SEARCH_MESSAGES = {
   COURSE_TYPE_QUERY_MUST_BE_IN_ENUM_VALUES_COURSE_TYPE_QUERY:
     'Course type query must be in enum values CourseTypeQuery',
   DOCUMENT_TYPE_QUERY_MUST_BE_IN_ENUM_VALUES_DOCUMENT_TYPE_QUERY:
-    'Document type query must be in enum values DocumentTypeQuery'
+    'Document type query must be in enum values DocumentTypeQuery',
+  USER_OR_EMAIL_MUST_NOT_BE_EMPTY: 'User or email must not be empty',
+  USER_OR_EMAIL_MUST_BE_STRING: 'User or email must be a string'
 } as const

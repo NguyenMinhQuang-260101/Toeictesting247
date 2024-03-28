@@ -3,6 +3,7 @@ import databaseServices from './database.services'
 import Course from '~/models/schemas/Course.schema'
 import { CourseType, CourseTypeQuery, DocumentType, DocumentTypeQuery } from '~/constants/enums'
 import Document from '~/models/schemas/Document.schema'
+import User from '~/models/schemas/User.schema'
 
 class SearchService {
   async searchCourse({
@@ -102,6 +103,36 @@ class SearchService {
 
     return {
       documents,
+      total
+    }
+  }
+
+  async searchUser({ limit, page, name_email }: { limit: number; page: number; name_email: string }) {
+    const $match: any = {
+      $text: {
+        $search: name_email
+      }
+    }
+
+    const [users, total] = await Promise.all([
+      databaseServices.users
+        .aggregate<User>([
+          {
+            $match
+          },
+          {
+            $skip: limit * (page - 1)
+          },
+          {
+            $limit: limit
+          }
+        ])
+        .toArray(),
+      databaseServices.users.countDocuments($match)
+    ])
+
+    return {
+      users,
       total
     }
   }

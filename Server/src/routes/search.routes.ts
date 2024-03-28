@@ -1,7 +1,11 @@
 import { Router } from 'express'
-import { searchCourseController, searchDocumentController } from '~/controllers/search.controllers'
+import {
+  searchCourseController,
+  searchDocumentController,
+  searchUserController
+} from '~/controllers/search.controllers'
 import { paginationValidation } from '~/middlewares/pagination.middlewares'
-import { searchCourseValidator, searchDocumentValidator } from '~/middlewares/search.middlewares'
+import { searchCourseValidator, searchDocumentValidator, searchUserValidator } from '~/middlewares/search.middlewares'
 
 const searchRouter = Router()
 
@@ -22,5 +26,14 @@ searchRouter.get('/course', paginationValidation, searchCourseValidator, searchC
  */
 
 searchRouter.get('/document', paginationValidation, searchDocumentValidator, searchDocumentController)
+
+/**
+ * Description: Search user
+ * Method: GET
+ * Path: /user
+ * Query: {limit: string, page: string, name_email: SearchUserQuery}
+ */
+
+searchRouter.get('/user', paginationValidation, searchUserValidator, searchUserController)
 
 export default searchRouter
