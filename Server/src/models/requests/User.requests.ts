@@ -1,5 +1,6 @@
 import { JwtPayload } from 'jsonwebtoken'
 import { TokenType, UserRuleType, UserVerifyStatus } from '~/constants/enums'
+import { ParamsDictionary, Query } from 'express-serve-static-core'
 
 export interface LoginRequestBody {
   email: string
@@ -66,6 +67,11 @@ export interface UpdateMeReqBody {
   rule?: UserRuleType
 }
 
-export interface GetProfileReqParams {
+export interface GetProfileReqParams extends ParamsDictionary {
   username: string
+}
+
+export interface UserQuery extends Query {
+  limit: string
+  page: string
 }

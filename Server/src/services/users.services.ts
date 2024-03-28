@@ -424,6 +424,24 @@ class UsersServices {
     }
   }
 
+  async getListUser({ page, limit }: { page: number; limit: number }) {
+    const users = await databaseServices.users
+      .aggregate<User>([
+        {
+          $skip: limit * (page - 1) // Công thức phân trang
+        },
+        {
+          $limit: limit
+        }
+      ])
+      .toArray()
+    const total = await databaseServices.users.countDocuments()
+    return {
+      users,
+      total
+    }
+  }
+
   async getMe(user_id: string) {
     const user = await databaseServices.users.findOne(
       { _id: new ObjectId(user_id) },

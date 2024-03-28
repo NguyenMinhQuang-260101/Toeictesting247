@@ -74,6 +74,11 @@ class QuestionsService {
           }
         },
         {
+          $sort: {
+            num_quest: 1
+          }
+        },
+        {
           $skip: limit * (page - 1)
         },
         {

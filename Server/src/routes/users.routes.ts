@@ -2,6 +2,7 @@ import { Router } from 'express'
 import {
   changePasswordController,
   forgotPasswordController,
+  getListUserController,
   getMeController,
   getProfileController,
   loginController,
@@ -16,6 +17,7 @@ import {
   verifyForgotPasswordController
 } from '~/controllers/users.controllers'
 import { filterMiddleware } from '~/middlewares/common.middlewares'
+import { paginationValidation } from '~/middlewares/paginations.middlewares'
 import {
   accessTokenValidator,
   changePasswordValidator,
@@ -26,6 +28,7 @@ import {
   registerValidator,
   resetPasswordValidator,
   updateMeValidator,
+  userRuleValidator,
   verifiedUserValidator,
   verifyForgotPasswordTokenValidator
 } from '~/middlewares/users.middlewares'
@@ -118,6 +121,22 @@ usersRouter.post(
  * Body: { forgot_password_token: string, password: string, confirm_password: string}
  */
 usersRouter.post('/reset-password', resetPasswordValidator, wrapRequestHandler(resetPasswordController))
+
+/**
+ * Description: Get list of users
+ * Method: GET
+ * Path: /list
+ * Headers: { Authorization: Bearer <access_token> }
+ * Query: { page: number, limit: number }
+ */
+usersRouter.get(
+  '/list',
+  accessTokenValidator,
+  verifiedUserValidator,
+  userRuleValidator,
+  paginationValidation,
+  wrapRequestHandler(getListUserController)
+)
 
 /**
  * Description: Get my profile

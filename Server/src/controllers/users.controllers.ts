@@ -16,6 +16,7 @@ import {
   ResetPasswordReqBody,
   TokenPayload,
   UpdateMeReqBody,
+  UserQuery,
   VerifyEmailReqBody,
   VerifyForgotPasswordReqBody
 } from '~/models/requests/User.requests'
@@ -171,6 +172,24 @@ export const changePasswordController = async (
   const { password } = req.body
   const result = await usersServices.changePassword(user_id, password)
   return res.json(result)
+}
+
+export const getListUserController = async (req: Request<any, any, any, UserQuery>, res: Response) => {
+  const limit = Number(req.query.limit)
+  const page = Number(req.query.page)
+  const { total, users } = await usersServices.getListUser({
+    limit,
+    page
+  })
+  return res.json({
+    message: 'Get list user successfully',
+    result: {
+      users,
+      limit,
+      page,
+      total_page: Math.ceil(total / limit)
+    }
+  })
 }
 
 export const getMeController = async (req: Request, res: Response) => {
