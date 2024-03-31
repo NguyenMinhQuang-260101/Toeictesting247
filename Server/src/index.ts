@@ -13,8 +13,10 @@ import notificationsRouter from './routes/notifications.routes'
 import documentsRouter from './routes/documents.routes'
 import scoreCardsRouter from './routes/scorecards.routes'
 import searchRouter from './routes/search.routes'
+import cors from 'cors'
 
 const app = express()
+app.use(cors())
 const port = envConfig.port
 databaseServices.connect().then(() => {
   databaseServices.indexUsers(),
