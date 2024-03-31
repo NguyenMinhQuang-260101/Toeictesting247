@@ -54,7 +54,7 @@ export default function Home() {
       <h2>Audio</h2>
       <audio controls>
         <source
-          src="http://localhost:4000/static/audio-stream/68f7843e9250686884474ea00.m4a"
+          src="https://toeictesting247-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/audios/18c0dc17cf92529d35b435e00.m4a"
           type="audio/mpeg"
         />
       </audio>
@@ -62,7 +62,7 @@ export default function Home() {
       <h2>Video Streaming</h2>
       <video controls width={500}>
         <source
-          src="http://localhost:4000/static/video-stream/c2d935d61f13619df86291e00.mp4"
+          src="https://toeictesting247-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/videos/af1d4a29bb36c26436a4ab500.mp4"
           type="video/mp4"
         />
       </video>
@@ -70,8 +70,7 @@ export default function Home() {
       <h2>HLS Streaming</h2>
       <MediaPlayer
         title="Sprite Fight"
-        // src="http://localhost:4000/static/video-hls/a0qP4aqlpHEpr1_9ZRzcr/master.m3u8"
-        src="http://localhost:4000/static/video-hls/RulOLcSBrLR0X6ZJm_lfo/master.m3u8"
+        // src="http://localhost:4000/static/video-hls/RulOLcSBrLR0X6ZJm_lfo/master.m3u8"
         aspectRatio={16 / 9}
       >
         <MediaProvider />
