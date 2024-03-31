@@ -12,7 +12,7 @@ import { ObjectId } from 'mongodb'
 import { USERS_MESSAGES } from '~/constants/message'
 import HTTP_STATUS from '~/constants/httpStatus'
 import axios from 'axios'
-import { sendVerifyEmail } from '~/utils/email'
+import { sendForgotPasswordEmail, sendVerifyEmail, sendVerifyRegisterEmail } from '~/utils/email'
 
 class UsersServices {
   private signAccessToken({
@@ -171,13 +171,7 @@ class UsersServices {
       new RefreshToken({ user_id: new ObjectId(user_id), token: refresh_token, iat, exp })
     )
 
-    await sendVerifyEmail(
-      payload.email,
-      'Verify your email',
-      `<h1 style="text-align: center;">Verify your email</h1>
-      <p style="text-align: center;">Click the link below to verify your email</p>
-      <a href="${envConfig.clientUrl}/verify-email?token=${email_verify_token}" style="display: block; text-align: center;">Verify</a>`
-    )
+    await sendVerifyRegisterEmail(payload.email, email_verify_token)
 
     return {
       access_token,
@@ -361,14 +355,14 @@ class UsersServices {
     }
   }
 
-  async resendVerifyEmail(user_id: string) {
+  async resendVerifyEmail(user_id: string, email: string) {
     const email_verify_token = await this.signEmailVerifyToken({
       user_id,
       verify: UserVerifyStatus.Unverified,
       rule: UserRuleType.User
     })
-    // Giả bộ là gửi email
-    console.log('Resend email_verify_token: ', email_verify_token)
+
+    await sendVerifyRegisterEmail(email, email_verify_token)
 
     // Cập nhật lại email_verify_token mới
     await databaseServices.users.updateOne({ _id: new ObjectId(user_id) }, [
@@ -382,7 +376,17 @@ class UsersServices {
     return { message: USERS_MESSAGES.RESEND_VERIFY_EMAIL_SUCCESS }
   }
 
-  async forgotPassword({ user_id, verify, rule }: { user_id: string; verify: UserVerifyStatus; rule: UserRuleType }) {
+  async forgotPassword({
+    user_id,
+    verify,
+    rule,
+    email
+  }: {
+    user_id: string
+    verify: UserVerifyStatus
+    rule: UserRuleType
+    email: string
+  }) {
     const forgot_password_token = await this.signForgotPasswordToken({
       user_id,
       verify,
@@ -399,6 +403,7 @@ class UsersServices {
 
     // Gửi email kèm link reset password đến email của user: http://toeictesting247.com/forgot-password?token=token
     console.log('forgot_password_token: ', forgot_password_token)
+    await sendForgotPasswordEmail(email, forgot_password_token)
 
     return { message: USERS_MESSAGES.CHECK_EMAIL_TO_RESET_PASSWORD }
   }

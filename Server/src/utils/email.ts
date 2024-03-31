@@ -15,7 +15,7 @@ const sesClient = new SESClient({
   }
 })
 
-// const verifyEmailTemplate = fs.readFileSync(path.resolve('src/templates/verify-email.html'), 'utf-8')
+const verifyEmailTemplate = fs.readFileSync(path.resolve('src/templates/verify-email.html'), 'utf-8')
 
 const createSendEmailCommand = ({
   fromAddress,
@@ -68,39 +68,37 @@ export const sendVerifyEmail = (toAddress: string, subject: string, body: string
   return sesClient.send(sendEmailCommand)
 }
 
-// export const sendVerifyRegisterEmail = (
-//   toAddress: string,
-//   email_verify_token: string,
-//   template: string = verifyEmailTemplate
-// ) => {
-//   return sendVerifyEmail(
-//     toAddress,
-//     'Verify your email',
-//     template
-//       .replace('{{title}}', 'Please verify your email')
-//       .replace('{{content}}', 'Click the button below to verify your email')
-//       .replace('{{titleLink}}', 'Verify')
-//       // .replace('{{link}}', `${envConfig.clientUrl}/verify-email?token=${email_verify_token}`)
-//       .replace('{{link}}', `http://localhost:3000/verify-email?token=${email_verify_token}`)
-//   )
-// }
+export const sendVerifyRegisterEmail = (
+  toAddress: string,
+  email_verify_token: string,
+  template: string = verifyEmailTemplate
+) => {
+  return sendVerifyEmail(
+    toAddress,
+    'Verify your email',
+    template
+      .replace('{{title}}', 'Please verify your email')
+      .replace('{{content}}', 'Click the button below to verify your email')
+      .replace('{{titleLink}}', 'Verify')
+      .replace('{{link}}', `${envConfig.clientUrl}/verify-email?token=${email_verify_token}`)
+  )
+}
 
-// export const sendForgotPasswordEmail = (
-//   toAddress: string,
-//   forgot_password_token: string,
-//   template: string = verifyEmailTemplate
-// ) => {
-//   return sendVerifyEmail(
-//     toAddress,
-//     'Reset Password',
-//     template
-//       .replace(
-//         '{{title}}',
-//         'You are receiving this email because you (or someone else) have requested the reset of the password for your account.'
-//       )
-//       .replace('{{content}}', 'Click the button below to reset your password')
-//       .replace('{{titleLink}}', 'Reset Password')
-//       // .replace('{{link}}', `${envConfig.clientUrl}/forgot-password?token=${forgot_password_token}`)
-//       .replace('{{link}}', `http://localhost:3000/forgot-password?token=${forgot_password_token}`)
-//   )
-// }
+export const sendForgotPasswordEmail = (
+  toAddress: string,
+  forgot_password_token: string,
+  template: string = verifyEmailTemplate
+) => {
+  return sendVerifyEmail(
+    toAddress,
+    'Reset Password',
+    template
+      .replace(
+        '{{title}}',
+        'You are receiving this email because you (or someone else) have requested the reset of the password for your account.'
+      )
+      .replace('{{content}}', 'Click the button below to reset your password')
+      .replace('{{titleLink}}', 'Reset Password')
+      .replace('{{link}}', `${envConfig.clientUrl}/forgot-password?token=${forgot_password_token}`)
+  )
+}
