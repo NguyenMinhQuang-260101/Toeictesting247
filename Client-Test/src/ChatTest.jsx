@@ -40,13 +40,17 @@ export default function ChatTest() {
 
   useEffect(() => {
     socket_test.auth = {
-      _id: profile._id,
+      Authorization: `Bearer ${localStorage.getItem("access_token")}`,
     };
     socket_test.connect();
 
     socket_test.on("receiver_message", (data) => {
       const { payload } = data;
       setConversations((conversations) => [payload, ...conversations]);
+    });
+
+    socket_test.on("connect_error", (err) => {
+      console.log(err.data);
     });
 
     return () => {

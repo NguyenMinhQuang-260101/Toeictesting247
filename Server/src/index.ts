@@ -19,6 +19,12 @@ import { Server } from 'socket.io'
 import { Conversation } from './models/schemas/Conversations.schema'
 import { ObjectId } from 'mongodb'
 import conversationRouter from './routes/conversations.routes'
+import { verifyAccessToken } from './utils/commons'
+import { TokenPayload } from './models/requests/User.requests'
+import { UserVerifyStatus } from './constants/enums'
+import HTTP_STATUS from './constants/httpStatus'
+import { USERS_MESSAGES } from './constants/message'
+import { ErrorWithStatus } from './models/Errors'
 
 const app = express()
 const httpServer = createServer(app)
@@ -64,6 +70,27 @@ const users: {
     socket_id: string
   }
 } = {}
+
+io.use(async (socket, next) => {
+  const { Authorization } = socket.handshake.auth
+  const access_token = Authorization?.split(' ')[1]
+  try {
+    const decoded_authorization = await verifyAccessToken(access_token)
+    const { verify } = decoded_authorization as TokenPayload
+    if (verify !== UserVerifyStatus.Verified) {
+      throw new ErrorWithStatus({
+        message: USERS_MESSAGES.USER_NOT_VERIFIED,
+        status: HTTP_STATUS.FORBIDDEN
+      })
+    }
+  } catch (error) {
+    next({
+      message: 'Unauthorized',
+      name: 'UnauthorizedError',
+      data: error
+    })
+  }
+})
 
 io.on('connection', (socket) => {
   console.log(`user connected with id: ${socket.id}`)
