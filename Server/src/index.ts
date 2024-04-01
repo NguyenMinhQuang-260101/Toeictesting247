@@ -16,6 +16,8 @@ import searchRouter from './routes/search.routes'
 import cors from 'cors'
 import { createServer } from 'http'
 import { Server } from 'socket.io'
+import { Conversation } from './models/schemas/Conversations.schema'
+import { ObjectId } from 'mongodb'
 
 const app = express()
 const httpServer = createServer(app)
@@ -67,11 +69,20 @@ io.on('connection', (socket) => {
   users[user_id] = { socket_id: socket.id }
 
   console.log(users)
-  socket.on('private message', (data) => {
+  socket.on('private message', async (data) => {
     const receiver_socket_id = users[data.to]?.socket_id
     if (!receiver_socket_id) {
       return
     }
+
+    await databaseServices.conversations.insertOne(
+      new Conversation({
+        sender_id: data.from,
+        receiver_id: data.to,
+        content: data.content
+      })
+    )
+
     io.to(receiver_socket_id).emit('receiver private message', {
       content: data.content,
       from: user_id

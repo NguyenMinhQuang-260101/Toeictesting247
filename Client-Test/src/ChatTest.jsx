@@ -57,7 +57,8 @@ export default function ChatTest() {
     setValue("");
     socket_test.emit("private message", {
       content: value,
-      to: receiver, // id of the user client 2
+      to: receiver,
+      from: profile._id,
     });
     setMessages((messages) => [
       ...messages,

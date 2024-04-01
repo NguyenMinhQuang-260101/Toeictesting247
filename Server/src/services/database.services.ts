@@ -1,6 +1,7 @@
 import { Collection, Db, MongoClient, ObjectId, WithId } from 'mongodb'
 import { envConfig } from '~/constants/config'
 import { OperatingStatus, TargetType } from '~/constants/enums'
+import { Conversation } from '~/models/schemas/Conversations.schema'
 import Course from '~/models/schemas/Course.schema'
 import Document from '~/models/schemas/Document.schema'
 import Notification from '~/models/schemas/Notification.schema'
@@ -284,6 +285,10 @@ class DatabaseServices {
 
   get scorecards(): Collection<ScoreCard> {
     return this.db.collection(envConfig.dbScoreCardsCollection)
+  }
+
+  get conversations(): Collection<Conversation> {
+    return this.db.collection(envConfig.dbConversationsCollection)
   }
 }
 

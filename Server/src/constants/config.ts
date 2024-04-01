@@ -20,6 +20,7 @@ export const envConfig = {
   dbQuestionsCollection: process.env.DB_QUESTIONS_COLLECTION as string,
   dbNotificationsCollection: process.env.DB_NOTIFICATIONS_COLLECTION as string,
   dbScoreCardsCollection: process.env.DB_SCORE_CARDS_COLLECTION as string,
+  dbConversationsCollection: process.env.DB_CONVERSATIONS_COLLECTION as string,
   passwordSecret: process.env.PASSWORD_SECRET as string,
   jwtSecretAccessToken: process.env.JWT_SECRET_ACCESS_TOKEN as string,
   jwtSecretRefreshToken: process.env.JWT_SECRET_REFRESH_TOKEN as string,
