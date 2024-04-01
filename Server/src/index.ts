@@ -18,6 +18,7 @@ import { createServer } from 'http'
 import { Server } from 'socket.io'
 import { Conversation } from './models/schemas/Conversations.schema'
 import { ObjectId } from 'mongodb'
+import conversationRouter from './routes/conversations.routes'
 
 const app = express()
 const httpServer = createServer(app)
@@ -47,6 +48,7 @@ app.use('/notifications', notificationsRouter)
 app.use('/documents', documentsRouter)
 app.use('/scorecards', scoreCardsRouter)
 app.use('/search', searchRouter)
+app.use('/conversations', conversationRouter)
 
 // Dùng sau khi đã sử dụng tất cả các routes
 app.use(defaultErrorHandler)
@@ -77,8 +79,8 @@ io.on('connection', (socket) => {
 
     await databaseServices.conversations.insertOne(
       new Conversation({
-        sender_id: data.from,
-        receiver_id: data.to,
+        sender_id: new ObjectId(data.from as string),
+        receiver_id: new ObjectId(data.to as string),
         content: data.content
       })
     )
