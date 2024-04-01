@@ -83,6 +83,9 @@ io.use(async (socket, next) => {
         status: HTTP_STATUS.FORBIDDEN
       })
     }
+    // Truyền decoded_authorization vào socket để sử dụng ở các middleware khác
+    socket.handshake.auth.decoded_authorization = decoded_authorization
+    next()
   } catch (error) {
     next({
       message: 'Unauthorized',
@@ -94,16 +97,12 @@ io.use(async (socket, next) => {
 
 io.on('connection', (socket) => {
   console.log(`user connected with id: ${socket.id}`)
-  const user_id = socket.handshake.auth._id
+  const { user_id } = socket.handshake.auth.decoded_authorization as TokenPayload
   users[user_id] = { socket_id: socket.id }
 
-  console.log(users)
   socket.on('send_message', async (data) => {
     const { receiver_id, sender_id, content } = data.payload
     const receiver_socket_id = users[receiver_id]?.socket_id
-    if (!receiver_socket_id) {
-      return
-    }
 
     const conversation = new Conversation({
       sender_id: new ObjectId(sender_id as string),
@@ -114,9 +113,11 @@ io.on('connection', (socket) => {
     const result = await databaseServices.conversations.insertOne(conversation)
     conversation._id = result.insertedId
 
-    io.to(receiver_socket_id).emit('receiver_message', {
-      payload: conversation
-    })
+    if (receiver_socket_id) {
+      io.to(receiver_socket_id).emit('receiver_message', {
+        payload: conversation
+      })
+    }
   })
 
   socket.on('disconnect', () => {

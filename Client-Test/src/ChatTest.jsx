@@ -39,11 +39,6 @@ export default function ChatTest() {
   };
 
   useEffect(() => {
-    socket_test.auth = {
-      Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-    };
-    socket_test.connect();
-
     socket_test.on("receiver_message", (data) => {
       const { payload } = data;
       setConversations((conversations) => [payload, ...conversations]);
