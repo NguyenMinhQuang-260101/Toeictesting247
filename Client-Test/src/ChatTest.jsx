@@ -48,6 +48,10 @@ export default function ChatTest() {
       console.log(err.data);
     });
 
+    socket_test.on("disconnect", (reason) => {
+      console.log(reason);
+    });
+
     return () => {
       socket_test.disconnect();
     };
