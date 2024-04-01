@@ -14,8 +14,11 @@ import documentsRouter from './routes/documents.routes'
 import scoreCardsRouter from './routes/scorecards.routes'
 import searchRouter from './routes/search.routes'
 import cors from 'cors'
+import { createServer } from 'http'
+import { Server } from 'socket.io'
 
 const app = express()
+const httpServer = createServer(app)
 app.use(cors())
 const port = envConfig.port
 databaseServices.connect().then(() => {
@@ -25,7 +28,7 @@ databaseServices.connect().then(() => {
     databaseServices.indexDocuments(),
     databaseServices.watchTimeFields()
 })
-app.listen(port, () => {
+httpServer.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`)
 })
 // tạo folder uploads
@@ -45,3 +48,36 @@ app.use('/search', searchRouter)
 
 // Dùng sau khi đã sử dụng tất cả các routes
 app.use(defaultErrorHandler)
+
+const io = new Server(httpServer, {
+  cors: {
+    origin: envConfig.clientUrl
+  }
+})
+
+const users: {
+  [key: string]: {
+    socket_id: string
+  }
+} = {}
+
+io.on('connection', (socket) => {
+  console.log(`user connected with id: ${socket.id}`)
+  const user_id = socket.handshake.auth._id
+  users[user_id] = { socket_id: socket.id }
+
+  console.log(users)
+  socket.on('private message', (data) => {
+    const receiver_socket_id = users[data.to].socket_id
+    io.to(receiver_socket_id).emit('receiver private message', {
+      content: data.content,
+      from: user_id
+    })
+  })
+
+  socket.on('disconnect', () => {
+    delete users[user_id]
+    console.log(`user disconnected with id: ${socket.id}`)
+    console.log(users)
+  })
+})
