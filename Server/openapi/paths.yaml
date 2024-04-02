@@ -1,0 +1,1636 @@
+paths:
+  #* API cho người dùng
+  /users/login:
+    post:
+      tags:
+        - users
+      summary: Đăng nhập hệ thống
+      description: Đăng nhập hệ thống với email và mật khẩu
+      operationId: login
+      requestBody:
+        description: Thông tin đăng nhập
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginBody'
+        required: true
+      responses:
+        default:
+          description: Đăng nhập thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Login success
+                  result:
+                    $ref: '#/components/schemas/SuccessAuthentication'
+                  rule:
+                    $ref: '#/components/schemas/UserRuleType'
+
+  /users/register:
+    post:
+      tags:
+        - users
+      summary: Đăng ký tài khoản
+      description: Đăng ký tài khoản với thông tin cơ bản
+      operationId: register
+      requestBody:
+        description: Thông tin đăng ký
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterBody'
+        required: true
+      responses:
+        default:
+          description: Đăng ký tài khoản thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Register success
+                  result:
+                    $ref: '#/components/schemas/SuccessAuthentication'
+
+  /users/refresh-token:
+    post:
+      tags:
+        - users
+      summary: Lấy access_token mới
+      description: Lấy access_token mới dựa vào refresh_token
+      operationId: refreshToken
+      requestBody:
+        description: Thông tin refresh_token
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                refresh_token:
+                  type: string
+                  example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjVmN2RjZjA5ZmYyNWRmMjI2MzE5ODBiIiwidG9rZW5fdHlwZSI6MSwidmVyaWZ5IjoxLCJydWxlIjowLCJpYXQiOjE3MTE5NTQ1MDAsImV4cCI6MTcyMDU5NDUwMH0.FSj9oaLkijZbHR1xhI6BIxCgWR5aaVWShUJQECPF4S8
+        required: true
+      responses:
+        default:
+          description: Lấy access_token và refresh_token mới thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Refresh token success
+                  result:
+                    $ref: '#/components/schemas/SuccessAuthentication'
+                  rule:
+                    $ref: '#/components/schemas/UserRuleType'
+
+  /users/logout:
+    post:
+      tags:
+        - users
+      summary: Đăng xuất hệ thống
+      description: Đăng xuất khỏi hệ thống
+      operationId: logout
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: Thông tin đăng xuất
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                refresh_token:
+                  type: string
+                  example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjVmN2RjZjA5ZmYyNWRmMjI2MzE5ODBiIiwidG9rZW5fdHlwZSI6MSwidmVyaWZ5IjoxLCJydWxlIjowLCJpYXQiOjE3MTE5NTQ1MDAsImV4cCI6MTcyMDU5NDUwMH0.FSj9oaLkijZbHR1xhI6BIxCgWR5aaVWShUJQECPF4S8
+        required: true
+      responses:
+        default:
+          description: Đăng xuất hệ thống thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                        example: Logout success
+
+  /users/verify-email:
+    post:
+      tags:
+        - users
+      summary: Xác thực email
+      description: Xác thực email người dùng
+      operationId: verifyEmail
+      requestBody:
+        description: Thông tin xác thực email
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email_verify_token:
+                  type: string
+                  example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjYwNTMzZDM1NmUzNjQxYmU2ZGRkZDE4IiwidG9rZW5fdHlwZSI6MiwidmVyaWZ5IjowLCJydWxlIjoxLCJpYXQiOjE3MTE2MTY5NzksImV4cCI6MTcxMjIyMTc3OX0.l9JNRAFv46c5H9Q8f7X41RWEW7IoBMcq2RSYEvJOQdU
+      responses:
+        default:
+          description: Xác thực email thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Email verify success
+                  result:
+                    $ref: '#/components/schemas/SuccessAuthentication'
+
+  /users/resend-verify-email:
+    post:
+      tags:
+        - users
+      summary: Gửi lại email xác thực
+      description: Gửi lại email xác thực
+      operationId: resendVerifyEmail
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Gửi lại email xác thực thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Resend verify email success
+
+  /users/forgot-password:
+    post:
+      tags:
+        - users
+      summary: Quên mật khẩu
+      description: Quên mật khẩu
+      operationId: forgotPassword
+      requestBody:
+        description: Thông tin quên mật khẩu
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: quangnguyenminh2001@gmail.com
+        required: true
+      responses:
+        '200':
+          description: Nhận được email reset password
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Kiểm tra email để reset mật khẩu
+
+  /users/verify-forgot-password:
+    post:
+      tags:
+        - users
+      summary: Xác thực link trong email để reset mật khẩu
+      description: Xác thực link trong email để reset mật khẩu
+      operationId: verifyForgotPassword
+      requestBody:
+        description: Thông tin xác thực link trong email để reset mật khẩu
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                forgot_password_token:
+                  type: string
+                  example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjRiZTBhZDJlNDNkMjQ2NDM5NGZlZWRiIiwidG9rZW5fdHlwZSI6MSwidmVyaWZ5IjoxLCJpYXQiOjE2OTEzODMyMjYsImV4cCI6MTcwMDAyMzIyNn0.bFnaBfxWl-Q48HCwAeMpNzZwTO9LEjcBd7Zyipjqr64
+        required: true
+      responses:
+        '200':
+          description: Xác thực link trong email để reset mật khẩu thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Xác thực link trong email để reset mật khẩu thành công
+
+  /users/reset-password:
+    post:
+      tags:
+        - users
+      summary: Reset mật khẩu
+      description: Reset mật khẩu
+      operationId: resetPassword
+      requestBody:
+        description: Thông tin reset mật khẩu
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                forgot_password_token:
+                  type: string
+                  example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjRiZTBhZDJlNDNkMjQ2NDM5NGZlZWRiIiwidG9rZW5fdHlwZSI6MSwidmVyaWZ5IjoxLCJpYXQiOjE2OTEzODMyMjYsImV4cCI6MTcwMDAyMzIyNn0.bFnaBfxWl-Q48HCwAeMpNzZwTO9LEjcBd7Zyipjqr64
+                password:
+                  type: string
+                  example: Quang123456@!
+                confirm_password:
+                  type: string
+                  example: Quang123456@!
+        required: true
+      responses:
+        default:
+          description: Reset mật khẩu thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Reset mật khẩu thành công
+
+  /users/list:
+    get:
+      tags:
+        - users
+      summary: Lấy danh sách người dùng
+      description: Lấy danh sách người dùng
+      operationId: getUsers
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: page
+          in: query
+          description: Số trang
+          required: true
+          schema:
+            type: integer
+            example: 1
+        - name: limit
+          in: query
+          description: Số lượng user trên mỗi trang
+          required: true
+          schema:
+            type: integer
+            example: 10
+      responses:
+        default:
+          description: Lấy danh sách người dùng thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Get list user successfully
+                  result:
+                    type: object
+                    properties:
+                      users:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/User'
+                      limit:
+                        type: integer
+                        example: 10
+                      page:
+                        type: integer
+                        example: 1
+                      total_page:
+                        type: integer
+                        example: 1
+
+  /users/me:
+    get:
+      tags:
+        - users
+      summary: Lấy thông tin người dùng hiện tại
+      description: Lấy thông tin người dùng hiện tại dựa vào access_token
+      operationId: getMe
+      security:
+        - BearerAuth: []
+      responses:
+        default:
+          description: Lấy thông tin người dùng thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Login success
+                  result:
+                    $ref: '#/components/schemas/User'
+
+    patch:
+      tags:
+        - users
+      summary: Cập nhật thông tin user
+      description: Cập nhật thông tin user
+      operationId: updateMe
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: Thông tin cập nhật user
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateMeBody'
+        required: true
+      responses:
+        default:
+          description: Cập nhật thông tin user thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Update profile success
+                  result:
+                    $ref: '#/components/schemas/User'
+
+  /users/{username}:
+    get:
+      tags:
+        - users
+      summary: Lấy thông tin user theo username
+      description: Lấy thông tin user theo username
+      operationId: getUserByUsername
+      parameters:
+        - name: username
+          in: path
+          description: username của user
+          required: true
+          schema:
+            type: string
+            example: quangnguyen01
+      responses:
+        default:
+          description: Lấy thông tin user theo username thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Get profile success
+                  result:
+                    $ref: '#/components/schemas/User'
+
+  /users/change-password:
+    put:
+      tags:
+        - users
+      summary: Đổi mật khẩu
+      description: Đổi mật khẩu
+      operationId: changePassword
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: Thông tin đổi mật khẩu
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                old_password:
+                  type: string
+                  example: Quang123@
+                password:
+                  type: string
+                  example: Quang123456@!
+                confirm_password:
+                  type: string
+                  example: Quang123456@!
+        required: true
+      responses:
+        default:
+          description: Đổi mật khẩu thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Đổi mật khẩu thành công
+
+  /medias/upload-image:
+    post:
+      tags:
+        - medias
+      summary: Upload ảnh
+      description: Upload ảnh
+      operationId: uploadImage
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: Thông tin upload ảnh, upload 1 hoặc nhiều ảnh
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                image:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+                  maxItems: 4
+        required: true
+      responses:
+        default:
+          description: Upload ảnh thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Upload success
+                  result:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Media'
+
+  /medias/upload-video:
+    post:
+      tags:
+        - medias
+      summary: Upload video
+      description: Upload video
+      operationId: uploadVideo
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: Thông tin upload video, chỉ upload được 1 video
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                video:
+                  type: string
+                  format: binary
+        required: true
+      responses:
+        default:
+          description: Upload video thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Upload success
+                  result:
+                    $ref: '#/components/schemas/Media'
+
+  /medias/upload-audio:
+    post:
+      tags:
+        - medias
+      summary: Upload audio
+      description: Upload audio
+      operationId: uploadAudio
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: Thông tin upload audio, chỉ upload được 1 audio
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                audio:
+                  type: string
+                  format: binary
+        required: true
+      responses:
+        default:
+          description: Upload audio thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Upload success
+                  result:
+                    $ref: '#/components/schemas/Media'
+
+  #* API cho khoá học
+  /courses/:
+    post:
+      tags:
+        - courses
+      summary: Tạo khoá học
+      description: Tạo khoá học
+      operationId: createCourse
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: Thông tin tạo khoá học
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CourseRequestBody'
+        required: true
+      responses:
+        default:
+          description: Tạo khoá học thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Create course success
+                  result:
+                    $ref: '#/components/schemas/CourseResponseBody'
+
+  /courses/list:
+    get:
+      tags:
+        - courses
+      summary: Lấy danh sách khoá học
+      description: Lấy danh sách khoá học
+      operationId: getCourses
+      parameters:
+        - name: page
+          in: query
+          description: Số trang
+          required: true
+          schema:
+            type: integer
+            example: 1
+        - name: limit
+          in: query
+          description: Số lượng khoá học trên mỗi trang
+          required: true
+          schema:
+            type: integer
+            example: 10
+        - name: course_type
+          in: query
+          description: Loại khoá học
+          required: false
+          schema:
+            $ref: '#/components/schemas/CourseType'
+      responses:
+        default:
+          description: Lấy danh sách khoá học thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Get list course successfully
+                  result:
+                    type: object
+                    properties:
+                      courses:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/CourseResponseBody'
+                      limit:
+                        type: integer
+                        example: 10
+                      page:
+                        type: integer
+                        example: 1
+                      total_page:
+                        type: integer
+                        example: 1
+
+  /courses/{course_id}:
+    get:
+      tags:
+        - courses
+      summary: Lấy thông tin khoá học theo id
+      description: Lấy thông tin khoá học theo id
+      operationId: getCourseById
+      parameters:
+        - name: course_id
+          in: path
+          description: id của khoá học
+          required: true
+          schema:
+            type: string
+            format: MongoId
+            example: '660ab00f044b53ddc078b490'
+      responses:
+        default:
+          description: Lấy thông tin khoá học theo id thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Get course success
+                  result:
+                    $ref: '#/components/schemas/CourseResponseBody'
+
+  /courses/update:
+    patch:
+      tags:
+        - courses
+      summary: Cập nhật khoá học
+      description: Cập nhật khoá học
+      operationId: updateCourse
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: Thông tin cập nhật khoá học
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateCourseRequestBody'
+        required: true
+      responses:
+        default:
+          description: Cập nhật khoá học thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Update course success
+                  result:
+                    $ref: '#/components/schemas/CourseResponseBody'
+
+  /courses/delete/{course_id}:
+    delete:
+      tags:
+        - courses
+      summary: Xóa khoá học
+      description: Xóa khoá học
+      operationId: deleteCourse
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: course_id
+          in: path
+          description: id của khoá học
+          required: true
+          schema:
+            type: string
+            format: MongoId
+            example: '660ab00f044b53ddc078b490'
+      responses:
+        default:
+          description: Xóa khoá học thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Course deleted successfully
+
+  #* API cho tài liệu
+  /documents/:
+    post:
+      tags:
+        - documents
+      summary: Tạo tài liệu
+      description: Tạo tài liệu
+      operationId: createDocument
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: Thông tin tạo tài liệu
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DocumentRequestBody'
+        required: true
+      responses:
+        default:
+          description: Tạo tài liệu thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Create document success
+                  result:
+                    $ref: '#/components/schemas/DocumentResponseBody'
+
+  /documents/list:
+    get:
+      tags:
+        - documents
+      summary: Lấy danh sách tài liệu
+      description: Lấy danh sách tài liệu
+      operationId: getDocuments
+      parameters:
+        - name: page
+          in: query
+          description: Số trang
+          required: true
+          schema:
+            type: integer
+            example: 1
+        - name: limit
+          in: query
+          description: Số lượng tài liệu trên mỗi trang
+          required: true
+          schema:
+            type: integer
+            example: 10
+        - name: document_type
+          in: query
+          description: Loại tài liệu
+          required: false
+          schema:
+            $ref: '#/components/schemas/DocumentType'
+      responses:
+        default:
+          description: Lấy danh sách tài liệu thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Get list document successfully
+                  result:
+                    type: object
+                    properties:
+                      documents:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/DocumentResponseBody'
+                      limit:
+                        type: integer
+                        example: 10
+                      page:
+                        type: integer
+                        example: 1
+                      total_page:
+                        type: integer
+                        example: 1
+
+  /documents/{document_id}:
+    get:
+      tags:
+        - documents
+      summary: Lấy thông tin tài liệu theo id
+      description: Lấy thông tin tài liệu theo id
+      operationId: getDocumentById
+      parameters:
+        - name: document_id
+          in: path
+          description: id của tài liệu
+          required: true
+          schema:
+            type: string
+            format: MongoId
+            example: '660ab00f044b53ddc078b490'
+      responses:
+        default:
+          description: Lấy thông tin tài liệu theo id thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Get document detail successfully
+                  result:
+                    $ref: '#/components/schemas/DocumentResponseBody'
+
+  /documents/update:
+    patch:
+      tags:
+        - documents
+      summary: Cập nhật tài liệu
+      description: Cập nhật tài liệu
+      operationId: updateDocument
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: Thông tin cập nhật tài liệu
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateDocumentRequestBody'
+        required: true
+      responses:
+        default:
+          description: Cập nhật tài liệu thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Update document success
+                  result:
+                    $ref: '#/components/schemas/DocumentResponseBody'
+
+  /documents/delete/{document_id}:
+    delete:
+      tags:
+        - documents
+      summary: Xóa tài liệu
+      description: Xóa tài liệu
+      operationId: deleteDocument
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: document_id
+          in: path
+          description: id của tài liệu
+          required: true
+          schema:
+            type: string
+            format: MongoId
+            example: '660ab00f044b53ddc078b490'
+      responses:
+        default:
+          description: Xóa tài liệu thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Document deleted successfully
+
+  #* API cho bài kiểm tra
+  /tests/:
+    post:
+      tags:
+        - tests
+      summary: Tạo bài kiểm tra
+      description: Tạo bài kiểm tra
+      operationId: createTest
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: Thông tin tạo bài kiểm tra
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TestRequestBody'
+        required: true
+      responses:
+        default:
+          description: Tạo bài kiểm tra thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Create test success
+                  result:
+                    $ref: '#/components/schemas/TestResponseBody'
+
+  /tests/{test_id}:
+    get:
+      tags:
+        - tests
+      summary: Lấy thông tin bài kiểm tra theo id
+      description: Lấy thông tin bài kiểm tra theo id
+      operationId: getTestById
+      parameters:
+        - name: test_id
+          in: path
+          description: id của bài kiểm tra
+          required: true
+          schema:
+            type: string
+            format: MongoId
+            example: '660ab00f044b53ddc078b490'
+      responses:
+        default:
+          description: Lấy thông tin bài kiểm tra theo id thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Get test detail successfully
+                  result:
+                    $ref: '#/components/schemas/TestResponseBody'
+
+  /tests/full-test-detail/{test_id}:
+    get:
+      tags:
+        - tests
+      summary: Lấy thông tin đầy đủ bài kiểm tra theo id
+      description: Lấy thông tin đầy đủ bài kiểm tra theo id
+      operationId: getFullTestDetailById
+      parameters:
+        - name: test_id
+          in: path
+          description: id của bài kiểm tra
+          required: true
+          schema:
+            type: string
+            format: MongoId
+            example: '660ab00f044b53ddc078b490'
+      responses:
+        default:
+          description: Lấy thông tin đầy đủ bài kiểm tra theo id thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Get full test detail successfully
+                  result:
+                    $ref: '#/components/schemas/FullTestDetailResponseBody'
+
+  /tests/list:
+    get:
+      tags:
+        - tests
+      summary: Lấy danh sách bài kiểm tra
+      description: Lấy danh sách bài kiểm tra
+      operationId: getTests
+      parameters:
+        - name: page
+          in: query
+          description: Số trang
+          required: true
+          schema:
+            type: integer
+            example: 1
+        - name: limit
+          in: query
+          description: Số lượng bài kiểm tra trên mỗi trang
+          required: true
+          schema:
+            type: integer
+            example: 10
+      responses:
+        default:
+          description: Lấy danh sách bài kiểm tra thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Get list test successfully
+                  result:
+                    type: object
+                    properties:
+                      tests:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/TestResponseBody'
+                      limit:
+                        type: integer
+                        example: 10
+                      page:
+                        type: integer
+                        example: 1
+                      total_page:
+                        type: integer
+                        example: 1
+
+  /tests/update:
+    patch:
+      tags:
+        - tests
+      summary: Cập nhật bài kiểm tra
+      description: Cập nhật bài kiểm tra
+      operationId: updateTest
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: Thông tin cập nhật bài kiểm tra
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateTestRequestBody'
+        required: true
+      responses:
+        default:
+          description: Cập nhật bài kiểm tra thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Update test success
+                  result:
+                    $ref: '#/components/schemas/TestResponseBody'
+
+  /tests/delete:
+    delete:
+      tags:
+        - tests
+      summary: Xóa bài kiểm tra
+      description: Xóa bài kiểm tra
+      operationId: deleteTest
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: Thông tin xóa bài kiểm tra
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                test_id:
+                  type: string
+                  format: MongoId
+                  description: id của bài kiểm tra
+                  example: '660b4cab4673a97618935954'
+                source_id:
+                  type: string
+                  format: MongoId
+                  description: id của tài liệu hoặc khoá học
+                  example: '660ab00f044b53ddc078b490'
+        required: true
+      responses:
+        default:
+          description: Xóa bài kiểm tra thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Test deleted successfully
+
+  #* API cho câu hỏi
+  /questions/:
+    post:
+      tags:
+        - questions
+      summary: Tạo câu hỏi
+      description: Tạo câu hỏi
+      operationId: createQuestion
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: Thông tin tạo câu hỏi
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QuestionRequestBody'
+        required: true
+      responses:
+        default:
+          description: Tạo câu hỏi thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Create question success
+                  result:
+                    $ref: '#/components/schemas/QuestionResponseBody'
+
+  /questions/{question_id}:
+    get:
+      tags:
+        - questions
+      summary: Lấy thông tin câu hỏi theo id
+      description: Lấy thông tin câu hỏi theo id
+      operationId: getQuestionById
+      parameters:
+        - name: question_id
+          in: path
+          description: id của câu hỏi
+          required: true
+          schema:
+            type: string
+            format: MongoId
+            example: '660ab00f044b53ddc078b490'
+      responses:
+        default:
+          description: Lấy thông tin câu hỏi theo id thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Get question detail successfully
+                  result:
+                    $ref: '#/components/schemas/QuestionResponseBody'
+
+  /questions/list:
+    get:
+      tags:
+        - questions
+      summary: Lấy danh sách câu hỏi
+      description: Lấy danh sách câu hỏi
+      operationId: getQuestions
+      parameters:
+        - name: page
+          in: query
+          description: Số trang
+          required: true
+          schema:
+            type: integer
+            example: 1
+        - name: limit
+          in: query
+          description: Số lượng câu hỏi trên mỗi trang
+          required: true
+          schema:
+            type: integer
+            example: 10
+      responses:
+        default:
+          description: Lấy danh sách câu hỏi thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Get list question successfully
+                  result:
+                    type: object
+                    properties:
+                      questions:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/QuestionResponseBody'
+                      limit:
+                        type: integer
+                        example: 10
+                      page:
+                        type: integer
+                        example: 1
+                      total_page:
+                        type: integer
+                        example: 1
+
+  /questions/update:
+    patch:
+      tags:
+        - questions
+      summary: Cập nhật câu hỏi
+      description: Cập nhật câu hỏi
+      operationId: updateQuestion
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: Thông tin cập nhật câu hỏi
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateQuestionRequestBody'
+        required: true
+      responses:
+        default:
+          description: Cập nhật câu hỏi thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Update question success
+                  result:
+                    $ref: '#/components/schemas/QuestionResponseBody'
+
+  /questions/delete:
+    delete:
+      tags:
+        - questions
+      summary: Xóa câu hỏi
+      description: Xóa câu hỏi
+      operationId: deleteQuestion
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: Thông tin xóa câu hỏi
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                question_id:
+                  type: string
+                  format: MongoId
+                  description: id của câu hỏi
+                  example: '660b4cab4673a97618935954'
+                test_id:
+                  type: string
+                  format: MongoId
+                  description: id của bài kiểm tra
+                  example: '660ab00f044b53ddc078b490'
+        required: true
+      responses:
+        default:
+          description: Xóa câu hỏi thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Question deleted successfully
+
+  #* API cho bài làm
+  /scorecards/:
+    post:
+      tags:
+        - scorecards
+      summary: Tạo bài làm
+      description: Tạo bài làm
+      operationId: createScorecard
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: Thông tin tạo bài làm
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ScorecardRequestBody'
+        required: true
+      responses:
+        default:
+          description: Tạo bài làm thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Create scorecard success
+                  result:
+                    $ref: '#/components/schemas/ScorecardResponseBody'
+
+  /scorecards/{scorecard_id}:
+    get:
+      tags:
+        - scorecards
+      summary: Lấy thông tin bài làm theo id
+      description: Lấy thông tin bài làm theo id
+      operationId: getScorecardById
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: scorecard_id
+          in: path
+          description: id của bài làm
+          required: true
+          schema:
+            type: string
+            format: MongoId
+            example: '660b5dd643ab56cfc721a5ba'
+      responses:
+        default:
+          description: Lấy thông tin bài làm theo id thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Get scorecard detail successfully
+                  result:
+                    $ref: '#/components/schemas/ScorecardDetailResponseBody'
+
+  #* API cho thông báo
+  /notifications/:
+    post:
+      tags:
+        - notifications
+      summary: Tạo thông báo
+      description: Tạo thông báo
+      operationId: createNotification
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: Thông tin tạo thông báo
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NotificationRequestBody'
+        required: true
+      responses:
+        default:
+          description: Tạo thông báo thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Create notification success
+                  result:
+                    $ref: '#/components/schemas/NotificationResponseBody'
+
+  /notifications/{notification_id}:
+    get:
+      tags:
+        - notifications
+      summary: Lấy thông tin thông báo theo id
+      description: Lấy thông tin thông báo theo id
+      operationId: getNotificationById
+      parameters:
+        - name: notification_id
+          in: path
+          description: id của thông báo
+          required: true
+          schema:
+            type: string
+            format: MongoId
+            example: '660b627443ab56cfc721a5bc'
+      responses:
+        default:
+          description: Lấy thông tin thông báo theo id thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Get notification detail successfully
+                  result:
+                    $ref: '#/components/schemas/NotificationDetailResponseBody'
+
+  /notifications/update:
+    patch:
+      tags:
+        - notifications
+      summary: Cập nhật thông báo
+      description: Cập nhật thông báo
+      operationId: updateNotification
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: Thông tin cập nhật thông báo
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateNotificationRequestBody'
+        required: true
+      responses:
+        default:
+          description: Cập nhật thông báo thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Update notification success
+                  result:
+                    $ref: '#/components/schemas/NotificationResponseBody'
+
+  #* API cho tìm kiếm
+  /search/user:
+    get:
+      tags:
+        - search
+      summary: Tìm kiếm người dùng
+      description: Tìm kiếm người dùng
+      operationId: searchUser
+      parameters:
+        - name: name_email
+          in: query
+          description: Tên hoặc email người dùng
+          required: true
+          schema:
+            type: string
+            example: 'quangnguyen01'
+        - name: limit
+          in: query
+          description: Số lượng người dùng trên mỗi trang
+          required: true
+          schema:
+            type: integer
+            example: 10
+        - name: page
+          in: query
+          description: Số trang
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        default:
+          description: Tìm kiếm người dùng thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Search user successfully
+                  result:
+                    type: object
+                    properties:
+                      users:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/User'
+                      limit:
+                        type: integer
+                        example: 10
+                      page:
+                        type: integer
+                        example: 1
+                      total_page:
+                        type: integer
+                        example: 1
+
+  /search/course:
+    get:
+      tags:
+        - search
+      summary: Tìm kiếm khoá học
+      description: Tìm kiếm khoá học
+      operationId: searchCourse
+      parameters:
+        - name: title
+          in: query
+          description: Tên khoá học
+          required: true
+          schema:
+            type: string
+            example: 'Toeic'
+        - name: limit
+          in: query
+          description: Số lượng khoá học trên mỗi trang
+          required: true
+          schema:
+            type: integer
+            example: 10
+        - name: page
+          in: query
+          description: Số trang
+          required: true
+          schema:
+            type: integer
+            example: 1
+        - name: course_type_query
+          in: query
+          description: Loại khoá học
+          required: false
+          schema:
+            $ref: '#/components/schemas/CourseTypeQuery'
+      responses:
+        default:
+          description: Tìm kiếm khoá học thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Search course successfully
+                  result:
+                    type: object
+                    properties:
+                      courses:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/CourseResponseBody'
+                      limit:
+                        type: integer
+                        example: 10
+                      page:
+                        type: integer
+                        example: 1
+                      total_page:
+                        type: integer
+                        example: 1
+
+  /search/document:
+    get:
+      tags:
+        - search
+      summary: Tìm kiếm tài liệu
+      description: Tìm kiếm tài liệu
+      operationId: searchDocument
+      parameters:
+        - name: title
+          in: query
+          description: Tên tài liệu
+          required: true
+          schema:
+            type: string
+            example: 'Toeic'
+        - name: limit
+          in: query
+          description: Số lượng tài liệu trên mỗi trang
+          required: true
+          schema:
+            type: integer
+            example: 10
+        - name: page
+          in: query
+          description: Số trang
+          required: true
+          schema:
+            type: integer
+            example: 1
+        - name: document_type_query
+          in: query
+          description: Loại tài liệu
+          required: false
+          schema:
+            $ref: '#/components/schemas/DocumentTypeQuery'
+      responses:
+        default:
+          description: Tìm kiếm tài liệu thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Search document successfully
+                  result:
+                    type: object
+                    properties:
+                      documents:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/DocumentResponseBody'
+                      limit:
+                        type: integer
+                        example: 10
+                      page:
+                        type: integer
+                        example: 1
+                      total_page:
+                        type: integer
+                        example: 1

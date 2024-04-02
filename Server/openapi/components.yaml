@@ -1,0 +1,862 @@
+components:
+  schemas:
+    RegisterBody:
+      type: object
+      properties:
+        name:
+          type: string
+          example: 'Nguyen Minh Quang'
+        email:
+          type: string
+          format: email
+          example: 'quangnguyenminh2001+8@gmail.com'
+        password:
+          type: string
+          example: 'Quang123456@!'
+        confirm_password:
+          type: string
+          example: 'Quang123456@!'
+        date_of_birth:
+          type: string
+          format: date-time
+          example: '2024-03-16T07:47:58+0800'
+
+    LoginBody:
+      type: object
+      properties:
+        email:
+          type: string
+          description: Email người dùng
+          example: quangnguyenminh2001@gmail.com
+        password:
+          type: string
+          description: Mật khẩu người dùng
+          example: Quang123456@!
+
+    SuccessAuthentication:
+      type: object
+      properties:
+        access_token:
+          type: string
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjVmN2RjZjA5ZmYyNWRmMjI2MzE5ODBiIiwidG9rZW5fdHlwZSI6MCwidmVyaWZ5IjoxLCJydWxlIjowLCJpYXQiOjE3MTE5NTQ1MDAsImV4cCI6MTcxMjA0MDkwMH0.UuDGGZG4ovKvles4M5J4yuonBEV4C16snT96kxzZVLE
+        refresh_token:
+          type: string
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjVmN2RjZjA5ZmYyNWRmMjI2MzE5ODBiIiwidG9rZW5fdHlwZSI6MSwidmVyaWZ5IjoxLCJydWxlIjowLCJpYXQiOjE3MTE5NTQ1MDAsImV4cCI6MTcyMDU5NDUwMH0.FSj9oaLkijZbHR1xhI6BIxCgWR5aaVWShUJQECPF4S8
+
+    UserVerifyStatus:
+      type: number
+      enum: [Unverified, Verified, Banned]
+      example: 1
+
+    UserRuleType:
+      type: number
+      enum: [Admin, User]
+      example: 1
+
+    User:
+      type: object
+      properties:
+        _id:
+          type: string
+          format: MongoId
+          example: '65f7dcf09ff25df22631980b'
+        name:
+          type: string
+          example: 'Nguyễn Minh Quang'
+        email:
+          type: string
+          format: email
+          example: 'quangnguyenminh2001@gmail.com'
+        date_of_birth:
+          type: string
+          format: ISO8601
+          example: '2024-03-15T23:47:58.000Z'
+        created_at:
+          type: string
+          format: ISO8601
+          example: '2024-03-18T06:19:28.327Z'
+        updated_at:
+          type: string
+          format: ISO8601
+          example: '2024-03-18T11:15:29.420Z'
+        verify:
+          $ref: '#/components/schemas/UserVerifyStatus'
+          example: 1
+        rule:
+          $ref: '#/components/schemas/UserRuleType'
+          example: 0
+        location:
+          type: string
+          example: ''
+        username:
+          type: string
+          example: 'quangnguyen01'
+        avatar:
+          type: string
+          example: ''
+        cover_photo:
+          type: string
+          example: ''
+
+    UpdateMeBody:
+      type: object
+      properties:
+        name:
+          type: string
+          example: John Doe
+        date_of_birth:
+          type: string
+          format: ISO8601
+          example: 2023-06-08T10:17:31.096Z
+        username:
+          type: string
+          example: 'johndoe'
+        location:
+          type: string
+          example: 'San Francisco, CA'
+        avatar:
+          type: string
+          example: 'http:localhost:4000/images/avatars/johndoe.jpg'
+        cover_photo:
+          type: string
+          example: 'http:localhost:4000/images/avatars/johndoe.jpg'
+        rule:
+          $ref: '#/components/schemas/UserRuleType'
+          example: 1
+
+    MediaType:
+      type: number
+      enum: [Image, Audio, Video]
+      example: 1
+
+    Media:
+      type: object
+      properties:
+        url:
+          type: string
+          example: 'http://localhost:4000/images/avatars/johndoe.jpg'
+        type:
+          $ref: '#/components/schemas/MediaType'
+
+    CourseType:
+      type: number
+      enum: [Listening, Reading, Full]
+      example: 0
+
+    OperatingStatus:
+      type: number
+      enum: [Active, Inactive, Updating]
+      example: 1
+
+    CourseRequestBody:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/CourseType'
+        title:
+          type: string
+          example: 'THÌ HIỆN TẠI HOÀN THÀNH VÀ THÌ HIỆN TẠI HOÀN THÀNH TIẾP DIỄN'
+        description:
+          type: string
+          example: 'Trong bài thi TOEIC, hiện tại hoàn thành và hiện tại hoàn thành tiếp diễn cũng là một cặp khiến nhiều thí sinh phải đau đầu. Chúng ta sẽ cùng xem qua kiến thức về cặp đôi này và làm một số bài tập để củng cố nhé.'
+        content:
+          type: string
+          example: '- Hiện tại hoàn thành: Diễn tả hành động đã chấm dứt ở hiện tại do đó đã có kết quả rõ ràng. I’ve waited for you for half an hour. (and now I stop waiting because you didn’t come.)  -> Bây giờ tôi không chờ nữa vì bạn không đến.-Hiện tại hoàn thành tiếp diễn: Diễn tả hành động vẫn tiếp diễn ở hiện tại, có khả năng lan tới tương lai do đó không có kết quả rõ rệt.I’ve been waiting for you for half an hour.-> Tôi sẽ tiếp tục chờ với hy vọng là bạn sẽ đến.'
+        thumbnails:
+          type: array
+          items:
+            $ref: '#/components/schemas/Media'
+            description: Danh sách media đính kèm
+
+    CourseResponseBody:
+      type: object
+      properties:
+        _id:
+          type: string
+          format: MongoId
+          example: '660ab00f044b53ddc078b490'
+        user_id:
+          type: string
+          example: '65f7dcf09ff25df22631980b'
+        type:
+          $ref: '#/components/schemas/CourseType'
+        title:
+          type: string
+          example: 'THÌ HIỆN TẠI HOÀN THÀNH VÀ THÌ HIỆN TẠI HOÀN THÀNH TIẾP DIỄN'
+        description:
+          type: string
+          example: 'Trong bài thi TOEIC, hiện tại hoàn thành và hiện tại hoàn thành tiếp diễn cũng là một cặp khiến nhiều thí sinh phải đau đầu. Chúng ta sẽ cùng xem qua kiến thức về cặp đôi này và làm một số bài tập để củng cố nhé.'
+        content:
+          type: string
+          example: '- Hiện tại hoàn thành: Diễn tả hành động đã chấm dứt ở hiện tại do đó đã có kết quả rõ ràng. I’ve waited for you for half an hour. (and now I stop waiting because you didn’t come.)  -> Bây giờ tôi không chờ nữa vì bạn không đến.-Hiện tại hoàn thành tiếp diễn: Diễn tả hành động vẫn tiếp diễn ở hiện tại, có khả năng lan tới tương lai do đó không có kết quả rõ rệt.I’ve been waiting for you for half an hour.-> Tôi sẽ tiếp tục chờ với hy vọng là bạn sẽ đến.'
+        tests:
+          type: array
+          items:
+            type: string
+            format: MongoId
+            example: ''
+        thumbnail:
+          type: array
+          items:
+            $ref: '#/components/schemas/Media'
+            description: Danh sách media đính kèm
+        notification:
+          type: string
+          format: MongoId
+          example: null
+        user_views:
+          type: integer
+          example: 0
+        created_at:
+          type: string
+          format: ISO8601
+          example: '2024-04-01T13:01:03.742Z'
+        updated_at:
+          type: string
+          format: ISO8601
+          example: '2024-04-01T13:01:03.742Z'
+        status:
+          $ref: '#/components/schemas/OperatingStatus'
+
+    UpdateCourseRequestBody:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/CourseType'
+        title:
+          type: string
+          example: 'THÌ HIỆN TẠI HOÀN THÀNH VÀ THÌ HIỆN TẠI HOÀN THÀNH TIẾP DIỄN'
+        description:
+          type: string
+          example: 'Trong bài thi TOEIC, hiện tại hoàn thành và hiện tại hoàn thành tiếp diễn cũng là một cặp khiến nhiều thí sinh phải đau đầu. Chúng ta sẽ cùng xem qua kiến thức về cặp đôi này và làm một số bài tập để củng cố nhé.'
+        content:
+          type: string
+          example: '- Hiện tại hoàn thành: Diễn tả hành động đã chấm dứt ở hiện tại do đó đã có kết quả rõ ràng. I’ve waited for you for half an hour. (and now I stop waiting because you didn’t come.)  -> Bây giờ tôi không chờ nữa vì bạn không đến.-Hiện tại hoàn thành tiếp diễn: Diễn tả hành động vẫn tiếp diễn ở hiện tại, có khả năng lan tới tương lai do đó không có kết quả rõ rệt.I’ve been waiting for you for half an hour.-> Tôi sẽ tiếp tục chờ với hy vọng là bạn sẽ đến.'
+        thumbnail:
+          type: array
+          items:
+            $ref: '#/components/schemas/Media'
+            description: Danh sách media đính kèm
+        status:
+          $ref: '#/components/schemas/OperatingStatus'
+
+    DocumentType:
+      type: number
+      enum: [Vocabulary, Grammar]
+      example: 0
+
+    DocumentRequestBody:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/DocumentType'
+        title:
+          type: string
+          example: 'THÌ HIỆN TẠI HOÀN THÀNH VÀ THÌ HIỆN TẠI HOÀN THÀNH TIẾP DIỄN'
+        description:
+          type: string
+          example: 'Trong bài thi TOEIC, hiện tại hoàn thành và hiện tại hoàn thành tiếp diễn cũng là một cặp khiến nhiều thí sinh phải đau đầu. Chúng ta sẽ cùng xem qua kiến thức về cặp đôi này và làm một số bài tập để củng cố nhé.'
+        content:
+          type: string
+          example: '- Hiện tại hoàn thành: Diễn tả hành động đã chấm dứt ở hiện tại do đó đã có kết quả rõ ràng. I’ve waited for you for half an hour. (and now I stop waiting because you didn’t come.)  -> Bây giờ tôi không chờ nữa vì bạn không đến.-Hiện tại hoàn thành tiếp diễn: Diễn tả hành động vẫn tiếp diễn ở hiện tại, có khả năng lan tới tương lai do đó không có kết quả rõ rệt.I’ve been waiting for you for half an hour.-> Tôi sẽ tiếp tục chờ với hy vọng là bạn sẽ đến.'
+        thumbnails:
+          type: array
+          items:
+            $ref: '#/components/schemas/Media'
+            description: Danh sách media đính kèm
+
+    DocumentResponseBody:
+      type: object
+      properties:
+        _id:
+          type: string
+          format: MongoId
+          example: '660ab00f044b53ddc078b490'
+        user_id:
+          type: string
+          example: '65f7dcf09ff25df22631980b'
+        type:
+          $ref: '#/components/schemas/DocumentType'
+        title:
+          type: string
+          example: 'THÌ HIỆN TẠI HOÀN THÀNH VÀ THÌ HIỆN TẠI HOÀN THÀNH TIẾP DIỄN'
+        description:
+          type: string
+          example: 'Trong bài thi TOEIC, hiện tại hoàn thành và hiện tại hoàn thành tiếp diễn cũng là một cặp khiến nhiều thí sinh phải đau đầu. Chúng ta sẽ cùng xem qua kiến thức về cặp đôi này và làm một số bài tập để củng cố nhé.'
+        content:
+          type: string
+          example: '- Hiện tại hoàn thành: Diễn tả hành động đã chấm dứt ở hiện tại do đó đã có kết quả rõ ràng. I’ve waited for you for half an hour. (and now I stop waiting because you didn’t come.)  -> Bây giờ tôi không chờ nữa vì bạn không đến.-Hiện tại hoàn thành tiếp diễn: Diễn tả hành động vẫn tiếp diễn ở hiện tại, có khả năng lan tới tương lai do đó không có kết quả rõ rệt.I’ve been waiting for you for half an hour.-> Tôi sẽ tiếp tục chờ với hy vọng là bạn sẽ đến.'
+        tests:
+          type: array
+          items:
+            type: string
+            format: MongoId
+            example: ''
+        thumbnail:
+          type: array
+          items:
+            $ref: '#/components/schemas/Media'
+            description: Danh sách media đính kèm
+        notification:
+          type: string
+          format: MongoId
+          example: null
+        user_views:
+          type: integer
+          example: 0
+        created_at:
+          type: string
+          format: ISO8601
+          example: '2024-04-01T13:01:03.742Z'
+        updated_at:
+          type: string
+          format: ISO8601
+          example: '2024-04-01T13:01:03.742Z'
+        status:
+          $ref: '#/components/schemas/OperatingStatus'
+
+    UpdateDocumentRequestBody:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/DocumentType'
+        title:
+          type: string
+          example: 'THÌ HIỆN TẠI HOÀN THÀNH VÀ THÌ HIỆN TẠI HOÀN THÀNH TIẾP DIỄN'
+        description:
+          type: string
+          example: 'Trong bài thi TOEIC, hiện tại hoàn thành và hiện tại hoàn thành tiếp diễn cũng là một cặp khiến nhiều thí sinh phải đau đầu. Chúng ta sẽ cùng xem qua kiến thức về cặp đôi này và làm một số bài tập để củng cố nhé.'
+        content:
+          type: string
+          example: '- Hiện tại hoàn thành: Diễn tả hành động đã chấm dứt ở hiện tại do đó đã có kết quả rõ ràng. I’ve waited for you for half an hour. (and now I stop waiting because you didn’t come.)  -> Bây giờ tôi không chờ nữa vì bạn không đến.-Hiện tại hoàn thành tiếp diễn: Diễn tả hành động vẫn tiếp diễn ở hiện tại, có khả năng lan tới tương lai do đó không có kết quả rõ rệt.I’ve been waiting for you for half an hour.-> Tôi sẽ tiếp tục chờ với hy vọng là bạn sẽ đến.'
+        thumbnail:
+          type: array
+          items:
+            $ref: '#/components/schemas/Media'
+            description: Danh sách media đính kèm
+        status:
+          $ref: '#/components/schemas/OperatingStatus'
+
+    TestRequestBody:
+      type: object
+      required:
+        - source_id
+        - title
+        - description
+        - timeline
+      properties:
+        source_id:
+          type: string
+          description: id của của khoá học hoặc tài liệu
+          example: '660ab00f044b53ddc078b490'
+        title:
+          type: string
+          example: 'BÀI TẬP 11'
+        description:
+          type: string
+          example: '(Các bạn xem đáp án và giải thích chi tiết cuối sách nhé)'
+        timeline:
+          type: integer
+          description: Thời gian làm bài
+          example: 133456
+
+    TestResponseBody:
+      type: object
+      properties:
+        _id:
+          type: string
+          format: MongoId
+          example: '660b4cab4673a97618935954'
+        source_id:
+          type: string
+          format: MongoId
+          example: '660ab00f044b53ddc078b490'
+        title:
+          type: string
+          example: 'BÀI TẬP 11'
+        description:
+          type: string
+          example: '(Các bạn xem đáp án và giải thích chi tiết cuối sách nhé)'
+        timeline:
+          type: integer
+          example: 133456
+        questions:
+          type: array
+          items: {}
+        created_at:
+          type: string
+          format: ISO8601
+          example: '2024-04-02T00:09:15.467Z'
+        updated_at:
+          type: string
+          format: ISO8601
+          example: '2024-04-02T00:09:15.467Z'
+
+    FullTestDetailResponseBody:
+      type: object
+      properties:
+        _id:
+          type: string
+          format: MongoId
+          example: '660b4cab4673a97618935954'
+        source_id:
+          type: string
+          format: MongoId
+          example: '660ab00f044b53ddc078b490'
+        title:
+          type: string
+          example: 'BÀI TẬP 11'
+        description:
+          type: string
+          example: '(Các bạn xem đáp án và giải thích chi tiết cuối sách nhé)'
+        timeline:
+          type: integer
+          example: 133456
+        questions:
+          type: array
+          items:
+            $ref: '#/components/schemas/QuestionResponseBody'
+        created_at:
+          type: string
+          format: ISO8601
+          example: '2024-04-02T00:09:15.467Z'
+        updated_at:
+          type: string
+          format: ISO8601
+          example: '2024-04-02T00:09:15.467Z'
+
+    UpdateTestRequestBody:
+      type: object
+      required:
+        - test_id
+        - source_id
+      properties:
+        test_id:
+          type: string
+          description: id của của bài kiểm tra
+          example: '660b4cab4673a97618935954'
+        source_id:
+          type: string
+          description: id của của khoá học hoặc tài liệu
+          example: '660ab00f044b53ddc078b490'
+        title:
+          type: string
+          example: 'BÀI TẬP 11'
+        description:
+          type: string
+          example: '(Các bạn xem đáp án và giải thích chi tiết cuối sách nhé)'
+        timeline:
+          type: integer
+          description: Thời gian làm bài
+          example: 133456
+
+    Answer:
+      type: object
+      properties:
+        order_answer:
+          type: string
+          example: 'A'
+        content_answer:
+          type: string
+          example: 'eat'
+
+    ListAnswers:
+      type: array
+      items:
+        type: object
+        properties:
+          order_answer:
+            type: string
+            example: 'A'
+          content_answer:
+            type: string
+            example: 'eat'
+      example:
+        - order_answer: 'A'
+          content_answer: 'eat'
+        - order_answer: 'B'
+          content_answer: 'eats'
+        - order_answer: 'C'
+          content_answer: 'are eating'
+        - order_answer: 'D'
+          content_answer: 'is eating'
+
+    QuestionRequestBody:
+      type: object
+      required:
+        - test_id
+        - num_quest
+        - description
+        - content
+        - answers
+        - correct_at
+        - score
+      properties:
+        test_id:
+          type: string
+          format: MongoId
+          example: '65ffa8b40b8b5996abe2cc56'
+        num_quest:
+          type: integer
+          example: 1
+        description:
+          type: string
+          example: 'Dịch: Bố mẹ tôi thường ăn sáng lúc 7h sáng. Câu này chỉ 1 thói quen nên ta dùng thì hiện tại đơn. “My parents” là chủ ngữ số nhiều --> động từ giữ nguyên dạng.'
+        content:
+          type: string
+          example: 'My parents normally __________ breakfast at 7:00 a.m.'
+        answers:
+          $ref: '#/components/schemas/ListAnswers'
+        correct_at:
+          $ref: '#/components/schemas/Answer'
+        score:
+          type: integer
+          example: 1
+
+    QuestionResponseBody:
+      type: object
+      properties:
+        _id:
+          type: string
+          format: MongoId
+          example: '65ffb1aefef511c9911f8980'
+        test_id:
+          type: string
+          format: MongoId
+          example: '65ffa8b40b8b5996abe2cc56'
+        num_quest:
+          type: integer
+          example: 1
+        description:
+          type: string
+          example: 'Dịch: Bố mẹ tôi thường ăn sáng lúc 7h sáng. Câu này chỉ 1 thói quen nên ta dùng thì hiện tại đơn. “My parents” là chủ ngữ số nhiều --> động từ giữ nguyên dạng.'
+        content:
+          type: string
+          example: 'My parents normally __________ breakfast at 7:00 a.m.'
+        answers:
+          $ref: '#/components/schemas/ListAnswers'
+        correct_at:
+          type: object
+          $ref: '#/components/schemas/Answer'
+        selected_at:
+          type: object
+          $ref: '#/components/schemas/Answer'
+        score:
+          type: integer
+          example: 1
+        created_at:
+          type: string
+          format: ISO8601
+          example: '2024-03-24T04:53:02.812Z'
+        updated_at:
+          type: string
+          format: ISO8601
+          example: '2024-03-26T05:00:15.707Z'
+
+    UpdateQuestionRequestBody:
+      type: object
+      required:
+        - question_id
+      properties:
+        question_id:
+          type: string
+          format: MongoId
+          example: '65ffa8b40b8b5996abe2cc56'
+        num_quest:
+          type: integer
+          example: 1
+        description:
+          type: string
+          example: 'Dịch: Bố mẹ tôi thường ăn sáng lúc 7h sáng. Câu này chỉ 1 thói quen nên ta dùng thì hiện tại đơn. “My parents” là chủ ngữ số nhiều --> động từ giữ nguyên dạng.'
+        content:
+          type: string
+          example: 'My parents normally __________ breakfast at 7:00 a.m.'
+        answers:
+          $ref: '#/components/schemas/ListAnswers'
+        correct_at:
+          $ref: '#/components/schemas/Answer'
+        score:
+          type: integer
+          example: 1
+
+    ScorecardRequestBody:
+      type: object
+      properties:
+        total_time:
+          type: integer
+          example: 111
+        test_id:
+          type: string
+          format: MongoId
+          example: '65ffb535f172c799e06f57dd'
+        questions:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/QuestionResponseBody'
+
+    ScorecardResponseBody:
+      type: object
+      properties:
+        _id:
+          type: string
+          format: MongoId
+          example: '660b5dd643ab56cfc721a5ba'
+        user_id:
+          type: string
+          format: MongoId
+          example: '65f7dcf09ff25df22631980f'
+        test_id:
+          type: string
+          format: MongoId
+          example: '65ffb535f172c799e06f57dd'
+        questions:
+          type: array
+          items:
+            type: string
+            format: MongoId
+            description: id của câu hỏi
+            example: '660b5dd643ab56cfc721a5bb'
+        total_correct:
+          type: integer
+          description: Số câu trả lời đúng
+          example: 1
+        total_marks:
+          type: integer
+          description: Tổng số điểm
+          example: 1
+        total_time:
+          type: integer
+          description: Tổng thời gian làm bài
+          example: 111
+        created_at:
+          type: string
+          format: ISO8601
+          example: '2024-04-02T01:22:30.887Z'
+
+    ScorecardDetailResponseBody:
+      type: object
+      properties:
+        _id:
+          type: string
+          format: MongoId
+          example: '660b5dd643ab56cfc721a5ba'
+        user_id:
+          type: string
+          format: MongoId
+          example: '65f7dcf09ff25df22631980f'
+        test_id:
+          type: string
+          format: MongoId
+          example: '65ffb535f172c799e06f57dd'
+        questions:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/QuestionResponseBody'
+        total_correct:
+          type: integer
+          description: Số câu trả lời đúng
+          example: 1
+        total_marks:
+          type: integer
+          description: Tổng số điểm
+          example: 1
+        total_time:
+          type: integer
+          description: Tổng thời gian làm bài
+          example: 111
+        created_at:
+          type: string
+          format: ISO8601
+          example: '2024-04-02T01:22:30.887Z'
+        total_question:
+          type: integer
+          description: Tổng số câu hỏi
+          example: 1
+
+    NotificationType:
+      type: number
+      enum: [Update, Other]
+      example: 0
+
+    TargetType:
+      type: number
+      enum: [Course, Document, Other]
+      example: 0
+
+    NotificationRequestBody:
+      type: object
+      required:
+        - type
+        - title
+        - content
+        - start_at
+        - end_at
+      properties:
+        type:
+          $ref: '#/components/schemas/NotificationType'
+        title:
+          type: string
+          example: 'Cập nhật tài liệu'
+        content:
+          type: string
+          example: 'Cập nhật, sửa đổi lại đáp án 1 số đề trong khoá học'
+        target_type:
+          $ref: '#/components/schemas/TargetType'
+        targets:
+          type: array
+          items:
+            type: string
+            format: MongoId
+            description: id của khoá học hoặc tài liệu
+            example: '660275a2724a9718bc532f26'
+        start_at:
+          type: string
+          format: ISO8601
+          description: Thời gian bắt đầu thông báo
+          example: '2024-03-26T18:40:00+0700'
+        end_at:
+          type: string
+          format: ISO8601
+          description: Thời gian kết thúc thông báo
+          example: '2024-03-26T18:50:00+0700'
+
+    NotificationResponseBody:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: '660b627443ab56cfc721a5bc'
+        user_id:
+          type: string
+          example: '65f7dcf09ff25df22631980b'
+        type:
+          $ref: '#/components/schemas/NotificationType'
+        title:
+          type: string
+          example: 'Cập nhật tài liệu'
+        content:
+          type: string
+          example: 'Cập nhật, sửa đổi lại đáp án 1 số đề trong khoá học'
+        target_type:
+          $ref: '#/components/schemas/TargetType'
+        targets:
+          type: array
+          items:
+            type: string
+            description: id của khoá học hoặc tài liệu
+            example: '660ab00f044b53ddc078b490'
+        start_at:
+          type: string
+          format: ISO8601
+          example: '2024-04-02T03:40:00.000Z'
+        end_at:
+          type: string
+          format: ISO8601
+          example: '2024-04-02T03:50:00.000Z'
+        created_at:
+          type: string
+          format: ISO8601
+          example: '2024-04-02T01:42:12.745Z'
+        updated_at:
+          type: string
+          format: ISO8601
+          example: '2024-04-02T01:42:12.745Z'
+
+    NotificationDetailResponseBody:
+      type: object
+      properties:
+        _id:
+          type: string
+          format: MongoId
+          example: '660b627443ab56cfc721a5bc'
+        user_id:
+          type: string
+          format: MongoId
+          example: '65f7dcf09ff25df22631980b'
+        type:
+          $ref: '#/components/schemas/NotificationType'
+        title:
+          type: string
+          example: 'Cập nhật tài liệu'
+        content:
+          type: string
+          example: 'Cập nhật, sửa đổi lại đáp án 1 số đề trong khoá học'
+        target_type:
+          $ref: '#/components/schemas/TargetType'
+        targets:
+          type: array
+          items:
+            type: object
+            properties:
+              _id:
+                type: string
+                format: MongoId
+                description: id của khoá học hoặc tài liệu
+                example: '660ab00f044b53ddc078b490'
+              user_id:
+                type: string
+                example: '65f7dcf09ff25df22631980b'
+              type:
+                type: integer
+                description: Loại khoá học hoặc tài liệu. Chi tiết xem ở CourseType và DocumentType
+                example: 1
+              title:
+                type: string
+                example: 'THÌ HIỆN TẠI HOÀN THÀNH VÀ THÌ HIỆN TẠI HOÀN THÀNH TIẾP DIỄN'
+              thumbnail:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Media'
+        start_at:
+          type: string
+          format: ISO8601
+          description: Thời gian bắt đầu thông báo
+          example: '2024-04-02T03:40:00.000Z'
+        end_at:
+          type: string
+          format: ISO8601
+          description: Thời gian kết thúc thông báo
+          example: '2024-04-02T03:50:00.000Z'
+        created_at:
+          type: string
+          format: ISO8601
+          example: '2024-04-02T01:42:12.745Z'
+        updated_at:
+          type: string
+          format: ISO8601
+          example: '2024-04-02T01:42:12.745Z'
+
+    UpdateNotificationRequestBody:
+      type: object
+      required:
+        - notification_id
+      properties:
+        notification_id:
+          type: string
+          example: '660b627443ab56cfc721a5bc'
+        title:
+          type: string
+          example: 'Thông báo mới'
+        content:
+          type: string
+          example: 'Nội dung thông báo'
+        start_at:
+          type: string
+          format: ISO8601
+          example: '2024-04-02T10:40:00+0700'
+        end_at:
+          type: string
+          format: ISO8601
+          example: '2024-04-02T10:50:00+0700'
+
+    CourseTypeQuery:
+      type: string
+      enum: [listening, reading, full]
+      example: listening
+
+    DocumentTypeQuery:
+      type: string
+      enum: [vocabulary, grammar]
+      example: vocabulary
