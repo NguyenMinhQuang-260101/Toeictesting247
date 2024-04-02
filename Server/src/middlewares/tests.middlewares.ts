@@ -210,15 +210,18 @@ export const testUpdateValidator = validate(
     source_id: sourceIdSchema,
     title: {
       ...titleSchema,
-      optional: true
+      optional: true,
+      notEmpty: undefined
     },
     description: {
       ...descriptionSchema,
-      optional: true
+      optional: true,
+      notEmpty: undefined
     },
     timeline: {
       ...timelineSchema,
-      optional: true
+      optional: true,
+      notEmpty: undefined
     }
   })
 )
