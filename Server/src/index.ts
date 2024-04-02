@@ -1,5 +1,5 @@
 import express from 'express'
-import { envConfig } from './constants/config'
+import { envConfig, isProduction } from './constants/config'
 import { defaultErrorHandler } from './middlewares/error.middlewares'
 import mediasRouter from './routes/medias.routes'
 import staticRouter from './routes/static.routes'
@@ -13,7 +13,7 @@ import notificationsRouter from './routes/notifications.routes'
 import documentsRouter from './routes/documents.routes'
 import scoreCardsRouter from './routes/scorecards.routes'
 import searchRouter from './routes/search.routes'
-import cors from 'cors'
+import cors, { CorsOptions } from 'cors'
 import { createServer } from 'http'
 import conversationRouter from './routes/conversations.routes'
 import initSocket from './utils/socket'
@@ -22,6 +22,8 @@ import initSocket from './utils/socket'
 // import path from 'path'
 import swaggerUi from 'swagger-ui-express'
 import swaggerJsdoc from 'swagger-jsdoc'
+import helmet from 'helmet'
+import { rateLimit } from 'express-rate-limit'
 
 // const file = fs.readFileSync(path.resolve('toeictesting247-swagger.yaml'), 'utf8')
 // const swaggerDocument = YAML.parse(file)
@@ -100,12 +102,33 @@ Tài liệu này được viết để hướng dẫn lập trình viên Front-e
   },
   apis: ['./openapi/*.yaml'] // files containing annotations as above
 }
-
 const openapiSpecification = swaggerJsdoc(options)
 
 const app = express()
 const httpServer = createServer(app)
+
+// ** Bảo mật với Helmet **
+app.use(helmet())
+
+// ** Rate limiting **
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  limit: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes).
+  standardHeaders: true, // draft-6: `RateLimit-*` headers; draft-7: combined `RateLimit` header
+  legacyHeaders: false // Disable the `X-RateLimit-*` headers.
+  // store: ... , // Use an external store for consistency across multiple server instances.
+})
+// Apply the rate limiting middleware to all requests.
+app.use(limiter)
+
+// ** CORS **
+// Khi truy cập vào client khác địa chỉ trong envConfig.clientUrl thì sẽ bị chặn bởi CORS
+const corsOptions: CorsOptions = {
+  origin: isProduction ? envConfig.clientUrl : '*',
+  optionsSuccessStatus: 200
+}
 app.use(cors())
+
 const port = envConfig.port
 databaseServices.connect().then(() => {
   databaseServices.indexUsers(),
