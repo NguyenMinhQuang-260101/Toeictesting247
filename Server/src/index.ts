@@ -64,7 +64,7 @@ Tài liệu này được viết để hướng dẫn lập trình viên Front-e
 
 ## Lưu Ý
 
-- Tất cả các API được tạo ra nhằm phục vụ cho khoá luận tốt nghiệp đề tài "Xây dựng hệ thống học tiếng Anh Toeic trực tuyến".
+- Tất cả các API được tạo ra nhằm phục vụ cho khoá luận tốt nghiệp đề tài "Xây dựng website học tiếng Anh Toeic trực tuyến".
 - Không sử dụng tài liệu này vào mục đích thương mại!
 `,
       contact: {

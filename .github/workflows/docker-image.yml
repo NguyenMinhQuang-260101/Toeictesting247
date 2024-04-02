@@ -40,4 +40,4 @@ jobs:
             docker pull nguyenminhquang01/toeictesting247:v1
             docker stop toeictesting247
             docker rm toeictesting247
-            docker run -dp 3000:3000 --name toeictesting247 nguyenminhquang01/toeictesting247:v1
+            docker run -dp 3000:3000 --name toeictesting247 --restart unless-stopped nguyenminhquang01/toeictesting247:v1
