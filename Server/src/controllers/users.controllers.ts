@@ -43,6 +43,7 @@ export const oauthController = async (req: Request, res: Response) => {
   const { code } = req.query
   const result = await usersServices.oauthGoogle(code as string)
   const urlRedirect = `${envConfig.clientRedirectCallback}?access_token=${result.access_token}&refresh_token=${result.refresh_token}&new_user=${result.newUser}&verify=${result.verify}&rule=${result.rule}`
+  console.log(urlRedirect)
   return res.redirect(urlRedirect)
 }
 
