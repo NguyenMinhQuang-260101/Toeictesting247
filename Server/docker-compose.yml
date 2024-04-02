@@ -1,0 +1,7 @@
+version: '3'
+services:
+  toeictesting247:
+    image: nguyenminhquang01/toeictesting247:v0
+    ports:
+      - '4000:4000'
+    # restart: always
