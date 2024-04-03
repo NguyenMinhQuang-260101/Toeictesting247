@@ -37,6 +37,7 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }}
+            docker rmi nguyenminhquang01/toeictesting247:v1
             docker pull nguyenminhquang01/toeictesting247:v1
             docker stop toeictesting247
             docker rm toeictesting247
