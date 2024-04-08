@@ -42,6 +42,7 @@ questionsRouter.post(
  * Description: Get list of questions by test_id
  * Method: GET
  * Path: /:test_id
+ * Headers: { Authorization?: Bearer <access token> }
  * Parameters: { test_id: string }
  * Query: { page: number, limit: number }
  */

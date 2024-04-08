@@ -44,7 +44,7 @@ externalDocs:
   description: Find out more about Swagger
   url: http://swagger.io
 servers:
-  # - url: https://toeictesting247api.io.vn
+  - url: https://toeictesting247api.io.vn
   - url: http://localhost:4000
 tags:
   - name: users
@@ -82,7 +82,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/LoginBody"
+              $ref: '#/components/schemas/LoginBody'
         required: true
       responses:
         default:
@@ -96,9 +96,9 @@ paths:
                     type: string
                     example: Login success
                   result:
-                    $ref: "#/components/schemas/SuccessAuthentication"
+                    $ref: '#/components/schemas/SuccessAuthentication'
                   rule:
-                    $ref: "#/components/schemas/UserRuleType"
+                    $ref: '#/components/schemas/UserRuleType'
 
   /users/register:
     post:
@@ -112,7 +112,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/RegisterBody"
+              $ref: '#/components/schemas/RegisterBody'
         required: true
       responses:
         default:
@@ -126,7 +126,7 @@ paths:
                     type: string
                     example: Register success
                   result:
-                    $ref: "#/components/schemas/SuccessAuthentication"
+                    $ref: '#/components/schemas/SuccessAuthentication'
 
   /users/refresh-token:
     post:
@@ -158,9 +158,9 @@ paths:
                     type: string
                     example: Refresh token success
                   result:
-                    $ref: "#/components/schemas/SuccessAuthentication"
+                    $ref: '#/components/schemas/SuccessAuthentication'
                   rule:
-                    $ref: "#/components/schemas/UserRuleType"
+                    $ref: '#/components/schemas/UserRuleType'
 
   /users/logout:
     post:
@@ -226,7 +226,7 @@ paths:
                     type: string
                     example: Email verify success
                   result:
-                    $ref: "#/components/schemas/SuccessAuthentication"
+                    $ref: '#/components/schemas/SuccessAuthentication'
 
   /users/resend-verify-email:
     post:
@@ -238,7 +238,7 @@ paths:
       security:
         - BearerAuth: []
       responses:
-        "200":
+        '200':
           description: Gửi lại email xác thực thành công
           content:
             application/json:
@@ -268,7 +268,7 @@ paths:
                   example: quangnguyenminh2001@gmail.com
         required: true
       responses:
-        "200":
+        '200':
           description: Nhận được email reset password
           content:
             application/json:
@@ -298,7 +298,7 @@ paths:
                   example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjRiZTBhZDJlNDNkMjQ2NDM5NGZlZWRiIiwidG9rZW5fdHlwZSI6MSwidmVyaWZ5IjoxLCJpYXQiOjE2OTEzODMyMjYsImV4cCI6MTcwMDAyMzIyNn0.bFnaBfxWl-Q48HCwAeMpNzZwTO9LEjcBd7Zyipjqr64
         required: true
       responses:
-        "200":
+        '200':
           description: Xác thực link trong email để reset mật khẩu thành công
           content:
             application/json:
@@ -386,7 +386,7 @@ paths:
                       users:
                         type: array
                         items:
-                          $ref: "#/components/schemas/User"
+                          $ref: '#/components/schemas/User'
                       limit:
                         type: integer
                         example: 10
@@ -418,7 +418,7 @@ paths:
                     type: string
                     example: Login success
                   result:
-                    $ref: "#/components/schemas/User"
+                    $ref: '#/components/schemas/User'
 
     patch:
       tags:
@@ -433,7 +433,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/UpdateMeBody"
+              $ref: '#/components/schemas/UpdateMeBody'
         required: true
       responses:
         default:
@@ -447,7 +447,7 @@ paths:
                     type: string
                     example: Update profile success
                   result:
-                    $ref: "#/components/schemas/User"
+                    $ref: '#/components/schemas/User'
 
   /users/{username}:
     get:
@@ -476,7 +476,7 @@ paths:
                     type: string
                     example: Get profile success
                   result:
-                    $ref: "#/components/schemas/User"
+                    $ref: '#/components/schemas/User'
 
   /users/change-password:
     put:
@@ -553,7 +553,7 @@ paths:
                   result:
                     type: array
                     items:
-                      $ref: "#/components/schemas/Media"
+                      $ref: '#/components/schemas/Media'
 
   /medias/upload-video:
     post:
@@ -587,7 +587,7 @@ paths:
                     type: string
                     example: Upload success
                   result:
-                    $ref: "#/components/schemas/Media"
+                    $ref: '#/components/schemas/Media'
 
   /medias/upload-audio:
     post:
@@ -621,7 +621,7 @@ paths:
                     type: string
                     example: Upload success
                   result:
-                    $ref: "#/components/schemas/Media"
+                    $ref: '#/components/schemas/Media'
 
   #* API cho khoá học
   /courses/:
@@ -638,7 +638,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/CourseRequestBody"
+              $ref: '#/components/schemas/CourseRequestBody'
         required: true
       responses:
         default:
@@ -652,7 +652,7 @@ paths:
                     type: string
                     example: Create course success
                   result:
-                    $ref: "#/components/schemas/CourseResponseBody"
+                    $ref: '#/components/schemas/CourseResponseBody'
 
   /courses/list:
     get:
@@ -681,7 +681,7 @@ paths:
           description: Loại khoá học
           required: false
           schema:
-            $ref: "#/components/schemas/CourseType"
+            $ref: '#/components/schemas/CourseType'
       responses:
         default:
           description: Lấy danh sách khoá học thành công
@@ -699,7 +699,7 @@ paths:
                       courses:
                         type: array
                         items:
-                          $ref: "#/components/schemas/CourseResponseBody"
+                          $ref: '#/components/schemas/CourseResponseBody'
                       limit:
                         type: integer
                         example: 10
@@ -725,7 +725,7 @@ paths:
           schema:
             type: string
             format: MongoId
-            example: "660ab00f044b53ddc078b490"
+            example: '660ab00f044b53ddc078b490'
       responses:
         default:
           description: Lấy thông tin khoá học theo id thành công
@@ -738,7 +738,7 @@ paths:
                     type: string
                     example: Get course success
                   result:
-                    $ref: "#/components/schemas/CourseResponseBody"
+                    $ref: '#/components/schemas/CourseResponseBody'
 
   /courses/update:
     patch:
@@ -754,7 +754,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/UpdateCourseRequestBody"
+              $ref: '#/components/schemas/UpdateCourseRequestBody'
         required: true
       responses:
         default:
@@ -768,7 +768,7 @@ paths:
                     type: string
                     example: Update course success
                   result:
-                    $ref: "#/components/schemas/CourseResponseBody"
+                    $ref: '#/components/schemas/CourseResponseBody'
 
   /courses/delete/{course_id}:
     delete:
@@ -787,7 +787,7 @@ paths:
           schema:
             type: string
             format: MongoId
-            example: "660ab00f044b53ddc078b490"
+            example: '660ab00f044b53ddc078b490'
       responses:
         default:
           description: Xóa khoá học thành công
@@ -815,7 +815,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/DocumentRequestBody"
+              $ref: '#/components/schemas/DocumentRequestBody'
         required: true
       responses:
         default:
@@ -829,7 +829,7 @@ paths:
                     type: string
                     example: Create document success
                   result:
-                    $ref: "#/components/schemas/DocumentResponseBody"
+                    $ref: '#/components/schemas/DocumentResponseBody'
 
   /documents/list:
     get:
@@ -858,7 +858,7 @@ paths:
           description: Loại tài liệu
           required: false
           schema:
-            $ref: "#/components/schemas/DocumentType"
+            $ref: '#/components/schemas/DocumentType'
       responses:
         default:
           description: Lấy danh sách tài liệu thành công
@@ -876,7 +876,7 @@ paths:
                       documents:
                         type: array
                         items:
-                          $ref: "#/components/schemas/DocumentResponseBody"
+                          $ref: '#/components/schemas/DocumentResponseBody'
                       limit:
                         type: integer
                         example: 10
@@ -902,7 +902,7 @@ paths:
           schema:
             type: string
             format: MongoId
-            example: "660ab00f044b53ddc078b490"
+            example: '660ab00f044b53ddc078b490'
       responses:
         default:
           description: Lấy thông tin tài liệu theo id thành công
@@ -915,7 +915,7 @@ paths:
                     type: string
                     example: Get document detail successfully
                   result:
-                    $ref: "#/components/schemas/DocumentResponseBody"
+                    $ref: '#/components/schemas/DocumentResponseBody'
 
   /documents/update:
     patch:
@@ -931,7 +931,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/UpdateDocumentRequestBody"
+              $ref: '#/components/schemas/UpdateDocumentRequestBody'
         required: true
       responses:
         default:
@@ -945,7 +945,7 @@ paths:
                     type: string
                     example: Update document success
                   result:
-                    $ref: "#/components/schemas/DocumentResponseBody"
+                    $ref: '#/components/schemas/DocumentResponseBody'
 
   /documents/delete/{document_id}:
     delete:
@@ -964,7 +964,7 @@ paths:
           schema:
             type: string
             format: MongoId
-            example: "660ab00f044b53ddc078b490"
+            example: '660ab00f044b53ddc078b490'
       responses:
         default:
           description: Xóa tài liệu thành công
@@ -992,7 +992,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/TestRequestBody"
+              $ref: '#/components/schemas/TestRequestBody'
         required: true
       responses:
         default:
@@ -1006,7 +1006,7 @@ paths:
                     type: string
                     example: Create test success
                   result:
-                    $ref: "#/components/schemas/TestResponseBody"
+                    $ref: '#/components/schemas/TestResponseBody'
 
   /tests/{test_id}:
     get:
@@ -1023,7 +1023,7 @@ paths:
           schema:
             type: string
             format: MongoId
-            example: "660ab00f044b53ddc078b490"
+            example: '660ab00f044b53ddc078b490'
       responses:
         default:
           description: Lấy thông tin bài kiểm tra theo id thành công
@@ -1036,7 +1036,7 @@ paths:
                     type: string
                     example: Get test detail successfully
                   result:
-                    $ref: "#/components/schemas/TestResponseBody"
+                    $ref: '#/components/schemas/TestResponseBody'
 
   /tests/full-test-detail/{test_id}:
     get:
@@ -1053,7 +1053,7 @@ paths:
           schema:
             type: string
             format: MongoId
-            example: "660ab00f044b53ddc078b490"
+            example: '660ab00f044b53ddc078b490'
       responses:
         default:
           description: Lấy thông tin đầy đủ bài kiểm tra theo id thành công
@@ -1066,9 +1066,9 @@ paths:
                     type: string
                     example: Get full test detail successfully
                   result:
-                    $ref: "#/components/schemas/FullTestDetailResponseBody"
+                    $ref: '#/components/schemas/FullTestDetailResponseBody'
 
-  /tests/list:
+  /tests/list/{source_id}:
     get:
       tags:
         - tests
@@ -1076,6 +1076,14 @@ paths:
       description: Lấy danh sách bài kiểm tra
       operationId: getTests
       parameters:
+        - name: source_id
+          in: path
+          description: id của document hoặc course
+          required: true
+          schema:
+            type: string
+            format: MongoId
+            example: '660e9e7ebcacb7dfe482795f'
         - name: page
           in: query
           description: Số trang
@@ -1107,7 +1115,7 @@ paths:
                       tests:
                         type: array
                         items:
-                          $ref: "#/components/schemas/TestResponseBody"
+                          $ref: '#/components/schemas/TestResponseBody'
                       limit:
                         type: integer
                         example: 10
@@ -1132,7 +1140,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/UpdateTestRequestBody"
+              $ref: '#/components/schemas/UpdateTestRequestBody'
         required: true
       responses:
         default:
@@ -1146,7 +1154,7 @@ paths:
                     type: string
                     example: Update test success
                   result:
-                    $ref: "#/components/schemas/TestResponseBody"
+                    $ref: '#/components/schemas/TestResponseBody'
 
   /tests/delete:
     delete:
@@ -1168,12 +1176,12 @@ paths:
                   type: string
                   format: MongoId
                   description: id của bài kiểm tra
-                  example: "660b4cab4673a97618935954"
+                  example: '660b4cab4673a97618935954'
                 source_id:
                   type: string
                   format: MongoId
                   description: id của tài liệu hoặc khoá học
-                  example: "660ab00f044b53ddc078b490"
+                  example: '660ab00f044b53ddc078b490'
         required: true
       responses:
         default:
@@ -1202,7 +1210,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/QuestionRequestBody"
+              $ref: '#/components/schemas/QuestionRequestBody'
         required: true
       responses:
         default:
@@ -1216,7 +1224,7 @@ paths:
                     type: string
                     example: Create question success
                   result:
-                    $ref: "#/components/schemas/QuestionResponseBody"
+                    $ref: '#/components/schemas/QuestionResponseBody'
 
   /questions/{question_id}:
     get:
@@ -1233,7 +1241,7 @@ paths:
           schema:
             type: string
             format: MongoId
-            example: "660ab00f044b53ddc078b490"
+            example: '660ab00f044b53ddc078b490'
       responses:
         default:
           description: Lấy thông tin câu hỏi theo id thành công
@@ -1246,16 +1254,26 @@ paths:
                     type: string
                     example: Get question detail successfully
                   result:
-                    $ref: "#/components/schemas/QuestionResponseBody"
+                    $ref: '#/components/schemas/QuestionResponseBody'
 
-  /questions/list:
+  /questions/list/{test_id}:
     get:
       tags:
         - questions
       summary: Lấy danh sách câu hỏi
-      description: Lấy danh sách câu hỏi
+      description: Lấy danh sách câu hỏi theo id bài kiểm tra
       operationId: getQuestions
+      security:
+        - BearerAuth: []
       parameters:
+        - name: test_id
+          in: path
+          description: id của bài kiểm tra
+          required: true
+          schema:
+            type: string
+            format: MongoId
+            example: '661012c6bcacb7dfe4827988'
         - name: page
           in: query
           description: Số trang
@@ -1287,7 +1305,7 @@ paths:
                       questions:
                         type: array
                         items:
-                          $ref: "#/components/schemas/QuestionResponseBody"
+                          $ref: '#/components/schemas/QuestionResponseBody'
                       limit:
                         type: integer
                         example: 10
@@ -1312,7 +1330,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/UpdateQuestionRequestBody"
+              $ref: '#/components/schemas/UpdateQuestionRequestBody'
         required: true
       responses:
         default:
@@ -1326,7 +1344,7 @@ paths:
                     type: string
                     example: Update question success
                   result:
-                    $ref: "#/components/schemas/QuestionResponseBody"
+                    $ref: '#/components/schemas/QuestionResponseBody'
 
   /questions/delete:
     delete:
@@ -1348,12 +1366,12 @@ paths:
                   type: string
                   format: MongoId
                   description: id của câu hỏi
-                  example: "660b4cab4673a97618935954"
+                  example: '660b4cab4673a97618935954'
                 test_id:
                   type: string
                   format: MongoId
                   description: id của bài kiểm tra
-                  example: "660ab00f044b53ddc078b490"
+                  example: '660ab00f044b53ddc078b490'
         required: true
       responses:
         default:
@@ -1382,7 +1400,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ScorecardRequestBody"
+              $ref: '#/components/schemas/ScorecardRequestBody'
         required: true
       responses:
         default:
@@ -1396,7 +1414,7 @@ paths:
                     type: string
                     example: Create scorecard success
                   result:
-                    $ref: "#/components/schemas/ScorecardResponseBody"
+                    $ref: '#/components/schemas/ScorecardResponseBody'
 
   /scorecards/{scorecard_id}:
     get:
@@ -1415,7 +1433,7 @@ paths:
           schema:
             type: string
             format: MongoId
-            example: "660b5dd643ab56cfc721a5ba"
+            example: '660b5dd643ab56cfc721a5ba'
       responses:
         default:
           description: Lấy thông tin bài làm theo id thành công
@@ -1428,7 +1446,7 @@ paths:
                     type: string
                     example: Get scorecard detail successfully
                   result:
-                    $ref: "#/components/schemas/ScorecardDetailResponseBody"
+                    $ref: '#/components/schemas/ScorecardDetailResponseBody'
 
   #* API cho thông báo
   /notifications/:
@@ -1445,7 +1463,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/NotificationRequestBody"
+              $ref: '#/components/schemas/NotificationRequestBody'
         required: true
       responses:
         default:
@@ -1459,7 +1477,7 @@ paths:
                     type: string
                     example: Create notification success
                   result:
-                    $ref: "#/components/schemas/NotificationResponseBody"
+                    $ref: '#/components/schemas/NotificationResponseBody'
 
   /notifications/{notification_id}:
     get:
@@ -1476,7 +1494,7 @@ paths:
           schema:
             type: string
             format: MongoId
-            example: "660b627443ab56cfc721a5bc"
+            example: '660b627443ab56cfc721a5bc'
       responses:
         default:
           description: Lấy thông tin thông báo theo id thành công
@@ -1489,7 +1507,7 @@ paths:
                     type: string
                     example: Get notification detail successfully
                   result:
-                    $ref: "#/components/schemas/NotificationDetailResponseBody"
+                    $ref: '#/components/schemas/NotificationDetailResponseBody'
 
   /notifications/update:
     patch:
@@ -1505,7 +1523,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/UpdateNotificationRequestBody"
+              $ref: '#/components/schemas/UpdateNotificationRequestBody'
         required: true
       responses:
         default:
@@ -1519,7 +1537,7 @@ paths:
                     type: string
                     example: Update notification success
                   result:
-                    $ref: "#/components/schemas/NotificationResponseBody"
+                    $ref: '#/components/schemas/NotificationResponseBody'
 
   #* API cho tìm kiếm
   /search/user:
@@ -1536,7 +1554,7 @@ paths:
           required: true
           schema:
             type: string
-            example: "quangnguyen01"
+            example: 'quangnguyen01'
         - name: limit
           in: query
           description: Số lượng người dùng trên mỗi trang
@@ -1568,7 +1586,7 @@ paths:
                       users:
                         type: array
                         items:
-                          $ref: "#/components/schemas/User"
+                          $ref: '#/components/schemas/User'
                       limit:
                         type: integer
                         example: 10
@@ -1593,7 +1611,7 @@ paths:
           required: true
           schema:
             type: string
-            example: "Toeic"
+            example: 'Toeic'
         - name: limit
           in: query
           description: Số lượng khoá học trên mỗi trang
@@ -1613,7 +1631,7 @@ paths:
           description: Loại khoá học
           required: false
           schema:
-            $ref: "#/components/schemas/CourseTypeQuery"
+            $ref: '#/components/schemas/CourseTypeQuery'
       responses:
         default:
           description: Tìm kiếm khoá học thành công
@@ -1631,7 +1649,7 @@ paths:
                       courses:
                         type: array
                         items:
-                          $ref: "#/components/schemas/CourseResponseBody"
+                          $ref: '#/components/schemas/CourseResponseBody'
                       limit:
                         type: integer
                         example: 10
@@ -1656,7 +1674,7 @@ paths:
           required: true
           schema:
             type: string
-            example: "Toeic"
+            example: 'Toeic'
         - name: limit
           in: query
           description: Số lượng tài liệu trên mỗi trang
@@ -1676,7 +1694,7 @@ paths:
           description: Loại tài liệu
           required: false
           schema:
-            $ref: "#/components/schemas/DocumentTypeQuery"
+            $ref: '#/components/schemas/DocumentTypeQuery'
       responses:
         default:
           description: Tìm kiếm tài liệu thành công
@@ -1694,7 +1712,7 @@ paths:
                       documents:
                         type: array
                         items:
-                          $ref: "#/components/schemas/DocumentResponseBody"
+                          $ref: '#/components/schemas/DocumentResponseBody'
                       limit:
                         type: integer
                         example: 10
@@ -1712,21 +1730,21 @@ components:
       properties:
         name:
           type: string
-          example: "Nguyen Minh Quang"
+          example: 'Nguyen Minh Quang'
         email:
           type: string
           format: email
-          example: "quangnguyenminh2001+8@gmail.com"
+          example: 'quangnguyenminh2001+8@gmail.com'
         password:
           type: string
-          example: "Quang123456@!"
+          example: 'Quang123456@!'
         confirm_password:
           type: string
-          example: "Quang123456@!"
+          example: 'Quang123456@!'
         date_of_birth:
           type: string
           format: date-time
-          example: "2024-03-16T07:47:58+0800"
+          example: '2024-03-16T07:47:58+0800'
 
     LoginBody:
       type: object
@@ -1766,44 +1784,44 @@ components:
         _id:
           type: string
           format: MongoId
-          example: "65f7dcf09ff25df22631980b"
+          example: '65f7dcf09ff25df22631980b'
         name:
           type: string
-          example: "Nguyễn Minh Quang"
+          example: 'Nguyễn Minh Quang'
         email:
           type: string
           format: email
-          example: "quangnguyenminh2001@gmail.com"
+          example: 'quangnguyenminh2001@gmail.com'
         date_of_birth:
           type: string
           format: ISO8601
-          example: "2024-03-15T23:47:58.000Z"
+          example: '2024-03-15T23:47:58.000Z'
         created_at:
           type: string
           format: ISO8601
-          example: "2024-03-18T06:19:28.327Z"
+          example: '2024-03-18T06:19:28.327Z'
         updated_at:
           type: string
           format: ISO8601
-          example: "2024-03-18T11:15:29.420Z"
+          example: '2024-03-18T11:15:29.420Z'
         verify:
-          $ref: "#/components/schemas/UserVerifyStatus"
+          $ref: '#/components/schemas/UserVerifyStatus'
           example: 1
         rule:
-          $ref: "#/components/schemas/UserRuleType"
+          $ref: '#/components/schemas/UserRuleType'
           example: 0
         location:
           type: string
-          example: ""
+          example: ''
         username:
           type: string
-          example: "quangnguyen01"
+          example: 'quangnguyen01'
         avatar:
           type: string
-          example: ""
+          example: ''
         cover_photo:
           type: string
-          example: ""
+          example: ''
 
     UpdateMeBody:
       type: object
@@ -1817,18 +1835,18 @@ components:
           example: 2023-06-08T10:17:31.096Z
         username:
           type: string
-          example: "johndoe"
+          example: 'johndoe'
         location:
           type: string
-          example: "San Francisco, CA"
+          example: 'San Francisco, CA'
         avatar:
           type: string
-          example: "http:localhost:4000/images/avatars/johndoe.jpg"
+          example: 'http:localhost:4000/images/avatars/johndoe.jpg'
         cover_photo:
           type: string
-          example: "http:localhost:4000/images/avatars/johndoe.jpg"
+          example: 'http:localhost:4000/images/avatars/johndoe.jpg'
         rule:
-          $ref: "#/components/schemas/UserRuleType"
+          $ref: '#/components/schemas/UserRuleType'
           example: 1
 
     MediaType:
@@ -1841,9 +1859,9 @@ components:
       properties:
         url:
           type: string
-          example: "http://localhost:4000/images/avatars/johndoe.jpg"
+          example: 'http://localhost:4000/images/avatars/johndoe.jpg'
         type:
-          $ref: "#/components/schemas/MediaType"
+          $ref: '#/components/schemas/MediaType'
 
     CourseType:
       type: number
@@ -1859,20 +1877,20 @@ components:
       type: object
       properties:
         type:
-          $ref: "#/components/schemas/CourseType"
+          $ref: '#/components/schemas/CourseType'
         title:
           type: string
-          example: "THÌ HIỆN TẠI HOÀN THÀNH VÀ THÌ HIỆN TẠI HOÀN THÀNH TIẾP DIỄN"
+          example: 'THÌ HIỆN TẠI HOÀN THÀNH VÀ THÌ HIỆN TẠI HOÀN THÀNH TIẾP DIỄN'
         description:
           type: string
-          example: "Trong bài thi TOEIC, hiện tại hoàn thành và hiện tại hoàn thành tiếp diễn cũng là một cặp khiến nhiều thí sinh phải đau đầu. Chúng ta sẽ cùng xem qua kiến thức về cặp đôi này và làm một số bài tập để củng cố nhé."
+          example: 'Trong bài thi TOEIC, hiện tại hoàn thành và hiện tại hoàn thành tiếp diễn cũng là một cặp khiến nhiều thí sinh phải đau đầu. Chúng ta sẽ cùng xem qua kiến thức về cặp đôi này và làm một số bài tập để củng cố nhé.'
         content:
           type: string
-          example: "- Hiện tại hoàn thành: Diễn tả hành động đã chấm dứt ở hiện tại do đó đã có kết quả rõ ràng. I’ve waited for you for half an hour. (and now I stop waiting because you didn’t come.)  -> Bây giờ tôi không chờ nữa vì bạn không đến.-Hiện tại hoàn thành tiếp diễn: Diễn tả hành động vẫn tiếp diễn ở hiện tại, có khả năng lan tới tương lai do đó không có kết quả rõ rệt.I’ve been waiting for you for half an hour.-> Tôi sẽ tiếp tục chờ với hy vọng là bạn sẽ đến."
+          example: '- Hiện tại hoàn thành: Diễn tả hành động đã chấm dứt ở hiện tại do đó đã có kết quả rõ ràng. I’ve waited for you for half an hour. (and now I stop waiting because you didn’t come.)  -> Bây giờ tôi không chờ nữa vì bạn không đến.-Hiện tại hoàn thành tiếp diễn: Diễn tả hành động vẫn tiếp diễn ở hiện tại, có khả năng lan tới tương lai do đó không có kết quả rõ rệt.I’ve been waiting for you for half an hour.-> Tôi sẽ tiếp tục chờ với hy vọng là bạn sẽ đến.'
         thumbnails:
           type: array
           items:
-            $ref: "#/components/schemas/Media"
+            $ref: '#/components/schemas/Media'
             description: Danh sách media đính kèm
 
     CourseResponseBody:
@@ -1881,31 +1899,31 @@ components:
         _id:
           type: string
           format: MongoId
-          example: "660ab00f044b53ddc078b490"
+          example: '660ab00f044b53ddc078b490'
         user_id:
           type: string
-          example: "65f7dcf09ff25df22631980b"
+          example: '65f7dcf09ff25df22631980b'
         type:
-          $ref: "#/components/schemas/CourseType"
+          $ref: '#/components/schemas/CourseType'
         title:
           type: string
-          example: "THÌ HIỆN TẠI HOÀN THÀNH VÀ THÌ HIỆN TẠI HOÀN THÀNH TIẾP DIỄN"
+          example: 'THÌ HIỆN TẠI HOÀN THÀNH VÀ THÌ HIỆN TẠI HOÀN THÀNH TIẾP DIỄN'
         description:
           type: string
-          example: "Trong bài thi TOEIC, hiện tại hoàn thành và hiện tại hoàn thành tiếp diễn cũng là một cặp khiến nhiều thí sinh phải đau đầu. Chúng ta sẽ cùng xem qua kiến thức về cặp đôi này và làm một số bài tập để củng cố nhé."
+          example: 'Trong bài thi TOEIC, hiện tại hoàn thành và hiện tại hoàn thành tiếp diễn cũng là một cặp khiến nhiều thí sinh phải đau đầu. Chúng ta sẽ cùng xem qua kiến thức về cặp đôi này và làm một số bài tập để củng cố nhé.'
         content:
           type: string
-          example: "- Hiện tại hoàn thành: Diễn tả hành động đã chấm dứt ở hiện tại do đó đã có kết quả rõ ràng. I’ve waited for you for half an hour. (and now I stop waiting because you didn’t come.)  -> Bây giờ tôi không chờ nữa vì bạn không đến.-Hiện tại hoàn thành tiếp diễn: Diễn tả hành động vẫn tiếp diễn ở hiện tại, có khả năng lan tới tương lai do đó không có kết quả rõ rệt.I’ve been waiting for you for half an hour.-> Tôi sẽ tiếp tục chờ với hy vọng là bạn sẽ đến."
+          example: '- Hiện tại hoàn thành: Diễn tả hành động đã chấm dứt ở hiện tại do đó đã có kết quả rõ ràng. I’ve waited for you for half an hour. (and now I stop waiting because you didn’t come.)  -> Bây giờ tôi không chờ nữa vì bạn không đến.-Hiện tại hoàn thành tiếp diễn: Diễn tả hành động vẫn tiếp diễn ở hiện tại, có khả năng lan tới tương lai do đó không có kết quả rõ rệt.I’ve been waiting for you for half an hour.-> Tôi sẽ tiếp tục chờ với hy vọng là bạn sẽ đến.'
         tests:
           type: array
           items:
             type: string
             format: MongoId
-            example: ""
+            example: ''
         thumbnail:
           type: array
           items:
-            $ref: "#/components/schemas/Media"
+            $ref: '#/components/schemas/Media'
             description: Danh sách media đính kèm
         notification:
           type: string
@@ -1917,35 +1935,35 @@ components:
         created_at:
           type: string
           format: ISO8601
-          example: "2024-04-01T13:01:03.742Z"
+          example: '2024-04-01T13:01:03.742Z'
         updated_at:
           type: string
           format: ISO8601
-          example: "2024-04-01T13:01:03.742Z"
+          example: '2024-04-01T13:01:03.742Z'
         status:
-          $ref: "#/components/schemas/OperatingStatus"
+          $ref: '#/components/schemas/OperatingStatus'
 
     UpdateCourseRequestBody:
       type: object
       properties:
         type:
-          $ref: "#/components/schemas/CourseType"
+          $ref: '#/components/schemas/CourseType'
         title:
           type: string
-          example: "THÌ HIỆN TẠI HOÀN THÀNH VÀ THÌ HIỆN TẠI HOÀN THÀNH TIẾP DIỄN"
+          example: 'THÌ HIỆN TẠI HOÀN THÀNH VÀ THÌ HIỆN TẠI HOÀN THÀNH TIẾP DIỄN'
         description:
           type: string
-          example: "Trong bài thi TOEIC, hiện tại hoàn thành và hiện tại hoàn thành tiếp diễn cũng là một cặp khiến nhiều thí sinh phải đau đầu. Chúng ta sẽ cùng xem qua kiến thức về cặp đôi này và làm một số bài tập để củng cố nhé."
+          example: 'Trong bài thi TOEIC, hiện tại hoàn thành và hiện tại hoàn thành tiếp diễn cũng là một cặp khiến nhiều thí sinh phải đau đầu. Chúng ta sẽ cùng xem qua kiến thức về cặp đôi này và làm một số bài tập để củng cố nhé.'
         content:
           type: string
-          example: "- Hiện tại hoàn thành: Diễn tả hành động đã chấm dứt ở hiện tại do đó đã có kết quả rõ ràng. I’ve waited for you for half an hour. (and now I stop waiting because you didn’t come.)  -> Bây giờ tôi không chờ nữa vì bạn không đến.-Hiện tại hoàn thành tiếp diễn: Diễn tả hành động vẫn tiếp diễn ở hiện tại, có khả năng lan tới tương lai do đó không có kết quả rõ rệt.I’ve been waiting for you for half an hour.-> Tôi sẽ tiếp tục chờ với hy vọng là bạn sẽ đến."
+          example: '- Hiện tại hoàn thành: Diễn tả hành động đã chấm dứt ở hiện tại do đó đã có kết quả rõ ràng. I’ve waited for you for half an hour. (and now I stop waiting because you didn’t come.)  -> Bây giờ tôi không chờ nữa vì bạn không đến.-Hiện tại hoàn thành tiếp diễn: Diễn tả hành động vẫn tiếp diễn ở hiện tại, có khả năng lan tới tương lai do đó không có kết quả rõ rệt.I’ve been waiting for you for half an hour.-> Tôi sẽ tiếp tục chờ với hy vọng là bạn sẽ đến.'
         thumbnail:
           type: array
           items:
-            $ref: "#/components/schemas/Media"
+            $ref: '#/components/schemas/Media'
             description: Danh sách media đính kèm
         status:
-          $ref: "#/components/schemas/OperatingStatus"
+          $ref: '#/components/schemas/OperatingStatus'
 
     DocumentType:
       type: number
@@ -1956,20 +1974,20 @@ components:
       type: object
       properties:
         type:
-          $ref: "#/components/schemas/DocumentType"
+          $ref: '#/components/schemas/DocumentType'
         title:
           type: string
-          example: "THÌ HIỆN TẠI HOÀN THÀNH VÀ THÌ HIỆN TẠI HOÀN THÀNH TIẾP DIỄN"
+          example: 'THÌ HIỆN TẠI HOÀN THÀNH VÀ THÌ HIỆN TẠI HOÀN THÀNH TIẾP DIỄN'
         description:
           type: string
-          example: "Trong bài thi TOEIC, hiện tại hoàn thành và hiện tại hoàn thành tiếp diễn cũng là một cặp khiến nhiều thí sinh phải đau đầu. Chúng ta sẽ cùng xem qua kiến thức về cặp đôi này và làm một số bài tập để củng cố nhé."
+          example: 'Trong bài thi TOEIC, hiện tại hoàn thành và hiện tại hoàn thành tiếp diễn cũng là một cặp khiến nhiều thí sinh phải đau đầu. Chúng ta sẽ cùng xem qua kiến thức về cặp đôi này và làm một số bài tập để củng cố nhé.'
         content:
           type: string
-          example: "- Hiện tại hoàn thành: Diễn tả hành động đã chấm dứt ở hiện tại do đó đã có kết quả rõ ràng. I’ve waited for you for half an hour. (and now I stop waiting because you didn’t come.)  -> Bây giờ tôi không chờ nữa vì bạn không đến.-Hiện tại hoàn thành tiếp diễn: Diễn tả hành động vẫn tiếp diễn ở hiện tại, có khả năng lan tới tương lai do đó không có kết quả rõ rệt.I’ve been waiting for you for half an hour.-> Tôi sẽ tiếp tục chờ với hy vọng là bạn sẽ đến."
+          example: '- Hiện tại hoàn thành: Diễn tả hành động đã chấm dứt ở hiện tại do đó đã có kết quả rõ ràng. I’ve waited for you for half an hour. (and now I stop waiting because you didn’t come.)  -> Bây giờ tôi không chờ nữa vì bạn không đến.-Hiện tại hoàn thành tiếp diễn: Diễn tả hành động vẫn tiếp diễn ở hiện tại, có khả năng lan tới tương lai do đó không có kết quả rõ rệt.I’ve been waiting for you for half an hour.-> Tôi sẽ tiếp tục chờ với hy vọng là bạn sẽ đến.'
         thumbnails:
           type: array
           items:
-            $ref: "#/components/schemas/Media"
+            $ref: '#/components/schemas/Media'
             description: Danh sách media đính kèm
 
     DocumentResponseBody:
@@ -1978,31 +1996,31 @@ components:
         _id:
           type: string
           format: MongoId
-          example: "660ab00f044b53ddc078b490"
+          example: '660ab00f044b53ddc078b490'
         user_id:
           type: string
-          example: "65f7dcf09ff25df22631980b"
+          example: '65f7dcf09ff25df22631980b'
         type:
-          $ref: "#/components/schemas/DocumentType"
+          $ref: '#/components/schemas/DocumentType'
         title:
           type: string
-          example: "THÌ HIỆN TẠI HOÀN THÀNH VÀ THÌ HIỆN TẠI HOÀN THÀNH TIẾP DIỄN"
+          example: 'THÌ HIỆN TẠI HOÀN THÀNH VÀ THÌ HIỆN TẠI HOÀN THÀNH TIẾP DIỄN'
         description:
           type: string
-          example: "Trong bài thi TOEIC, hiện tại hoàn thành và hiện tại hoàn thành tiếp diễn cũng là một cặp khiến nhiều thí sinh phải đau đầu. Chúng ta sẽ cùng xem qua kiến thức về cặp đôi này và làm một số bài tập để củng cố nhé."
+          example: 'Trong bài thi TOEIC, hiện tại hoàn thành và hiện tại hoàn thành tiếp diễn cũng là một cặp khiến nhiều thí sinh phải đau đầu. Chúng ta sẽ cùng xem qua kiến thức về cặp đôi này và làm một số bài tập để củng cố nhé.'
         content:
           type: string
-          example: "- Hiện tại hoàn thành: Diễn tả hành động đã chấm dứt ở hiện tại do đó đã có kết quả rõ ràng. I’ve waited for you for half an hour. (and now I stop waiting because you didn’t come.)  -> Bây giờ tôi không chờ nữa vì bạn không đến.-Hiện tại hoàn thành tiếp diễn: Diễn tả hành động vẫn tiếp diễn ở hiện tại, có khả năng lan tới tương lai do đó không có kết quả rõ rệt.I’ve been waiting for you for half an hour.-> Tôi sẽ tiếp tục chờ với hy vọng là bạn sẽ đến."
+          example: '- Hiện tại hoàn thành: Diễn tả hành động đã chấm dứt ở hiện tại do đó đã có kết quả rõ ràng. I’ve waited for you for half an hour. (and now I stop waiting because you didn’t come.)  -> Bây giờ tôi không chờ nữa vì bạn không đến.-Hiện tại hoàn thành tiếp diễn: Diễn tả hành động vẫn tiếp diễn ở hiện tại, có khả năng lan tới tương lai do đó không có kết quả rõ rệt.I’ve been waiting for you for half an hour.-> Tôi sẽ tiếp tục chờ với hy vọng là bạn sẽ đến.'
         tests:
           type: array
           items:
             type: string
             format: MongoId
-            example: ""
+            example: ''
         thumbnail:
           type: array
           items:
-            $ref: "#/components/schemas/Media"
+            $ref: '#/components/schemas/Media'
             description: Danh sách media đính kèm
         notification:
           type: string
@@ -2014,35 +2032,35 @@ components:
         created_at:
           type: string
           format: ISO8601
-          example: "2024-04-01T13:01:03.742Z"
+          example: '2024-04-01T13:01:03.742Z'
         updated_at:
           type: string
           format: ISO8601
-          example: "2024-04-01T13:01:03.742Z"
+          example: '2024-04-01T13:01:03.742Z'
         status:
-          $ref: "#/components/schemas/OperatingStatus"
+          $ref: '#/components/schemas/OperatingStatus'
 
     UpdateDocumentRequestBody:
       type: object
       properties:
         type:
-          $ref: "#/components/schemas/DocumentType"
+          $ref: '#/components/schemas/DocumentType'
         title:
           type: string
-          example: "THÌ HIỆN TẠI HOÀN THÀNH VÀ THÌ HIỆN TẠI HOÀN THÀNH TIẾP DIỄN"
+          example: 'THÌ HIỆN TẠI HOÀN THÀNH VÀ THÌ HIỆN TẠI HOÀN THÀNH TIẾP DIỄN'
         description:
           type: string
-          example: "Trong bài thi TOEIC, hiện tại hoàn thành và hiện tại hoàn thành tiếp diễn cũng là một cặp khiến nhiều thí sinh phải đau đầu. Chúng ta sẽ cùng xem qua kiến thức về cặp đôi này và làm một số bài tập để củng cố nhé."
+          example: 'Trong bài thi TOEIC, hiện tại hoàn thành và hiện tại hoàn thành tiếp diễn cũng là một cặp khiến nhiều thí sinh phải đau đầu. Chúng ta sẽ cùng xem qua kiến thức về cặp đôi này và làm một số bài tập để củng cố nhé.'
         content:
           type: string
-          example: "- Hiện tại hoàn thành: Diễn tả hành động đã chấm dứt ở hiện tại do đó đã có kết quả rõ ràng. I’ve waited for you for half an hour. (and now I stop waiting because you didn’t come.)  -> Bây giờ tôi không chờ nữa vì bạn không đến.-Hiện tại hoàn thành tiếp diễn: Diễn tả hành động vẫn tiếp diễn ở hiện tại, có khả năng lan tới tương lai do đó không có kết quả rõ rệt.I’ve been waiting for you for half an hour.-> Tôi sẽ tiếp tục chờ với hy vọng là bạn sẽ đến."
+          example: '- Hiện tại hoàn thành: Diễn tả hành động đã chấm dứt ở hiện tại do đó đã có kết quả rõ ràng. I’ve waited for you for half an hour. (and now I stop waiting because you didn’t come.)  -> Bây giờ tôi không chờ nữa vì bạn không đến.-Hiện tại hoàn thành tiếp diễn: Diễn tả hành động vẫn tiếp diễn ở hiện tại, có khả năng lan tới tương lai do đó không có kết quả rõ rệt.I’ve been waiting for you for half an hour.-> Tôi sẽ tiếp tục chờ với hy vọng là bạn sẽ đến.'
         thumbnail:
           type: array
           items:
-            $ref: "#/components/schemas/Media"
+            $ref: '#/components/schemas/Media'
             description: Danh sách media đính kèm
         status:
-          $ref: "#/components/schemas/OperatingStatus"
+          $ref: '#/components/schemas/OperatingStatus'
 
     TestRequestBody:
       type: object
@@ -2055,13 +2073,13 @@ components:
         source_id:
           type: string
           description: id của của khoá học hoặc tài liệu
-          example: "660ab00f044b53ddc078b490"
+          example: '660ab00f044b53ddc078b490'
         title:
           type: string
-          example: "BÀI TẬP 11"
+          example: 'BÀI TẬP 11'
         description:
           type: string
-          example: "(Các bạn xem đáp án và giải thích chi tiết cuối sách nhé)"
+          example: '(Các bạn xem đáp án và giải thích chi tiết cuối sách nhé)'
         timeline:
           type: integer
           description: Thời gian làm bài
@@ -2073,17 +2091,17 @@ components:
         _id:
           type: string
           format: MongoId
-          example: "660b4cab4673a97618935954"
+          example: '660b4cab4673a97618935954'
         source_id:
           type: string
           format: MongoId
-          example: "660ab00f044b53ddc078b490"
+          example: '660ab00f044b53ddc078b490'
         title:
           type: string
-          example: "BÀI TẬP 11"
+          example: 'BÀI TẬP 11'
         description:
           type: string
-          example: "(Các bạn xem đáp án và giải thích chi tiết cuối sách nhé)"
+          example: '(Các bạn xem đáp án và giải thích chi tiết cuối sách nhé)'
         timeline:
           type: integer
           example: 133456
@@ -2093,11 +2111,11 @@ components:
         created_at:
           type: string
           format: ISO8601
-          example: "2024-04-02T00:09:15.467Z"
+          example: '2024-04-02T00:09:15.467Z'
         updated_at:
           type: string
           format: ISO8601
-          example: "2024-04-02T00:09:15.467Z"
+          example: '2024-04-02T00:09:15.467Z'
 
     FullTestDetailResponseBody:
       type: object
@@ -2105,32 +2123,32 @@ components:
         _id:
           type: string
           format: MongoId
-          example: "660b4cab4673a97618935954"
+          example: '660b4cab4673a97618935954'
         source_id:
           type: string
           format: MongoId
-          example: "660ab00f044b53ddc078b490"
+          example: '660ab00f044b53ddc078b490'
         title:
           type: string
-          example: "BÀI TẬP 11"
+          example: 'BÀI TẬP 11'
         description:
           type: string
-          example: "(Các bạn xem đáp án và giải thích chi tiết cuối sách nhé)"
+          example: '(Các bạn xem đáp án và giải thích chi tiết cuối sách nhé)'
         timeline:
           type: integer
           example: 133456
         questions:
           type: array
           items:
-            $ref: "#/components/schemas/QuestionResponseBody"
+            $ref: '#/components/schemas/QuestionResponseBody'
         created_at:
           type: string
           format: ISO8601
-          example: "2024-04-02T00:09:15.467Z"
+          example: '2024-04-02T00:09:15.467Z'
         updated_at:
           type: string
           format: ISO8601
-          example: "2024-04-02T00:09:15.467Z"
+          example: '2024-04-02T00:09:15.467Z'
 
     UpdateTestRequestBody:
       type: object
@@ -2141,17 +2159,17 @@ components:
         test_id:
           type: string
           description: id của của bài kiểm tra
-          example: "660b4cab4673a97618935954"
+          example: '660b4cab4673a97618935954'
         source_id:
           type: string
           description: id của của khoá học hoặc tài liệu
-          example: "660ab00f044b53ddc078b490"
+          example: '660ab00f044b53ddc078b490'
         title:
           type: string
-          example: "BÀI TẬP 11"
+          example: 'BÀI TẬP 11'
         description:
           type: string
-          example: "(Các bạn xem đáp án và giải thích chi tiết cuối sách nhé)"
+          example: '(Các bạn xem đáp án và giải thích chi tiết cuối sách nhé)'
         timeline:
           type: integer
           description: Thời gian làm bài
@@ -2162,10 +2180,10 @@ components:
       properties:
         order_answer:
           type: string
-          example: "A"
+          example: 'A'
         content_answer:
           type: string
-          example: "eat"
+          example: 'eat'
 
     ListAnswers:
       type: array
@@ -2174,19 +2192,19 @@ components:
         properties:
           order_answer:
             type: string
-            example: "A"
+            example: 'A'
           content_answer:
             type: string
-            example: "eat"
+            example: 'eat'
       example:
-        - order_answer: "A"
-          content_answer: "eat"
-        - order_answer: "B"
-          content_answer: "eats"
-        - order_answer: "C"
-          content_answer: "are eating"
-        - order_answer: "D"
-          content_answer: "is eating"
+        - order_answer: 'A'
+          content_answer: 'eat'
+        - order_answer: 'B'
+          content_answer: 'eats'
+        - order_answer: 'C'
+          content_answer: 'are eating'
+        - order_answer: 'D'
+          content_answer: 'is eating'
 
     QuestionRequestBody:
       type: object
@@ -2202,20 +2220,20 @@ components:
         test_id:
           type: string
           format: MongoId
-          example: "65ffa8b40b8b5996abe2cc56"
+          example: '65ffa8b40b8b5996abe2cc56'
         num_quest:
           type: integer
           example: 1
         description:
           type: string
-          example: "Dịch: Bố mẹ tôi thường ăn sáng lúc 7h sáng. Câu này chỉ 1 thói quen nên ta dùng thì hiện tại đơn. “My parents” là chủ ngữ số nhiều --> động từ giữ nguyên dạng."
+          example: 'Dịch: Bố mẹ tôi thường ăn sáng lúc 7h sáng. Câu này chỉ 1 thói quen nên ta dùng thì hiện tại đơn. “My parents” là chủ ngữ số nhiều --> động từ giữ nguyên dạng.'
         content:
           type: string
-          example: "My parents normally __________ breakfast at 7:00 a.m."
+          example: 'My parents normally __________ breakfast at 7:00 a.m.'
         answers:
-          $ref: "#/components/schemas/ListAnswers"
+          $ref: '#/components/schemas/ListAnswers'
         correct_at:
-          $ref: "#/components/schemas/Answer"
+          $ref: '#/components/schemas/Answer'
         score:
           type: integer
           example: 1
@@ -2226,39 +2244,39 @@ components:
         _id:
           type: string
           format: MongoId
-          example: "65ffb1aefef511c9911f8980"
+          example: '65ffb1aefef511c9911f8980'
         test_id:
           type: string
           format: MongoId
-          example: "65ffa8b40b8b5996abe2cc56"
+          example: '65ffa8b40b8b5996abe2cc56'
         num_quest:
           type: integer
           example: 1
         description:
           type: string
-          example: "Dịch: Bố mẹ tôi thường ăn sáng lúc 7h sáng. Câu này chỉ 1 thói quen nên ta dùng thì hiện tại đơn. “My parents” là chủ ngữ số nhiều --> động từ giữ nguyên dạng."
+          example: 'Dịch: Bố mẹ tôi thường ăn sáng lúc 7h sáng. Câu này chỉ 1 thói quen nên ta dùng thì hiện tại đơn. “My parents” là chủ ngữ số nhiều --> động từ giữ nguyên dạng.'
         content:
           type: string
-          example: "My parents normally __________ breakfast at 7:00 a.m."
+          example: 'My parents normally __________ breakfast at 7:00 a.m.'
         answers:
-          $ref: "#/components/schemas/ListAnswers"
+          $ref: '#/components/schemas/ListAnswers'
         correct_at:
           type: object
-          $ref: "#/components/schemas/Answer"
+          $ref: '#/components/schemas/Answer'
         selected_at:
           type: object
-          $ref: "#/components/schemas/Answer"
+          $ref: '#/components/schemas/Answer'
         score:
           type: integer
           example: 1
         created_at:
           type: string
           format: ISO8601
-          example: "2024-03-24T04:53:02.812Z"
+          example: '2024-03-24T04:53:02.812Z'
         updated_at:
           type: string
           format: ISO8601
-          example: "2024-03-26T05:00:15.707Z"
+          example: '2024-03-26T05:00:15.707Z'
 
     UpdateQuestionRequestBody:
       type: object
@@ -2268,20 +2286,20 @@ components:
         question_id:
           type: string
           format: MongoId
-          example: "65ffa8b40b8b5996abe2cc56"
+          example: '65ffa8b40b8b5996abe2cc56'
         num_quest:
           type: integer
           example: 1
         description:
           type: string
-          example: "Dịch: Bố mẹ tôi thường ăn sáng lúc 7h sáng. Câu này chỉ 1 thói quen nên ta dùng thì hiện tại đơn. “My parents” là chủ ngữ số nhiều --> động từ giữ nguyên dạng."
+          example: 'Dịch: Bố mẹ tôi thường ăn sáng lúc 7h sáng. Câu này chỉ 1 thói quen nên ta dùng thì hiện tại đơn. “My parents” là chủ ngữ số nhiều --> động từ giữ nguyên dạng.'
         content:
           type: string
-          example: "My parents normally __________ breakfast at 7:00 a.m."
+          example: 'My parents normally __________ breakfast at 7:00 a.m.'
         answers:
-          $ref: "#/components/schemas/ListAnswers"
+          $ref: '#/components/schemas/ListAnswers'
         correct_at:
-          $ref: "#/components/schemas/Answer"
+          $ref: '#/components/schemas/Answer'
         score:
           type: integer
           example: 1
@@ -2295,12 +2313,12 @@ components:
         test_id:
           type: string
           format: MongoId
-          example: "65ffb535f172c799e06f57dd"
+          example: '65ffb535f172c799e06f57dd'
         questions:
           type: array
           items:
             type: object
-            $ref: "#/components/schemas/QuestionResponseBody"
+            $ref: '#/components/schemas/QuestionResponseBody'
 
     ScorecardResponseBody:
       type: object
@@ -2308,22 +2326,22 @@ components:
         _id:
           type: string
           format: MongoId
-          example: "660b5dd643ab56cfc721a5ba"
+          example: '660b5dd643ab56cfc721a5ba'
         user_id:
           type: string
           format: MongoId
-          example: "65f7dcf09ff25df22631980f"
+          example: '65f7dcf09ff25df22631980f'
         test_id:
           type: string
           format: MongoId
-          example: "65ffb535f172c799e06f57dd"
+          example: '65ffb535f172c799e06f57dd'
         questions:
           type: array
           items:
             type: string
             format: MongoId
             description: id của câu hỏi
-            example: "660b5dd643ab56cfc721a5bb"
+            example: '660b5dd643ab56cfc721a5bb'
         total_correct:
           type: integer
           description: Số câu trả lời đúng
@@ -2339,7 +2357,7 @@ components:
         created_at:
           type: string
           format: ISO8601
-          example: "2024-04-02T01:22:30.887Z"
+          example: '2024-04-02T01:22:30.887Z'
 
     ScorecardDetailResponseBody:
       type: object
@@ -2347,20 +2365,20 @@ components:
         _id:
           type: string
           format: MongoId
-          example: "660b5dd643ab56cfc721a5ba"
+          example: '660b5dd643ab56cfc721a5ba'
         user_id:
           type: string
           format: MongoId
-          example: "65f7dcf09ff25df22631980f"
+          example: '65f7dcf09ff25df22631980f'
         test_id:
           type: string
           format: MongoId
-          example: "65ffb535f172c799e06f57dd"
+          example: '65ffb535f172c799e06f57dd'
         questions:
           type: array
           items:
             type: object
-            $ref: "#/components/schemas/QuestionResponseBody"
+            $ref: '#/components/schemas/QuestionResponseBody'
         total_correct:
           type: integer
           description: Số câu trả lời đúng
@@ -2376,7 +2394,7 @@ components:
         created_at:
           type: string
           format: ISO8601
-          example: "2024-04-02T01:22:30.887Z"
+          example: '2024-04-02T01:22:30.887Z'
         total_question:
           type: integer
           description: Tổng số câu hỏi
@@ -2402,74 +2420,74 @@ components:
         - end_at
       properties:
         type:
-          $ref: "#/components/schemas/NotificationType"
+          $ref: '#/components/schemas/NotificationType'
         title:
           type: string
-          example: "Cập nhật tài liệu"
+          example: 'Cập nhật tài liệu'
         content:
           type: string
-          example: "Cập nhật, sửa đổi lại đáp án 1 số đề trong khoá học"
+          example: 'Cập nhật, sửa đổi lại đáp án 1 số đề trong khoá học'
         target_type:
-          $ref: "#/components/schemas/TargetType"
+          $ref: '#/components/schemas/TargetType'
         targets:
           type: array
           items:
             type: string
             format: MongoId
             description: id của khoá học hoặc tài liệu
-            example: "660275a2724a9718bc532f26"
+            example: '660275a2724a9718bc532f26'
         start_at:
           type: string
           format: ISO8601
           description: Thời gian bắt đầu thông báo
-          example: "2024-03-26T18:40:00+0700"
+          example: '2024-03-26T18:40:00+0700'
         end_at:
           type: string
           format: ISO8601
           description: Thời gian kết thúc thông báo
-          example: "2024-03-26T18:50:00+0700"
+          example: '2024-03-26T18:50:00+0700'
 
     NotificationResponseBody:
       type: object
       properties:
         _id:
           type: string
-          example: "660b627443ab56cfc721a5bc"
+          example: '660b627443ab56cfc721a5bc'
         user_id:
           type: string
-          example: "65f7dcf09ff25df22631980b"
+          example: '65f7dcf09ff25df22631980b'
         type:
-          $ref: "#/components/schemas/NotificationType"
+          $ref: '#/components/schemas/NotificationType'
         title:
           type: string
-          example: "Cập nhật tài liệu"
+          example: 'Cập nhật tài liệu'
         content:
           type: string
-          example: "Cập nhật, sửa đổi lại đáp án 1 số đề trong khoá học"
+          example: 'Cập nhật, sửa đổi lại đáp án 1 số đề trong khoá học'
         target_type:
-          $ref: "#/components/schemas/TargetType"
+          $ref: '#/components/schemas/TargetType'
         targets:
           type: array
           items:
             type: string
             description: id của khoá học hoặc tài liệu
-            example: "660ab00f044b53ddc078b490"
+            example: '660ab00f044b53ddc078b490'
         start_at:
           type: string
           format: ISO8601
-          example: "2024-04-02T03:40:00.000Z"
+          example: '2024-04-02T03:40:00.000Z'
         end_at:
           type: string
           format: ISO8601
-          example: "2024-04-02T03:50:00.000Z"
+          example: '2024-04-02T03:50:00.000Z'
         created_at:
           type: string
           format: ISO8601
-          example: "2024-04-02T01:42:12.745Z"
+          example: '2024-04-02T01:42:12.745Z'
         updated_at:
           type: string
           format: ISO8601
-          example: "2024-04-02T01:42:12.745Z"
+          example: '2024-04-02T01:42:12.745Z'
 
     NotificationDetailResponseBody:
       type: object
@@ -2477,21 +2495,21 @@ components:
         _id:
           type: string
           format: MongoId
-          example: "660b627443ab56cfc721a5bc"
+          example: '660b627443ab56cfc721a5bc'
         user_id:
           type: string
           format: MongoId
-          example: "65f7dcf09ff25df22631980b"
+          example: '65f7dcf09ff25df22631980b'
         type:
-          $ref: "#/components/schemas/NotificationType"
+          $ref: '#/components/schemas/NotificationType'
         title:
           type: string
-          example: "Cập nhật tài liệu"
+          example: 'Cập nhật tài liệu'
         content:
           type: string
-          example: "Cập nhật, sửa đổi lại đáp án 1 số đề trong khoá học"
+          example: 'Cập nhật, sửa đổi lại đáp án 1 số đề trong khoá học'
         target_type:
-          $ref: "#/components/schemas/TargetType"
+          $ref: '#/components/schemas/TargetType'
         targets:
           type: array
           items:
@@ -2501,39 +2519,39 @@ components:
                 type: string
                 format: MongoId
                 description: id của khoá học hoặc tài liệu
-                example: "660ab00f044b53ddc078b490"
+                example: '660ab00f044b53ddc078b490'
               user_id:
                 type: string
-                example: "65f7dcf09ff25df22631980b"
+                example: '65f7dcf09ff25df22631980b'
               type:
                 type: integer
                 description: Loại khoá học hoặc tài liệu. Chi tiết xem ở CourseType và DocumentType
                 example: 1
               title:
                 type: string
-                example: "THÌ HIỆN TẠI HOÀN THÀNH VÀ THÌ HIỆN TẠI HOÀN THÀNH TIẾP DIỄN"
+                example: 'THÌ HIỆN TẠI HOÀN THÀNH VÀ THÌ HIỆN TẠI HOÀN THÀNH TIẾP DIỄN'
               thumbnail:
                 type: array
                 items:
-                  $ref: "#/components/schemas/Media"
+                  $ref: '#/components/schemas/Media'
         start_at:
           type: string
           format: ISO8601
           description: Thời gian bắt đầu thông báo
-          example: "2024-04-02T03:40:00.000Z"
+          example: '2024-04-02T03:40:00.000Z'
         end_at:
           type: string
           format: ISO8601
           description: Thời gian kết thúc thông báo
-          example: "2024-04-02T03:50:00.000Z"
+          example: '2024-04-02T03:50:00.000Z'
         created_at:
           type: string
           format: ISO8601
-          example: "2024-04-02T01:42:12.745Z"
+          example: '2024-04-02T01:42:12.745Z'
         updated_at:
           type: string
           format: ISO8601
-          example: "2024-04-02T01:42:12.745Z"
+          example: '2024-04-02T01:42:12.745Z'
 
     UpdateNotificationRequestBody:
       type: object
@@ -2542,21 +2560,21 @@ components:
       properties:
         notification_id:
           type: string
-          example: "660b627443ab56cfc721a5bc"
+          example: '660b627443ab56cfc721a5bc'
         title:
           type: string
-          example: "Thông báo mới"
+          example: 'Thông báo mới'
         content:
           type: string
-          example: "Nội dung thông báo"
+          example: 'Nội dung thông báo'
         start_at:
           type: string
           format: ISO8601
-          example: "2024-04-02T10:40:00+0700"
+          example: '2024-04-02T10:40:00+0700'
         end_at:
           type: string
           format: ISO8601
-          example: "2024-04-02T10:50:00+0700"
+          example: '2024-04-02T10:50:00+0700'
 
     CourseTypeQuery:
       type: string

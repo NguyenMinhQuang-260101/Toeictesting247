@@ -42,8 +42,7 @@ testsRouter.post(
 /**
  * Description: Get list of tests by source_id
  * Method: GET
- * Path: /:source_id
- * Headers: { Authorization?: Bearer <access token>}
+ * Path: /list/:source_id
  * Parameters: { source_id: string }
  * Query: { page: number, limit: number }
  */

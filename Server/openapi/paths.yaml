@@ -998,7 +998,7 @@ paths:
                   result:
                     $ref: '#/components/schemas/FullTestDetailResponseBody'
 
-  /tests/list:
+  /tests/list/{source_id}:
     get:
       tags:
         - tests
@@ -1006,6 +1006,14 @@ paths:
       description: Lấy danh sách bài kiểm tra
       operationId: getTests
       parameters:
+        - name: source_id
+          in: path
+          description: id của document hoặc course
+          required: true
+          schema:
+            type: string
+            format: MongoId
+            example: '660e9e7ebcacb7dfe482795f'
         - name: page
           in: query
           description: Số trang
@@ -1178,14 +1186,24 @@ paths:
                   result:
                     $ref: '#/components/schemas/QuestionResponseBody'
 
-  /questions/list:
+  /questions/list/{test_id}:
     get:
       tags:
         - questions
       summary: Lấy danh sách câu hỏi
-      description: Lấy danh sách câu hỏi
+      description: Lấy danh sách câu hỏi theo id bài kiểm tra
       operationId: getQuestions
+      security:
+        - BearerAuth: []
       parameters:
+        - name: test_id
+          in: path
+          description: id của bài kiểm tra
+          required: true
+          schema:
+            type: string
+            format: MongoId
+            example: '661012c6bcacb7dfe4827988'
         - name: page
           in: query
           description: Số trang
