@@ -25,8 +25,8 @@ import { CompleteMultipartUploadCommandOutput } from '@aws-sdk/client-s3'
 
 class MediasService {
   async uploadImage(req: Request) {
-    const directoryPathImageTemp = path.resolve(__dirname, UPLOAD_IMAGE_TEMP_DIR)
-    const directoryPathImage = path.resolve(__dirname, UPLOAD_IMAGE_DIR)
+    // const directoryPathImageTemp = path.resolve(__dirname, UPLOAD_IMAGE_TEMP_DIR)
+    // const directoryPathImage = path.resolve(__dirname, UPLOAD_IMAGE_DIR)
 
     const files = await handleUploadImage(req)
     const result: Media[] = await Promise.all(
@@ -34,6 +34,7 @@ class MediasService {
         const newName = getNameFromFullname(file.newFilename)
         const newFullFilename = `${newName}.jpg`
         const newPath = path.resolve(UPLOAD_IMAGE_DIR, newFullFilename)
+        sharp.cache(false)
         await sharp(file.filepath).jpeg().toFile(newPath)
         const s3Result = await uploadFileToS3({
           filename: 'images/' + newFullFilename,
@@ -41,8 +42,7 @@ class MediasService {
           contentType: mime.getType(newPath) as string
         })
 
-        // Một cách khác để xoá file
-        //** await Promise.all([fsPromise.unlink(file.filepath), fsPromise.unlink(newPath)]) **
+        await Promise.all([fsPromise.unlink(file.filepath), fsPromise.unlink(newPath)])
 
         return {
           url: (s3Result as CompleteMultipartUploadCommandOutput).Location as string,
@@ -56,11 +56,14 @@ class MediasService {
         // }
       })
     )
-    if (deleteAllFiles(directoryPathImageTemp) && deleteAllFiles(directoryPathImage)) return result
+    // Một cách khác để xoá file
+    // if (deleteAllFiles(directoryPathImageTemp) && deleteAllFiles(directoryPathImage))
+    return result
   }
 
   async uploadAudio(req: Request) {
-    const directoryPathAudio = path.resolve(__dirname, UPLOAD_AUDIO_DIR)
+    // const directoryPathAudio = path.resolve(__dirname, UPLOAD_AUDIO_DIR)
+
     const files = await handleUploadAudio(req)
     const result: Media[] = await Promise.all(
       files.map(async (file) => {
@@ -69,6 +72,8 @@ class MediasService {
           filepath: file.filepath,
           contentType: mime.getType(file.filepath) as string
         })
+
+        fsPromise.unlink(file.filepath)
 
         return {
           url: (s3Result as CompleteMultipartUploadCommandOutput).Location as string,
@@ -83,11 +88,14 @@ class MediasService {
         // }
       })
     )
-    if (deleteAllFiles(directoryPathAudio)) return result
+    // Một cách khác để xoá file
+    // if (deleteAllFiles(directoryPathAudio))
+    return result
   }
 
   async uploadVideo(req: Request) {
-    const directoryPathVideo = path.resolve(__dirname, UPLOAD_VIDEO_DIR)
+    // const directoryPathVideo = path.resolve(__dirname, UPLOAD_VIDEO_DIR)
+
     const files = await handleUploadVideo(req)
     const result: Media[] = await Promise.all(
       files.map(async (file) => {
@@ -96,6 +104,8 @@ class MediasService {
           filepath: file.filepath,
           contentType: mime.getType(file.filepath) as string
         })
+
+        fsPromise.unlink(file.filepath)
 
         return {
           url: (s3Result as CompleteMultipartUploadCommandOutput).Location as string,
@@ -110,7 +120,9 @@ class MediasService {
         // }
       })
     )
-    if (deleteAllFiles(directoryPathVideo)) return result
+    // Một cách khác để xoá file
+    // if (deleteAllFiles(directoryPathVideo))
+    return result
   }
 }
 
