@@ -17,8 +17,10 @@ export const createScoreCardController = async (
 }
 
 export const getScoreCardController = async (req: Request, res: Response) => {
+  const { user_id } = req.decoded_authorization as TokenPayload
+  const scorecard = await scoreCardService.getScoreCard(user_id, req.params.test_id)
   return res.json({
     message: 'Get Scorecard successfully',
-    result: req.scorecard
+    result: scorecard
   })
 }

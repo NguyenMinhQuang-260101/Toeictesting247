@@ -1346,27 +1346,27 @@ paths:
                   result:
                     $ref: '#/components/schemas/ScorecardResponseBody'
 
-  /scorecards/{scorecard_id}:
+  /scorecards/{test_id}:
     get:
       tags:
         - scorecards
-      summary: Lấy thông tin bài làm theo id
-      description: Lấy thông tin bài làm theo id
-      operationId: getScorecardById
+      summary: Lấy thông tin bài làm theo test_id
+      description: Lấy thông tin bài làm theo id bài kiểm tra
+      operationId: getScorecardByTestId
       security:
         - BearerAuth: []
       parameters:
-        - name: scorecard_id
+        - name: test_id
           in: path
-          description: id của bài làm
+          description: id của bài kiểm tra đã làm
           required: true
           schema:
             type: string
             format: MongoId
-            example: '660b5dd643ab56cfc721a5ba'
+            example: '65ffb535f172c799e06f57dd'
       responses:
         default:
-          description: Lấy thông tin bài làm theo id thành công
+          description: Lấy thông tin bài làm theo test_id thành công
           content:
             application/json:
               schema:

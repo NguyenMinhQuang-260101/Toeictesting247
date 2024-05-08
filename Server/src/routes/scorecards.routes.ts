@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import { createScoreCardController, getScoreCardController } from '~/controllers/scoreCards.controllers'
-import { crateScoreCardValidator, scoreCardIdValidator } from '~/middlewares/scorecards.middlewares'
+import { crateScoreCardValidator } from '~/middlewares/scorecards.middlewares'
 import { testIdValidator } from '~/middlewares/tests.middlewares'
 import { accessTokenValidator, verifiedUserValidator } from '~/middlewares/users.middlewares'
 import { wrapRequestHandler } from '~/utils/handlers'
@@ -25,18 +25,18 @@ scoreCardsRouter.post(
 )
 
 /**
- * Description: Get a scoreCard
+ * Description: Get a scoreCard by test_id
  * Method: GET
  * Path: /:scorecard_id
  * Headers: { Authorization Bearer <access token>}
- * Params: { scorecard_id: string }
+ * Params: { test_id: string }
  */
 
 scoreCardsRouter.get(
-  '/:scorecard_id',
+  '/:test_id',
   accessTokenValidator,
   verifiedUserValidator,
-  scoreCardIdValidator,
+  testIdValidator,
   wrapRequestHandler(getScoreCardController)
 )
 

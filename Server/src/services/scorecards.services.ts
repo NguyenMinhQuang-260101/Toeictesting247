@@ -118,6 +118,40 @@ class ScoreCardService {
 
     return scoreCard
   }
+
+  async getScoreCard(user_id: string, test_id: string) {
+    const [scoreCard] = await databaseServices.scorecards
+      .aggregate<ScoreCard>([
+        {
+          $match: {
+            user_id: new ObjectId(user_id),
+            test_id: new ObjectId(test_id)
+          }
+        },
+        {
+          $lookup: {
+            from: 'questions',
+            localField: 'questions',
+            foreignField: '_id',
+            as: 'questions'
+          }
+        },
+        {
+          $addFields: {
+            total_question: {
+              $size: '$questions'
+            }
+          }
+        }
+      ])
+      .toArray()
+
+    if (!scoreCard) {
+      throw new Error('ScoreCard not found')
+    }
+
+    return scoreCard
+  }
 }
 
 const scoreCardService = new ScoreCardService()
