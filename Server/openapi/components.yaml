@@ -579,6 +579,142 @@ components:
           type: integer
           example: 1
 
+    QuestionType:
+      type: number
+      enum: [SimpleQuestion, QuoteQuestion, DoubleQuestion, TripleQuestion, QuadrupleQuestion, QuintupleQuestion]
+      example: 0
+
+    QuestionRequestBody_V2:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/QuestionType'
+        type_content:
+          type: integer
+          example: 1
+        num_part:
+          type: integer
+          example: 1
+        description:
+          type: string
+          example: '(D) A museum guide'
+        content:
+          type: string
+          example: 'Because of her hearing disability, Ms. Frasier will be _____ by a sign language expert so she can participate in the meeting.'
+        audio_content:
+          type: string
+          example: 'https://toeictesting247.com/audio/audio1.mp3'
+        image_content:
+          type: string
+          example: 'https://toeictesting247.com/image/image1.png'
+        answers:
+          $ref: '#/components/schemas/ListAnswers'
+        correct_at:
+          $ref: '#/components/schemas/Answer'
+        parent_id:
+          type: string
+          format: MongoId
+          example: '65ffb1aefef511c9911f8980'
+        score:
+          type: integer
+          example: 1
+      required:
+        - type
+        - type_content
+        - num_part
+        - description
+        - content
+        - answers
+        - correct_at
+        - parent_id
+        - score
+
+    QuestionResponseBody_v2:
+      type: object
+      properties:
+        _id:
+          type: string
+          format: MongoId
+          example: '6654bd4939911624e709ac35'
+        type:
+          $ref: '#/components/schemas/QuestionType'
+        type_content:
+          type: integer
+          example: 1
+        num_part:
+          type: integer
+          example: 1
+        description:
+          type: string
+          example: '(D) A museum guide'
+        content:
+          type: string
+          example: 'Because of her hearing disability, Ms. Frasier will be _____ by a sign language expert so she can participate in the meeting.'
+        audio_content:
+          type: string
+          example: 'https://toeictesting247.com/audio/audio1.mp3'
+        image_content:
+          type: string
+          example: 'https://toeictesting247.com/image/image1.png'
+        answers:
+          $ref: '#/components/schemas/ListAnswers'
+        correct_at:
+          $ref: '#/components/schemas/Answer'
+        parent_id:
+          type: string
+          format: MongoId
+          example: '65ffb1aefef511c9911f8980'
+        score:
+          type: integer
+          example: 1
+        created_at:
+          type: string
+          format: date-time
+          example: '2024-05-27T17:05:13.697Z'
+        updated_at:
+          type: string
+          format: date-time
+          example: '2024-05-27T17:05:13.697Z'
+      required:
+        - type
+        - type_content
+        - num_part
+        - description
+        - content
+        - answers
+        - correct_at
+        - parent_id
+        - score
+
+    UpdateQuestionRequestBody_v2:
+      type: object
+      required:
+        - question_id
+      properties:
+        question_id:
+          type: string
+          format: MongoId
+          example: '6654bd4939911624e709ac35'
+        description:
+          type: string
+          example: '(D) A museum guide'
+        content:
+          type: string
+          example: 'Because of her hearing disability, Ms. Frasier will be _____ by a sign language expert so she can participate in the meeting.'
+        audio_content:
+          type: string
+          example: 'https://toeictesting247.com/audio/audio1.mp3'
+        image_content:
+          type: string
+          example: 'https://toeictesting247.com/image/image1.png'
+        answers:
+          $ref: '#/components/schemas/ListAnswers'
+        correct_at:
+          $ref: '#/components/schemas/Answer'
+        score:
+          type: integer
+          example: 1
+
     ScorecardRequestBody:
       type: object
       properties:

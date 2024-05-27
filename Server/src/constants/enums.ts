@@ -33,6 +33,20 @@ export enum DocumentType {
   Grammar
 }
 
+export enum QuestionType {
+  SimpleQuestion,
+  QuoteQuestion,
+  DoubleQuestion,
+  TripleQuestion,
+  QuadrupleQuestion,
+  QuintupleQuestion
+}
+
+export enum QuestionContentType {
+  Listening,
+  Reading
+}
+
 export enum OperatingStatus {
   Active,
   Inactive,

@@ -164,6 +164,40 @@ export const QUESTIONS_MESSAGES = {
     'Can only delete question when course or document is updating or inactive'
 } as const
 
+export const QUESTIONS_V2_MESSAGES = {
+  QUESTION_ID_INVALID: 'Question id invalid',
+  QUESTION_NOT_FOUND: 'Question not found',
+  ORIGIN_NOT_FOUND: 'Origin not found. Meaning that cannot find the course or document that the question belongs to',
+  TYPE_QUEST_MUST_NOT_BE_EMPTY: 'Type quest must not be empty',
+  TYPE_QUEST_INVALID: 'Type quest invalid',
+  PART_QUEST_MUST_BE_A_NUMBER: 'Part quest must be a number',
+  PART_QUEST_MUST_NOT_BE_EMPTY: 'Part quest must not be empty',
+  TYPE_CONTENT_MUST_NOT_BE_EMPTY: 'Type content must not be empty',
+  TYPE_CONTENT_INVALID: 'Type content invalid',
+  DESCRIPTION_MUST_BE_STRING: 'Description must be a string',
+  DESCRIPTION_MUST_NOT_BE_EMPTY: 'Description must not be empty',
+  CONTENT_MUST_BE_STRING_OR_MEDIA_OBJECT: 'Content must be a string or media object',
+  CONTENT_MUST_BE_STRING: 'Content must be a string',
+  CONTENT_MUST_NOT_BE_EMPTY: 'Content must not be empty',
+  ANSWERS_MUST_BE_AN_ARRAY_OF_ANSWER_OBJECT: 'Answers must be an array of answer object',
+  ANSWERS_MUST_NOT_BE_EMPTY: 'Answers must not be empty',
+  CORRECT_AT_MUST_BE_AN_ANSWER_OBJECT: 'Correct at must be an answer object',
+  CORRECT_AT_MUST_NOT_BE_EMPTY: 'Correct at must not be empty',
+  SELECTED_AT_MUST_BE_AN_ANSWER_OBJECT: 'Selected at must be an answer object',
+  SELECTED_AT_MUST_NOT_BE_EMPTY: 'Selected at must not be empty',
+  SCORE_MUST_BE_A_NUMBER: 'Score must be a number',
+  SCORE_MUST_NOT_BE_EMPTY: 'Score must not be empty',
+  PARENT_ID_QUEST_INVALID: 'Parent id quest invalid',
+  PARENT_ID_QUEST_MUST_NOT_BE_EMPTY: 'Parent id quest must not be empty',
+  COURSE_OF_QUESTION_NOT_FOUND: 'Course of question not found',
+  CAN_ONLY_CREATE_QUESTION_WHEN_COURSE_OR_DOCUMENT_IS_UPDATING_OR_INACTIVE:
+    'Can only create question when course or document is updating or inactive',
+  CAN_ONLY_UPDATE_QUESTION_WHEN_COURSE_OR_DOCUMENT_IS_UPDATING_OR_INACTIVE:
+    'Can only update question when course or document is updating or inactive',
+  CAN_ONLY_DELETE_QUESTION_WHEN_COURSE_OR_DOCUMENT_IS_UPDATING_OR_INACTIVE:
+    'Can only delete question when course or document is updating or inactive'
+} as const
+
 export const NOTIFICATIONS_MESSAGES = {
   NOTIFICATION_ID_INVALID: 'Notification id invalid',
   NOTIFICATION_NOT_FOUND: 'Notification not found',

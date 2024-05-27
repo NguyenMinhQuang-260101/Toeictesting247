@@ -7,6 +7,7 @@ import Test from './models/schemas/Test.schema'
 import Question from './models/schemas/Question.schema'
 import Document from './models/schemas/Document.schema'
 import ScoreCard from './models/schemas/ScoreCard.schema'
+import Question_v2 from './models/schemas/Question_v2.schema'
 
 declare module 'express' {
   interface Request {
@@ -19,6 +20,7 @@ declare module 'express' {
     document?: Document
     test?: Test
     question?: Question & { origin_id?: string }
+    question_v2?: Question_v2
     notification?: Notification
     source?: Course | Document
     scorecard?: ScoreCard

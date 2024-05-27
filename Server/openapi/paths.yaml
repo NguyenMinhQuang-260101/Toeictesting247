@@ -1315,6 +1315,185 @@ paths:
                     type: string
                     example: Question deleted successfully
 
+  #* API cho câu hỏi ver 2
+  /questions-v2/:
+    post:
+      tags:
+        - questions_v2
+      summary: Tạo câu hỏi
+      description: Tạo câu hỏi
+      operationId: createQuestion
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: Thông tin tạo câu hỏi
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QuestionRequestBody_V2'
+        required: true
+      responses:
+        default:
+          description: Tạo câu hỏi thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Create question success
+                  result:
+                    $ref: '#/components/schemas/QuestionRequestBody_V2'
+
+  /questions-v2/{question_id}:
+    get:
+      tags:
+        - questions_v2
+      summary: Lấy thông tin câu hỏi theo id
+      description: Lấy thông tin câu hỏi theo id
+      operationId: getQuestionById
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: question_id
+          in: path
+          description: id của câu hỏi
+          required: true
+          schema:
+            type: string
+            format: MongoId
+            example: '66547f6f171f8b1b9f91c7f2'
+      responses:
+        default:
+          description: Lấy thông tin câu hỏi theo id thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Get question detail successfully
+                  result:
+                    $ref: '#/components/schemas/QuestionResponseBody_v2'
+
+  /questions-v2/list:
+    get:
+      tags:
+        - questions_v2
+      summary: Lấy danh sách câu hỏi
+      description: Lấy danh sách toàn bộ câu hỏi
+      operationId: getQuestions
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: page
+          in: query
+          description: Số trang
+          required: true
+          schema:
+            type: integer
+            example: 1
+        - name: limit
+          in: query
+          description: Số lượng câu hỏi trên mỗi trang
+          required: true
+          schema:
+            type: integer
+            example: 10
+      responses:
+        default:
+          description: Lấy danh sách câu hỏi thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Get list question successfully
+                  result:
+                    type: object
+                    properties:
+                      questions:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/QuestionResponseBody_v2'
+                      limit:
+                        type: integer
+                        example: 10
+                      page:
+                        type: integer
+                        example: 1
+                      total_page:
+                        type: integer
+                        example: 1
+
+  /questions-v2/update:
+    patch:
+      tags:
+        - questions_v2
+      summary: Cập nhật câu hỏi
+      description: Cập nhật câu hỏi
+      operationId: updateQuestion
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: Thông tin cập nhật câu hỏi
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateQuestionRequestBody_v2'
+        required: true
+      responses:
+        default:
+          description: Cập nhật câu hỏi thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Update question success
+                  result:
+                    $ref: '#/components/schemas/QuestionResponseBody_v2'
+
+  /questions-v2/delete:
+    delete:
+      tags:
+        - questions_v2
+      summary: Xóa câu hỏi
+      description: Xóa câu hỏi
+      operationId: deleteQuestion
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: Thông tin xóa câu hỏi
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                question_id:
+                  type: string
+                  format: MongoId
+                  description: id của câu hỏi
+                  example: '66547f6f171f8b1b9f91c7f2'
+        required: true
+      responses:
+        default:
+          description: Xóa câu hỏi thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Question deleted successfully
+
   #* API cho bài làm
   /scorecards/:
     post:

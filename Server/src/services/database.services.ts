@@ -6,6 +6,7 @@ import Course from '~/models/schemas/Course.schema'
 import Document from '~/models/schemas/Document.schema'
 import Notification from '~/models/schemas/Notification.schema'
 import Question from '~/models/schemas/Question.schema'
+import Question_v2 from '~/models/schemas/Question_v2.schema'
 import RefreshToken from '~/models/schemas/RefreshToken.schema'
 import ScoreCard from '~/models/schemas/ScoreCard.schema'
 import Test from '~/models/schemas/Test.schema'
@@ -277,6 +278,10 @@ class DatabaseServices {
 
   get questions(): Collection<Question> {
     return this.db.collection(envConfig.dbQuestionsCollection)
+  }
+
+  get questions_v2(): Collection<Question_v2> {
+    return this.db.collection(envConfig.dbQuestionsCollection_v2)
   }
 
   get notifications(): Collection<Notification> {

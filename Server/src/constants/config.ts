@@ -38,6 +38,7 @@ export const envConfig = {
   dbDocumentsCollection: process.env.DB_DOCUMENTS_COLLECTION as string,
   dbTestsCollection: process.env.DB_TESTS_COLLECTION as string,
   dbQuestionsCollection: process.env.DB_QUESTIONS_COLLECTION as string,
+  dbQuestionsCollection_v2: process.env.DB_QUESTIONS_V2_COLLECTION as string,
   dbNotificationsCollection: process.env.DB_NOTIFICATIONS_COLLECTION as string,
   dbScoreCardsCollection: process.env.DB_SCORE_CARDS_COLLECTION as string,
   dbConversationsCollection: process.env.DB_CONVERSATIONS_COLLECTION as string,
