@@ -195,7 +195,9 @@ export const QUESTIONS_V2_MESSAGES = {
   CAN_ONLY_UPDATE_QUESTION_WHEN_COURSE_OR_DOCUMENT_IS_UPDATING_OR_INACTIVE:
     'Can only update question when course or document is updating or inactive',
   CAN_ONLY_DELETE_QUESTION_WHEN_COURSE_OR_DOCUMENT_IS_UPDATING_OR_INACTIVE:
-    'Can only delete question when course or document is updating or inactive'
+    'Can only delete question when course or document is updating or inactive',
+  QUANTITY_QUESTION_MUST_NOT_BE_EMPTY: 'Quantity question must not be empty',
+  QUANTITY_QUESTION_MUST_BE_A_NUMBER: 'Quantity question must be a number'
 } as const
 
 export const NOTIFICATIONS_MESSAGES = {

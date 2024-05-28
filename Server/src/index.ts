@@ -25,6 +25,7 @@ import swaggerJsdoc from 'swagger-jsdoc'
 import helmet from 'helmet'
 import { rateLimit } from 'express-rate-limit'
 import questionsRouter_v2 from './routes/questions_v2.routes'
+import testsRouter_v2 from './routes/tests_v2.routes'
 
 // const file = fs.readFileSync(path.resolve('toeictesting247-swagger.yaml'), 'utf8')
 // const swaggerDocument = YAML.parse(file)
@@ -151,6 +152,7 @@ app.use('/medias', mediasRouter)
 app.use('/static', staticRouter)
 app.use('/courses', coursesRouter)
 app.use('/tests', testsRouter)
+app.use('/tests-v2', testsRouter_v2)
 app.use('/questions', questionsRouter)
 app.use('/questions-v2', questionsRouter_v2)
 app.use('/notifications', notificationsRouter)

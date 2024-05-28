@@ -8,6 +8,7 @@ import Question from './models/schemas/Question.schema'
 import Document from './models/schemas/Document.schema'
 import ScoreCard from './models/schemas/ScoreCard.schema'
 import Question_v2 from './models/schemas/Question_v2.schema'
+import Test_v2 from './models/schemas/Test_v2.schema'
 
 declare module 'express' {
   interface Request {
@@ -19,6 +20,7 @@ declare module 'express' {
     course?: Course
     document?: Document
     test?: Test
+    test_v2?: Test_v2
     question?: Question & { origin_id?: string }
     question_v2?: Question_v2
     notification?: Notification

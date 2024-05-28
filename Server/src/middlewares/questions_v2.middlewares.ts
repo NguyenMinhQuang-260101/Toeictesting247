@@ -64,9 +64,11 @@ const answerSchema: ParamSchema = {
   custom: {
     options: (value, { req }) => {
       if (
-        value.some((item: any) => {
-          return typeof item.order_answer !== 'string' || typeof item.content_answer !== 'string'
-        })
+        req.body.type === QuestionType.SimpleQuestion ||
+        (req.body.type === QuestionType.QuoteQuestion &&
+          value.some((item: any) => {
+            return typeof item.order_answer !== 'string' || typeof item.content_answer !== 'string'
+          }))
       ) {
         throw new Error(QUESTIONS_MESSAGES.ANSWERS_MUST_BE_AN_ARRAY_OF_ANSWER_OBJECT)
       }
@@ -78,8 +80,10 @@ const answerSchema: ParamSchema = {
 const correctAtSchema: ParamSchema = {
   custom: {
     options: (value, { req }) => {
-      if (typeof value.order_answer !== 'string' || typeof value.content_answer !== 'string') {
-        throw new Error(QUESTIONS_MESSAGES.CORRECT_AT_MUST_BE_AN_ANSWER_OBJECT)
+      if (req.body.type === QuestionType.SimpleQuestion || req.body.type === QuestionType.QuoteQuestion) {
+        if (typeof value.order_answer !== 'string' || typeof value.content_answer !== 'string') {
+          throw new Error(QUESTIONS_MESSAGES.CORRECT_AT_MUST_BE_AN_ANSWER_OBJECT)
+        }
       }
       return true
     }

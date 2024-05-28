@@ -1125,6 +1125,334 @@ paths:
                     type: string
                     example: Test deleted successfully
 
+  #* API cho bài kiểm tra ver 2
+  /tests-v2/:
+    post:
+      tags:
+        - tests_v2
+      summary: Tạo bài kiểm tra
+      description: Tạo bài kiểm tra
+      operationId: createTest
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: Thông tin tạo bài kiểm tra
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TestRequestBody_v2'
+        required: true
+      responses:
+        default:
+          description: Tạo bài kiểm tra thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Create test success
+                  result:
+                    $ref: '#/components/schemas/TestResponseBody_v2'
+
+  /tests-v2/{test_id}:
+    get:
+      tags:
+        - tests_v2
+      summary: Lấy thông tin bài kiểm tra theo id
+      description: Lấy thông tin bài kiểm tra theo id
+      operationId: getTestById
+      parameters:
+        - name: test_id
+          in: path
+          description: id của bài kiểm tra
+          required: true
+          schema:
+            type: string
+            format: MongoId
+            example: '665571740bed7738534ca70f'
+      responses:
+        default:
+          description: Lấy thông tin bài kiểm tra theo id thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Get test detail successfully
+                  result:
+                    $ref: '#/components/schemas/TestResponseBody_v2'
+
+  /tests-v2/full-test-detail/{test_id}:
+    get:
+      tags:
+        - tests_v2
+      summary: Lấy thông tin đầy đủ bài kiểm tra theo id
+      description: Lấy thông tin đầy đủ bài kiểm tra theo id
+      operationId: getFullTestDetailById
+      parameters:
+        - name: test_id
+          in: path
+          description: id của bài kiểm tra
+          required: true
+          schema:
+            type: string
+            format: MongoId
+            example: '660ab00f044b53ddc078b490'
+      responses:
+        default:
+          description: Lấy thông tin đầy đủ bài kiểm tra theo id thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Get full test detail successfully
+                  result:
+                    $ref: '#/components/schemas/FullTestDetailResponseBody_v2'
+
+  /tests-v2/list:
+    get:
+      tags:
+        - tests_v2
+      summary: Lấy danh sách bài kiểm tra
+      description: Lấy danh sách bài kiểm tra
+      operationId: getTests
+      parameters:
+        - name: page
+          in: query
+          description: Số trang
+          required: true
+          schema:
+            type: integer
+            example: 1
+        - name: limit
+          in: query
+          description: Số lượng bài kiểm tra trên mỗi trang
+          required: true
+          schema:
+            type: integer
+            example: 10
+      responses:
+        default:
+          description: Lấy danh sách bài kiểm tra thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Get list test successfully
+                  result:
+                    type: object
+                    properties:
+                      tests:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/TestResponseBody_v2'
+                      limit:
+                        type: integer
+                        example: 10
+                      page:
+                        type: integer
+                        example: 1
+                      total_page:
+                        type: integer
+                        example: 1
+
+  /tests-v2/update:
+    patch:
+      tags:
+        - tests_v2
+      summary: Cập nhật bài kiểm tra
+      description: Cập nhật bài kiểm tra
+      operationId: updateTest
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: Thông tin cập nhật bài kiểm tra
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateTestRequestBody_v2'
+        required: true
+      responses:
+        default:
+          description: Cập nhật bài kiểm tra thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Update test success
+                  result:
+                    $ref: '#/components/schemas/TestResponseBody_v2'
+
+  /tests-v2/add-question:
+    patch:
+      tags:
+        - tests_v2
+      summary: Thêm câu hỏi vào bài kiểm tra
+      description: Thêm câu hỏi vào bài kiểm tra
+      operationId: addQuestionToTest
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: Thông tin thêm câu hỏi vào bài kiểm tra
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                test_id:
+                  type: string
+                  format: MongoId
+                  description: id của bài kiểm tra
+                  example: '660b4cab4673a97618935954'
+                question_id:
+                  type: string
+                  format: MongoId
+                  description: id của câu hỏi
+                  example: '660b4cab4673a97618935954'
+        required: true
+      responses:
+        default:
+          description: Thêm câu hỏi vào bài kiểm tra thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Add question to test successfully
+                  result:
+                    $ref: '#/components/schemas/TestResponseBody_v2'
+
+  /tests-v2/random-questions:
+    patch:
+      tags:
+        - tests_v2
+      summary: Thêm câu hỏi vào bài kiểm tra
+      description: Thêm câu hỏi vào bài kiểm tra
+      operationId: addQuestionToTest
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: Thông tin thêm câu hỏi vào bài kiểm tra
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                test_id:
+                  type: string
+                  format: MongoId
+                  description: id của bài kiểm tra
+                  example: '660b4cab4673a97618935954'
+                type_question:
+                  $ref: '#/components/schemas/QuestionType'
+                type_content_question:
+                  $ref: '#/components/schemas/QuestionTypeContent'
+                number_question:
+                  type: integer
+                  example: 2
+        required: true
+      responses:
+        default:
+          description: Thêm câu hỏi vào bài kiểm tra thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Add question to test successfully
+                  result:
+                    $ref: '#/components/schemas/TestResponseBody_v2'
+
+  /tests-v2/delete:
+    delete:
+      tags:
+        - tests_v2
+      summary: Xóa bài kiểm tra
+      description: Xóa bài kiểm tra
+      operationId: deleteTest
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: Thông tin xóa bài kiểm tra
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                test_id:
+                  type: string
+                  format: MongoId
+                  description: id của bài kiểm tra
+                  example: '660b4cab4673a97618935954'
+        required: true
+      responses:
+        default:
+          description: Xóa bài kiểm tra thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Test deleted successfully
+
+  /tests-v2/delete-question-from-test:
+    delete:
+      tags:
+        - tests_v2
+      summary: Xóa bài kiểm tra
+      description: Xóa bài kiểm tra
+      operationId: deleteTest
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: Thông tin xóa bài kiểm tra
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                test_id:
+                  type: string
+                  format: MongoId
+                  description: id của bài kiểm tra
+                  example: '660b4cab4673a97618935954'
+                question_id:
+                  type: string
+                  format: MongoId
+                  description: id của câu hỏi
+                  example: '660b4cab4673a97618935954'
+        required: true
+      responses:
+        default:
+          description: Xóa câu hỏi khỏi bài kiểm tra thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Delete question from test successfully
+
   #* API cho câu hỏi
   /questions/:
     post:

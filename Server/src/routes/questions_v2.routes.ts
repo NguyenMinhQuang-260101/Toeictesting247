@@ -33,7 +33,7 @@ questionsRouter_v2.post(
 )
 
 /**
- * Description: Get list of questions by test_id
+ * Description: Get list of questions
  * Method: GET
  * Path: /:test_id
  * Headers: { Authorization?: Bearer <access token> }
@@ -48,6 +48,13 @@ questionsRouter_v2.get(
   wrapRequestHandler(getListQuestionsController_v2)
 )
 
+/**
+ * Description: Get question detail
+ * Method: GET
+ * Path: /:question_id
+ * Headers: { Authorization?: bearer <access token> }
+ * Query: { question_id: string }
+ */
 questionsRouter_v2.get(
   '/:question_id',
   accessTokenValidator,

@@ -57,6 +57,8 @@ tags:
     description: Các API liên quan đến tài liệu (thêm, cập nhật, ...)
   - name: tests
     description: Các API liên quan đến bài kiểm tra (thêm, cập nhật, ...)
+  - name: tests_v2
+    description: Các API liên quan đến bài kiểm tra (thêm, cập nhật, ...)
   - name: questions
     description: Các API liên quan đến câu hỏi (thêm, cập nhật, ...)
   - name: questions_v2
@@ -1196,6 +1198,334 @@ paths:
                   message:
                     type: string
                     example: Test deleted successfully
+
+  #* API cho bài kiểm tra ver 2
+  /tests-v2/:
+    post:
+      tags:
+        - tests_v2
+      summary: Tạo bài kiểm tra
+      description: Tạo bài kiểm tra
+      operationId: createTest
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: Thông tin tạo bài kiểm tra
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TestRequestBody_v2'
+        required: true
+      responses:
+        default:
+          description: Tạo bài kiểm tra thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Create test success
+                  result:
+                    $ref: '#/components/schemas/TestResponseBody_v2'
+
+  /tests-v2/{test_id}:
+    get:
+      tags:
+        - tests_v2
+      summary: Lấy thông tin bài kiểm tra theo id
+      description: Lấy thông tin bài kiểm tra theo id
+      operationId: getTestById
+      parameters:
+        - name: test_id
+          in: path
+          description: id của bài kiểm tra
+          required: true
+          schema:
+            type: string
+            format: MongoId
+            example: '665571740bed7738534ca70f'
+      responses:
+        default:
+          description: Lấy thông tin bài kiểm tra theo id thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Get test detail successfully
+                  result:
+                    $ref: '#/components/schemas/TestResponseBody_v2'
+
+  /tests-v2/full-test-detail/{test_id}:
+    get:
+      tags:
+        - tests_v2
+      summary: Lấy thông tin đầy đủ bài kiểm tra theo id
+      description: Lấy thông tin đầy đủ bài kiểm tra theo id
+      operationId: getFullTestDetailById
+      parameters:
+        - name: test_id
+          in: path
+          description: id của bài kiểm tra
+          required: true
+          schema:
+            type: string
+            format: MongoId
+            example: '660ab00f044b53ddc078b490'
+      responses:
+        default:
+          description: Lấy thông tin đầy đủ bài kiểm tra theo id thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Get full test detail successfully
+                  result:
+                    $ref: '#/components/schemas/FullTestDetailResponseBody_v2'
+
+  /tests-v2/list:
+    get:
+      tags:
+        - tests_v2
+      summary: Lấy danh sách bài kiểm tra
+      description: Lấy danh sách bài kiểm tra
+      operationId: getTests
+      parameters:
+        - name: page
+          in: query
+          description: Số trang
+          required: true
+          schema:
+            type: integer
+            example: 1
+        - name: limit
+          in: query
+          description: Số lượng bài kiểm tra trên mỗi trang
+          required: true
+          schema:
+            type: integer
+            example: 10
+      responses:
+        default:
+          description: Lấy danh sách bài kiểm tra thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Get list test successfully
+                  result:
+                    type: object
+                    properties:
+                      tests:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/TestResponseBody_v2'
+                      limit:
+                        type: integer
+                        example: 10
+                      page:
+                        type: integer
+                        example: 1
+                      total_page:
+                        type: integer
+                        example: 1
+
+  /tests-v2/update:
+    patch:
+      tags:
+        - tests_v2
+      summary: Cập nhật bài kiểm tra
+      description: Cập nhật bài kiểm tra
+      operationId: updateTest
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: Thông tin cập nhật bài kiểm tra
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateTestRequestBody_v2'
+        required: true
+      responses:
+        default:
+          description: Cập nhật bài kiểm tra thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Update test success
+                  result:
+                    $ref: '#/components/schemas/TestResponseBody_v2'
+
+  /tests-v2/add-question:
+    patch:
+      tags:
+        - tests_v2
+      summary: Thêm câu hỏi vào bài kiểm tra
+      description: Thêm câu hỏi vào bài kiểm tra
+      operationId: addQuestionToTest
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: Thông tin thêm câu hỏi vào bài kiểm tra
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                test_id:
+                  type: string
+                  format: MongoId
+                  description: id của bài kiểm tra
+                  example: '660b4cab4673a97618935954'
+                question_id:
+                  type: string
+                  format: MongoId
+                  description: id của câu hỏi
+                  example: '660b4cab4673a97618935954'
+        required: true
+      responses:
+        default:
+          description: Thêm câu hỏi vào bài kiểm tra thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Add question to test successfully
+                  result:
+                    $ref: '#/components/schemas/TestResponseBody_v2'
+
+  /tests-v2/random-questions:
+    patch:
+      tags:
+        - tests_v2
+      summary: Thêm câu hỏi vào bài kiểm tra
+      description: Thêm câu hỏi vào bài kiểm tra
+      operationId: addQuestionToTest
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: Thông tin thêm câu hỏi vào bài kiểm tra
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                test_id:
+                  type: string
+                  format: MongoId
+                  description: id của bài kiểm tra
+                  example: '660b4cab4673a97618935954'
+                type_question:
+                  $ref: '#/components/schemas/QuestionType'
+                type_content_question:
+                  $ref: '#/components/schemas/QuestionTypeContent'
+                number_question:
+                  type: integer
+                  example: 2
+        required: true
+      responses:
+        default:
+          description: Thêm câu hỏi vào bài kiểm tra thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Add question to test successfully
+                  result:
+                    $ref: '#/components/schemas/TestResponseBody_v2'
+
+  /tests-v2/delete:
+    delete:
+      tags:
+        - tests_v2
+      summary: Xóa bài kiểm tra
+      description: Xóa bài kiểm tra
+      operationId: deleteTest
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: Thông tin xóa bài kiểm tra
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                test_id:
+                  type: string
+                  format: MongoId
+                  description: id của bài kiểm tra
+                  example: '660b4cab4673a97618935954'
+        required: true
+      responses:
+        default:
+          description: Xóa bài kiểm tra thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Test deleted successfully
+
+  /tests-v2/delete-question-from-test:
+    delete:
+      tags:
+        - tests_v2
+      summary: Xóa bài kiểm tra
+      description: Xóa bài kiểm tra
+      operationId: deleteTest
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: Thông tin xóa bài kiểm tra
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                test_id:
+                  type: string
+                  format: MongoId
+                  description: id của bài kiểm tra
+                  example: '660b4cab4673a97618935954'
+                question_id:
+                  type: string
+                  format: MongoId
+                  description: id của câu hỏi
+                  example: '660b4cab4673a97618935954'
+        required: true
+      responses:
+        default:
+          description: Xóa câu hỏi khỏi bài kiểm tra thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Delete question from test successfully
 
   #* API cho câu hỏi
   /questions/:
@@ -2356,6 +2686,172 @@ components:
           description: Thời gian làm bài
           example: 133456
 
+    TestRequestBody_v2:
+      type: object
+      required:
+        - title
+        - description
+        - timeline
+      properties:
+        title:
+          type: string
+          example: 'TEST 1'
+        description:
+          type: string
+          example: 'Part 1: Photos'
+        timeline:
+          type: integer
+          description: Thời gian làm bài
+          example: 120
+
+    TestResponseBody_v2:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: '6655f6fb91219247ab3fab70'
+        title:
+          type: string
+          example: 'Test 4'
+        description:
+          type: string
+          example: 'Part 1: Photos'
+        timeline:
+          type: integer
+          example: 120
+        questions:
+          type: array
+          example: []
+          items:
+            type: object
+        created_at:
+          type: string
+          format: date-time
+          example: '2024-05-28T15:23:39.603Z'
+        updated_at:
+          type: string
+          format: date-time
+          example: '2024-05-28T15:23:39.603Z'
+
+    FullTestDetailResponseBody_v2:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: '6655716d0bed7738534ca70d'
+        title:
+          type: string
+          example: 'Test 2'
+        description:
+          type: string
+          example: 'Part 1: Photos'
+        timeline:
+          type: integer
+          example: 120
+        questions:
+          type: array
+          items:
+            type: object
+            properties:
+              num_part:
+                type: integer
+                example: 1
+              items:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    _id:
+                      type: string
+                      example: '665573350bed7738534ca712'
+                    type:
+                      $ref: '#/components/schemas/QuestionType'
+                    type_content:
+                      $ref: '#/components/schemas/QuestionTypeContent'
+                    num_part:
+                      type: integer
+                      example: 1
+                    description:
+                      type: string
+                      example: "cooperative: sẵn lòng giúp đỡ hoặc làm những gì người khác yêu cầu visible: có thể nhìn thấy essential: cần thiết hoặc cần thiết alternative: (của một hoặc nhiều thứ) có sẵn như một khả năng khác => 'essential' có nghĩa hợp lý nhất"
+                    content:
+                      type: string
+                      example: 'Having proper ventilation throughout the building is _____ for protecting the health and well-being of the workers.'
+                    audio_content:
+                      type: string
+                      nullable: true
+                      example: null
+                    image_content:
+                      type: string
+                      nullable: true
+                      example: null
+                    answers:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          order_answer:
+                            type: string
+                            example: 'A'
+                          content_answer:
+                            type: string
+                            example: 'cooperative'
+                    correct_at:
+                      type: object
+                      properties:
+                        order_answer:
+                          type: string
+                          example: 'C'
+                        content_answer:
+                          type: string
+                          example: 'essential'
+                      nullable: true
+                      example: null
+                    selected_at:
+                      type: object
+                      nullable: true
+                      example: null
+                    score:
+                      type: integer
+                      example: 1
+                    parent_id:
+                      type: string
+                      nullable: true
+                      example: null
+                    created_at:
+                      type: string
+                      format: date-time
+                      example: '2024-05-28T06:01:25.308Z'
+                    updated_at:
+                      type: string
+                      format: date-time
+                      example: '2024-05-28T06:01:25.308Z'
+                    child_questions:
+                      type: array
+                      example: []
+                      items:
+                        type: object
+
+    UpdateTestRequestBody_v2:
+      type: object
+      required:
+        - test_id
+      properties:
+        test_id:
+          type: string
+          description: id của của bài kiểm tra
+          example: '660b4cab4673a97618935954'
+        title:
+          type: string
+          example: 'BÀI TẬP 11'
+        description:
+          type: string
+          example: '(Các bạn xem đáp án và giải thích chi tiết cuối sách nhé)'
+        timeline:
+          type: integer
+          description: Thời gian làm bài
+          example: 133456
+
     Answer:
       type: object
       properties:
@@ -2488,6 +2984,11 @@ components:
     QuestionType:
       type: number
       enum: [SimpleQuestion, QuoteQuestion, DoubleQuestion, TripleQuestion, QuadrupleQuestion, QuintupleQuestion]
+      example: 0
+
+    QuestionTypeContent:
+      type: number
+      enum: [Listening, Reading]
       example: 0
 
     QuestionRequestBody_V2:

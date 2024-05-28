@@ -114,7 +114,11 @@ class QuestionsService_v2 {
   async deleteQuestionController_v2(question_id: string) {
     await Promise.all([
       databaseServices.questions_v2.deleteOne({ _id: new ObjectId(question_id) }),
-      databaseServices.questions_v2.deleteMany({ parent_id: new ObjectId(question_id) })
+      databaseServices.questions_v2.deleteMany({ parent_id: new ObjectId(question_id) }),
+      databaseServices.tests_v2.updateMany(
+        { questions: new ObjectId(question_id) },
+        { $pull: { questions: new ObjectId(question_id) } }
+      )
     ])
   }
 }

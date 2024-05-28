@@ -10,6 +10,7 @@ import Question_v2 from '~/models/schemas/Question_v2.schema'
 import RefreshToken from '~/models/schemas/RefreshToken.schema'
 import ScoreCard from '~/models/schemas/ScoreCard.schema'
 import Test from '~/models/schemas/Test.schema'
+import Test_v2 from '~/models/schemas/Test_v2.schema'
 import User from '~/models/schemas/User.schema'
 const uri = `mongodb+srv://${envConfig.dbUsername}:${envConfig.dbPassword}@toeictesting247.bcdy1vx.mongodb.net/?retryWrites=true&w=majority&appName=ToeicTesting247`
 
@@ -274,6 +275,10 @@ class DatabaseServices {
 
   get tests(): Collection<Test> {
     return this.db.collection(envConfig.dbTestsCollection)
+  }
+
+  get tests_v2(): Collection<Test_v2> {
+    return this.db.collection(envConfig.dbTestsCollection_v2)
   }
 
   get questions(): Collection<Question> {
