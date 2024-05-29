@@ -235,6 +235,11 @@ export const fullTestIdValidator_v2 = validate(
                   }
                 },
                 {
+                  $sort: {
+                    '_id.num_part': 1
+                  }
+                },
+                {
                   $group: {
                     _id: '$_id._id',
                     title: {
@@ -252,11 +257,6 @@ export const fullTestIdValidator_v2 = validate(
                         items: '$items'
                       }
                     }
-                  }
-                },
-                {
-                  $sort: {
-                    'questions.num_part': 1
                   }
                 }
               ])
