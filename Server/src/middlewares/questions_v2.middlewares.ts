@@ -64,11 +64,11 @@ const answerSchema: ParamSchema = {
   custom: {
     options: (value, { req }) => {
       if (
-        req.body.type === QuestionType.SimpleQuestion ||
-        (req.body.type === QuestionType.QuoteQuestion &&
-          value.some((item: any) => {
-            return typeof item.order_answer !== 'string' || typeof item.content_answer !== 'string'
-          }))
+        req.body.type === QuestionType.SimpleQuestion &&
+        req.body.type === QuestionType.QuoteQuestion &&
+        value.some((item: any) => {
+          return typeof item.order_answer !== 'string' || typeof item.content_answer !== 'string'
+        })
       ) {
         throw new Error(QUESTIONS_MESSAGES.ANSWERS_MUST_BE_AN_ARRAY_OF_ANSWER_OBJECT)
       }
