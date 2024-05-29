@@ -2,10 +2,13 @@ import { Router } from 'express'
 import {
   searchCourseController,
   searchDocumentController,
+  searchQuestionController,
   searchUserController
 } from '~/controllers/search.controllers'
 import { paginationValidation } from '~/middlewares/pagination.middlewares'
+import { searchQuestionValidator } from '~/middlewares/questions_v2.middlewares'
 import { searchCourseValidator, searchDocumentValidator, searchUserValidator } from '~/middlewares/search.middlewares'
+import { accessTokenValidator, verifiedUserValidator } from '~/middlewares/users.middlewares'
 
 const searchRouter = Router()
 
@@ -34,6 +37,29 @@ searchRouter.get('/document', paginationValidation, searchDocumentValidator, sea
  * Query: {limit: string, page: string, name_email: SearchUserQuery}
  */
 
-searchRouter.get('/user', paginationValidation, searchUserValidator, searchUserController)
+searchRouter.get(
+  '/user',
+  accessTokenValidator,
+  verifiedUserValidator,
+  paginationValidation,
+  searchUserValidator,
+  searchUserController
+)
+
+/**
+ * Description: Search question
+ * Method: GET
+ * Path: /question
+ * Query: {limit: string, page: string, type: QuestionType, type_content: QuestionContentType, num_part: number}
+ */
+
+searchRouter.get(
+  '/question',
+  accessTokenValidator,
+  verifiedUserValidator,
+  paginationValidation,
+  searchQuestionValidator,
+  searchQuestionController
+)
 
 export default searchRouter

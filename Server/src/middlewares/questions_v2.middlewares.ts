@@ -1,9 +1,9 @@
 import { Request } from 'express'
 import { ParamSchema, checkSchema } from 'express-validator'
 import { ObjectId } from 'mongodb'
-import { QuestionContentType, QuestionType } from '~/constants/enums'
+import { QuestionContentType, QuestionContentTypeQuery, QuestionType, QuestionTypeQuery } from '~/constants/enums'
 import HTTP_STATUS from '~/constants/httpStatus'
-import { QUESTIONS_MESSAGES, QUESTIONS_V2_MESSAGES } from '~/constants/message'
+import { QUESTIONS_MESSAGES, QUESTIONS_MESSAGES_V2, QUESTIONS_V2_MESSAGES } from '~/constants/message'
 import { ErrorWithStatus } from '~/models/Errors'
 import Question_v2 from '~/models/schemas/Question_v2.schema'
 import databaseServices from '~/services/database.services'
@@ -247,5 +247,31 @@ export const updateQuestionValidator_v2 = validate(
       }
     },
     ['body']
+  )
+)
+
+export const searchQuestionValidator = validate(
+  checkSchema(
+    {
+      question_type: {
+        optional: true,
+        isIn: {
+          options: [Object.values(QuestionTypeQuery)],
+          errorMessage: QUESTIONS_MESSAGES_V2.TYPE_MUST_BE_IN_ENUM_VALUES_QUESTION_TYPE
+        }
+      },
+      question_content_type: {
+        optional: true,
+        isIn: {
+          options: [Object.values(QuestionContentTypeQuery)],
+          errorMessage: QUESTIONS_MESSAGES_V2.TYPE_CONTENT_MUST_BE_IN_ENUM_VALUES_QUESTION_CONTENT_TYPE
+        }
+      },
+      num_part: {
+        optional: true,
+        isNumeric: true
+      }
+    },
+    ['query']
   )
 )

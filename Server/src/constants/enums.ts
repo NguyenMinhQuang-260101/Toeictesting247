@@ -74,3 +74,16 @@ export enum DocumentTypeQuery {
   Vocabulary = 'vocabulary',
   Grammar = 'grammar'
 }
+
+export enum QuestionTypeQuery {
+  SimpleQuestion = 'simple_question',
+  DoubleQuestion = 'double_question',
+  TripleQuestion = 'triple_question',
+  QuadrupleQuestion = 'quadruple_question',
+  QuintupleQuestion = 'quintuple_question'
+}
+
+export enum QuestionContentTypeQuery {
+  Listening = 'listening',
+  Reading = 'reading'
+}

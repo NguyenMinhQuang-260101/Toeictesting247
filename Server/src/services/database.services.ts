@@ -9,6 +9,7 @@ import Question from '~/models/schemas/Question.schema'
 import Question_v2 from '~/models/schemas/Question_v2.schema'
 import RefreshToken from '~/models/schemas/RefreshToken.schema'
 import ScoreCard from '~/models/schemas/ScoreCard.schema'
+import ScoreCard_v2 from '~/models/schemas/ScoreCard_v2.schema'
 import Test from '~/models/schemas/Test.schema'
 import Test_v2 from '~/models/schemas/Test_v2.schema'
 import User from '~/models/schemas/User.schema'
@@ -48,6 +49,15 @@ class DatabaseServices {
       this.users.createIndex({ email: 1 }, { unique: true })
       this.users.createIndex({ username: 1 }, { unique: true })
       this.users.createIndex({ name: 'text', username: 'text', email: 'text' }, { default_language: 'none' })
+    }
+  }
+
+  async indexQuestions() {
+    const exists = await this.questions_v2.indexExists(['type_1', 'type_content_1', 'num_part_1'])
+    if (!exists) {
+      this.questions_v2.createIndex({ type: 1 })
+      this.questions_v2.createIndex({ type_content: 1 })
+      this.questions_v2.createIndex({ num_part: 1 })
     }
   }
 
@@ -295,6 +305,10 @@ class DatabaseServices {
 
   get scorecards(): Collection<ScoreCard> {
     return this.db.collection(envConfig.dbScoreCardsCollection)
+  }
+
+  get scorecards_v2(): Collection<ScoreCard_v2> {
+    return this.db.collection(envConfig.dbScoreCardsCollection_v2)
   }
 
   get conversations(): Collection<Conversation> {

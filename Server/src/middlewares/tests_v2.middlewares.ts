@@ -256,7 +256,7 @@ export const fullTestIdValidator_v2 = validate(
                 },
                 {
                   $sort: {
-                    'questions.num_part': -1
+                    'questions.num_part': 1
                   }
                 }
               ])

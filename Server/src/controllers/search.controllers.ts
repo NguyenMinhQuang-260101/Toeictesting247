@@ -1,6 +1,11 @@
 import { ParamsDictionary } from 'express-serve-static-core'
 import { Request, Response } from 'express'
-import { SearchCourseQuery, SearchDocumentQuery, SearchUserReqQuery } from '~/models/requests/Search.requests'
+import {
+  SearchCourseQuery,
+  SearchDocumentQuery,
+  SearchQuestionReqQuery,
+  SearchUserReqQuery
+} from '~/models/requests/Search.requests'
 import searchService from '~/services/search.services'
 
 export const searchCourseController = async (
@@ -64,6 +69,31 @@ export const searchUserController = async (
     message: 'Search user successfully',
     result: {
       users,
+      limit,
+      page,
+      total_page: Math.ceil(total / limit)
+    }
+  })
+}
+
+export const searchQuestionController = async (
+  req: Request<ParamsDictionary, any, any, SearchQuestionReqQuery>,
+  res: Response
+) => {
+  const num_part = Number(req.query.num_part)
+  const limit = Number(req.query.limit)
+  const page = Number(req.query.page)
+  const { total, questions } = await searchService.searchQuestion({
+    num_part,
+    question_type: req.query.question_type,
+    question_content_type: req.query.question_content_type,
+    limit,
+    page
+  })
+  return res.json({
+    message: 'Search questions successfully',
+    result: {
+      questions,
       limit,
       page,
       total_page: Math.ceil(total / limit)

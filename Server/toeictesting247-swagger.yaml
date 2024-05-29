@@ -65,6 +65,8 @@ tags:
     description: Các API liên quan đến câu hỏi (thêm, cập nhật, ...)
   - name: scorecards
     description: Các API liên quan đến bảng điểm (thêm, cập nhật, ...)
+  - name: scorecards_v2
+    description: Các API liên quan đến bảng điểm (thêm, cập nhật, ...)
   - name: notifications
     description: Các API liên quan đến thông báo (thêm, cập nhật, ...)
   - name: search
@@ -1959,6 +1961,69 @@ paths:
                   result:
                     $ref: '#/components/schemas/ScorecardDetailResponseBody'
 
+  #* API cho bài làm ver 2
+  /scorecards-v2/:
+    post:
+      tags:
+        - scorecards_v2
+      summary: Tạo bài làm
+      description: Tạo bài làm
+      operationId: createScorecard
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: Thông tin tạo bài làm
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ScorecardRequestBody_v2'
+        required: true
+      responses:
+        default:
+          description: Tạo bài làm thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Create scorecard success
+                  result:
+                    $ref: '#/components/schemas/ScorecardResponseBody_v2'
+
+  /scorecards-v2/{test_id}:
+    get:
+      tags:
+        - scorecards_v2
+      summary: Lấy thông tin bài làm theo test_id
+      description: Lấy thông tin bài làm theo test_id
+      operationId: getScorecardByTestId
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: test_id
+          in: path
+          description: id của bài kiểm tra đã làm
+          required: true
+          schema:
+            type: string
+            format: MongoId
+            example: '65ffb535f172c799e06f57dd'
+      responses:
+        default:
+          description: Lấy thông tin bài làm theo test_id thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Get scorecard detail successfully
+                  result:
+                    $ref: '#/components/schemas/ScorecardDetailResponseBody_v2'
+
   #* API cho thông báo
   /notifications/:
     post:
@@ -2224,6 +2289,75 @@ paths:
                         type: array
                         items:
                           $ref: '#/components/schemas/DocumentResponseBody'
+                      limit:
+                        type: integer
+                        example: 10
+                      page:
+                        type: integer
+                        example: 1
+                      total_page:
+                        type: integer
+                        example: 1
+
+  /search/question:
+    get:
+      tags:
+        - search
+      summary: Tìm kiếm câu hỏi
+      description: Tìm kiếm câu hỏi
+      operationId: searchQuestion
+      parameters:
+        - name: question_type
+          in: query
+          description: Loại câu hỏi
+          required: false
+          schema:
+            $ref: '#/components/schemas/QuestionTypeQuery'
+        - name: question_content_type
+          in: query
+          description: Loại nội dung câu hỏi
+          required: false
+          schema:
+            $ref: '#/components/schemas/QuestionContentTypeQuery'
+        - name: num_part
+          in: query
+          description: Câu hỏi thuộc phần nào (nhập số từ 1)
+          required: false
+          schema:
+            type: integer
+            example: 1
+        - name: limit
+          in: query
+          description: Số lượng tài liệu trên mỗi trang
+          required: true
+          schema:
+            type: integer
+            example: 10
+        - name: page
+          in: query
+          description: Số trang
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        default:
+          description: Tìm kiếm câu hỏi thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Search document successfully
+                  result:
+                    type: object
+                    properties:
+                      documents:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/QuestionResponseBody_v2'
                       limit:
                         type: integer
                         example: 10
@@ -3218,6 +3352,102 @@ components:
           description: Tổng số câu hỏi
           example: 1
 
+    ScorecardRequestBody_v2:
+      type: object
+      properties:
+        total_time:
+          type: integer
+          example: 111
+        test_id:
+          type: string
+          format: MongoId
+          example: '65ffb535f172c799e06f57dd'
+        questions:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/QuestionResponseBody_v2'
+
+    ScorecardResponseBody_v2:
+      type: object
+      properties:
+        _id:
+          type: string
+          format: MongoId
+          example: '660b5dd643ab56cfc721a5ba'
+        user_id:
+          type: string
+          format: MongoId
+          example: '65f7dcf09ff25df22631980f'
+        test_id:
+          type: string
+          format: MongoId
+          example: '65ffb535f172c799e06f57dd'
+        questions:
+          type: array
+          items:
+            type: string
+            format: MongoId
+            description: id của câu hỏi
+            example: '660b5dd643ab56cfc721a5bb'
+        total_correct:
+          type: integer
+          description: Số câu trả lời đúng
+          example: 1
+        total_marks:
+          type: integer
+          description: Tổng số điểm
+          example: 1
+        total_time:
+          type: integer
+          description: Tổng thời gian làm bài
+          example: 111
+        created_at:
+          type: string
+          format: ISO8601
+          example: '2024-04-02T01:22:30.887Z'
+
+    ScorecardDetailResponseBody_v2:
+      type: object
+      properties:
+        _id:
+          type: string
+          format: MongoId
+          example: '660b5dd643ab56cfc721a5ba'
+        user_id:
+          type: string
+          format: MongoId
+          example: '65f7dcf09ff25df22631980f'
+        test_id:
+          type: string
+          format: MongoId
+          example: '65ffb535f172c799e06f57dd'
+        questions:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/QuestionResponseBody_v2'
+        total_correct:
+          type: integer
+          description: Số câu trả lời đúng
+          example: 1
+        total_marks:
+          type: integer
+          description: Tổng số điểm
+          example: 1
+        total_time:
+          type: integer
+          description: Tổng thời gian làm bài
+          example: 111
+        created_at:
+          type: string
+          format: ISO8601
+          example: '2024-04-02T01:22:30.887Z'
+        total_question:
+          type: integer
+          description: Tổng số câu hỏi
+          example: 1
+
     NotificationType:
       type: number
       enum: [Update, Other]
@@ -3403,6 +3633,16 @@ components:
       type: string
       enum: [vocabulary, grammar]
       example: vocabulary
+
+    QuestionTypeQuery:
+      type: string
+      enum: [simple_question, double_question, triple_question, quadruple_question, quintuple_question]
+      example: simple_question
+
+    QuestionContentTypeQuery:
+      type: string
+      enum: [listening, reading]
+      example: listening
 
   securitySchemes:
     BearerAuth:

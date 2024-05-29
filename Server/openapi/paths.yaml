@@ -1885,6 +1885,69 @@ paths:
                   result:
                     $ref: '#/components/schemas/ScorecardDetailResponseBody'
 
+  #* API cho bài làm ver 2
+  /scorecards-v2/:
+    post:
+      tags:
+        - scorecards_v2
+      summary: Tạo bài làm
+      description: Tạo bài làm
+      operationId: createScorecard
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: Thông tin tạo bài làm
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ScorecardRequestBody_v2'
+        required: true
+      responses:
+        default:
+          description: Tạo bài làm thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Create scorecard success
+                  result:
+                    $ref: '#/components/schemas/ScorecardResponseBody_v2'
+
+  /scorecards-v2/{test_id}:
+    get:
+      tags:
+        - scorecards_v2
+      summary: Lấy thông tin bài làm theo test_id
+      description: Lấy thông tin bài làm theo test_id
+      operationId: getScorecardByTestId
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: test_id
+          in: path
+          description: id của bài kiểm tra đã làm
+          required: true
+          schema:
+            type: string
+            format: MongoId
+            example: '65ffb535f172c799e06f57dd'
+      responses:
+        default:
+          description: Lấy thông tin bài làm theo test_id thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Get scorecard detail successfully
+                  result:
+                    $ref: '#/components/schemas/ScorecardDetailResponseBody_v2'
+
   #* API cho thông báo
   /notifications/:
     post:
@@ -2150,6 +2213,75 @@ paths:
                         type: array
                         items:
                           $ref: '#/components/schemas/DocumentResponseBody'
+                      limit:
+                        type: integer
+                        example: 10
+                      page:
+                        type: integer
+                        example: 1
+                      total_page:
+                        type: integer
+                        example: 1
+
+  /search/question:
+    get:
+      tags:
+        - search
+      summary: Tìm kiếm câu hỏi
+      description: Tìm kiếm câu hỏi
+      operationId: searchQuestion
+      parameters:
+        - name: question_type
+          in: query
+          description: Loại câu hỏi
+          required: false
+          schema:
+            $ref: '#/components/schemas/QuestionTypeQuery'
+        - name: question_content_type
+          in: query
+          description: Loại nội dung câu hỏi
+          required: false
+          schema:
+            $ref: '#/components/schemas/QuestionContentTypeQuery'
+        - name: num_part
+          in: query
+          description: Câu hỏi thuộc phần nào (nhập số từ 1)
+          required: false
+          schema:
+            type: integer
+            example: 1
+        - name: limit
+          in: query
+          description: Số lượng tài liệu trên mỗi trang
+          required: true
+          schema:
+            type: integer
+            example: 10
+        - name: page
+          in: query
+          description: Số trang
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        default:
+          description: Tìm kiếm câu hỏi thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Search document successfully
+                  result:
+                    type: object
+                    properties:
+                      documents:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/QuestionResponseBody_v2'
                       limit:
                         type: integer
                         example: 10

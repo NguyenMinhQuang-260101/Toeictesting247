@@ -164,6 +164,14 @@ export const QUESTIONS_MESSAGES = {
     'Can only delete question when course or document is updating or inactive'
 } as const
 
+export const QUESTIONS_MESSAGES_V2 = {
+  TYPE_MUST_NOT_BE_EMPTY: 'Type must not be empty',
+  TYPE_MUST_BE_IN_ENUM_VALUES_QUESTION_TYPE: 'Type must be in enum values QuestionType',
+  TYPE_CONTENT_MUST_NOT_BE_EMPTY: 'Type content must not be empty',
+  TYPE_CONTENT_MUST_BE_IN_ENUM_VALUES_QUESTION_CONTENT_TYPE: 'Type content must be in enum values QuestionContentType',
+  NUM_PART_MUST_BE_A_NUMBER: 'Num part must be a number'
+} as const
+
 export const QUESTIONS_V2_MESSAGES = {
   QUESTION_ID_INVALID: 'Question id invalid',
   QUESTION_NOT_FOUND: 'Question not found',
@@ -233,6 +241,22 @@ export const SCORECARDS_MESSAGES = {
   QUESTION_ID_MUST_NOT_BE_EMPTY: 'Question id must not be empty',
   TEST_ID_QUESTION_MUST_BE_THE_SAME_AS_THE_TEST_ID_IN_THE_BODY:
     'Test id question must be the same as the test id in the body'
+} as const
+
+export const SCORECARDS_MESSAGES_v2 = {
+  SCORECARD_ID_INVALID: 'ScoreCard id invalid',
+  SCORECARD_NOT_FOUND: 'ScoreCard not found',
+  TOTAL_TIME_MUST_BE_A_NUMBER: 'Total time must be a number of seconds',
+  QUESTIONS_MUST_BE_AN_ARRAY: 'Questions must be an array of question',
+  QUESTION_ID_INVALID: 'Question id invalid',
+  TOTAL_TIME_MUST_NOT_BE_EMPTY: 'Total time must not be empty',
+  QUESTION_ID_MUST_NOT_BE_EMPTY: 'Question id must not be empty',
+  TEST_ID_QUESTION_MUST_BE_THE_SAME_AS_THE_TEST_ID_IN_THE_BODY:
+    'Test id question must be the same as the test id in the body',
+  NUM_PART_MUST_NOT_BE_EMPTY: 'Num part must not be empty',
+  NUM_PART_MUST_BE_A_NUMBER: 'Num part must be a number',
+  ITEMS_MUST_BE_AN_ARRAY: 'Questions items must be an array',
+  ITEMS_MUST_NOT_BE_EMPTY: 'Questions items must not be empty'
 } as const
 
 export const SEARCH_MESSAGES = {

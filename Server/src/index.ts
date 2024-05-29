@@ -26,6 +26,7 @@ import helmet from 'helmet'
 import { rateLimit } from 'express-rate-limit'
 import questionsRouter_v2 from './routes/questions_v2.routes'
 import testsRouter_v2 from './routes/tests_v2.routes'
+import scoreCardsRouter_v2 from './routes/scorecards_v2.routes'
 
 // const file = fs.readFileSync(path.resolve('toeictesting247-swagger.yaml'), 'utf8')
 // const swaggerDocument = YAML.parse(file)
@@ -137,6 +138,7 @@ databaseServices.connect().then(() => {
     databaseServices.indexRefreshTokens(),
     databaseServices.indexCourses(),
     databaseServices.indexDocuments(),
+    databaseServices.indexQuestions(),
     databaseServices.watchTimeFields()
 })
 httpServer.listen(port, () => {
@@ -158,6 +160,7 @@ app.use('/questions-v2', questionsRouter_v2)
 app.use('/notifications', notificationsRouter)
 app.use('/documents', documentsRouter)
 app.use('/scorecards', scoreCardsRouter)
+app.use('/scorecards-v2', scoreCardsRouter_v2)
 app.use('/search', searchRouter)
 app.use('/conversations', conversationRouter)
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(openapiSpecification))

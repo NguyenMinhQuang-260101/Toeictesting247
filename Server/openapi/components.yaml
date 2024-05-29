@@ -982,6 +982,102 @@ components:
           description: Tổng số câu hỏi
           example: 1
 
+    ScorecardRequestBody_v2:
+      type: object
+      properties:
+        total_time:
+          type: integer
+          example: 111
+        test_id:
+          type: string
+          format: MongoId
+          example: '65ffb535f172c799e06f57dd'
+        questions:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/QuestionResponseBody_v2'
+
+    ScorecardResponseBody_v2:
+      type: object
+      properties:
+        _id:
+          type: string
+          format: MongoId
+          example: '660b5dd643ab56cfc721a5ba'
+        user_id:
+          type: string
+          format: MongoId
+          example: '65f7dcf09ff25df22631980f'
+        test_id:
+          type: string
+          format: MongoId
+          example: '65ffb535f172c799e06f57dd'
+        questions:
+          type: array
+          items:
+            type: string
+            format: MongoId
+            description: id của câu hỏi
+            example: '660b5dd643ab56cfc721a5bb'
+        total_correct:
+          type: integer
+          description: Số câu trả lời đúng
+          example: 1
+        total_marks:
+          type: integer
+          description: Tổng số điểm
+          example: 1
+        total_time:
+          type: integer
+          description: Tổng thời gian làm bài
+          example: 111
+        created_at:
+          type: string
+          format: ISO8601
+          example: '2024-04-02T01:22:30.887Z'
+
+    ScorecardDetailResponseBody_v2:
+      type: object
+      properties:
+        _id:
+          type: string
+          format: MongoId
+          example: '660b5dd643ab56cfc721a5ba'
+        user_id:
+          type: string
+          format: MongoId
+          example: '65f7dcf09ff25df22631980f'
+        test_id:
+          type: string
+          format: MongoId
+          example: '65ffb535f172c799e06f57dd'
+        questions:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/QuestionResponseBody_v2'
+        total_correct:
+          type: integer
+          description: Số câu trả lời đúng
+          example: 1
+        total_marks:
+          type: integer
+          description: Tổng số điểm
+          example: 1
+        total_time:
+          type: integer
+          description: Tổng thời gian làm bài
+          example: 111
+        created_at:
+          type: string
+          format: ISO8601
+          example: '2024-04-02T01:22:30.887Z'
+        total_question:
+          type: integer
+          description: Tổng số câu hỏi
+          example: 1
+
     NotificationType:
       type: number
       enum: [Update, Other]
@@ -1167,3 +1263,13 @@ components:
       type: string
       enum: [vocabulary, grammar]
       example: vocabulary
+
+    QuestionTypeQuery:
+      type: string
+      enum: [simple_question, double_question, triple_question, quadruple_question, quintuple_question]
+      example: simple_question
+
+    QuestionContentTypeQuery:
+      type: string
+      enum: [listening, reading]
+      example: listening
